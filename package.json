@@ -1,11 +1,11 @@
 {
-  "name": "APP_NAME",
-  "description": "APP_DESCRIPTION",
+  "name": "derby-dashboard",
+  "description": "A web app that displays fundraising data, along with schedules and challenges",
   "version": "1.0.0",
-  "author": "USERNAME",
+  "author": "benz2012",
   "license": "MIT",
   "main": "index.js",
-  "repository": "https://github.com/USERNAME/APP_NAME",
+  "repository": "https://github.com/benz2012/derby-dashboard",
   "scripts": {
     "dev": "node server",
     "start": "NODE_ENV=production node server",

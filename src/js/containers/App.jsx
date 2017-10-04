@@ -10,7 +10,7 @@ export default class App extends Component {
   render() {
     return (
       <AppStyle>
-        <BasicComponent name="USERNAME" />
+        <BasicComponent name="benz2012" />
       </AppStyle>
     )
   }
