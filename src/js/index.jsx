@@ -1,6 +1,7 @@
+/* eslint import/first: 0 */
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader' // eslint-disable-line import/no-extraneous-dependencies
+import { AppContainer } from 'react-hot-loader'
 
 // Load Polyfills
 import Promise from 'promise-polyfill'
@@ -10,8 +11,11 @@ if (!window.Promise) {
   window.Promise = Promise
 }
 
+// Load Extraneous Assets
+import '../favicons/favicons' // all favicons
+
 // Root Application Container
-import App from './containers/App' // eslint-disable-line import/first
+import App from './containers/App'
 
 
 // Wrapper Function for rendering, allows HMR in development only, AppContainer
