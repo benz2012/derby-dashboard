@@ -1,4 +1,4 @@
-# derby-dashboard
+# Derby Dashboard
 
 A web app that displays fundraising data, along with schedules and challenges
 
@@ -19,6 +19,11 @@ You will need to Download and Install [Node.js](https://nodejs.org/en/download/)
 Download or clone this project
 ```bash
 git clone https://github.com/benz2012/derby-dashboard.git
+```
+
+Move into the project folder
+```bash
+cd derby-dashboard
 ```
 
 Install all the Javascript libraries used to build this web application
