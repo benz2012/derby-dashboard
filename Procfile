@@ -1,2 +1,2 @@
 web: node server
-scraper: node scraper
+worker: node worker
