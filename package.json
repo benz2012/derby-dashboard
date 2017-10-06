@@ -13,7 +13,9 @@
     "lint": "eslint --ext .jsx,.js src/**; exit 0"
   },
   "dependencies": {
-    "express": "^4.16.1"
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.1",
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
