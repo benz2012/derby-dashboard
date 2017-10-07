@@ -1,6 +1,9 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb')
 
-require('../../env') // load environment variables
+if (process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line global-require
+  require('../../env') // load environment variables
+}
 
 
 // Database Connection
