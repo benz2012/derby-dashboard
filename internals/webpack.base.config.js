@@ -24,6 +24,18 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(png)$/,
+        exclude: /favicons/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [

@@ -12,7 +12,8 @@ if (!window.Promise) {
 }
 
 // Load Extraneous Assets
-import '../favicons/favicons' // all favicons
+import '../assets/favicons/favicons' // all favicons
+import '../assets/images/og_image_v001.png'
 
 // Root Application Container
 import App from './containers/App'

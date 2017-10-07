@@ -2,6 +2,8 @@
 
 A web app that displays fundraising data, along with schedules and challenges
 
+![cover image of derby dashboard]('public/og_image_v001.png')
+
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
