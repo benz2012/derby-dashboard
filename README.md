@@ -1,8 +1,9 @@
 # Derby Dashboard
 
-A web app that displays fundraising data, along with schedules and challenges
+A web app that displays fundraising data, along with schedules and challenges.
+[Live Website](https://derby-dashboard.herokuapp.com)
 
-![cover image of derby dashboard]('public/og_image_v001.png')
+![cover image of derby dashboard](public/og_image_v001.png)
 
 ## Table of Contents
 
