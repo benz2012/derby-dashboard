@@ -11,10 +11,15 @@
     "comma-dangle": 1,
     "react/forbid-prop-types": 0,
 <<<<<<< HEAD
+<<<<<<< HEAD
     "import/no-extraneous-dependencies": 0
 =======
     "import/no-extraneous-dependencies": 0,
     "radix": 0
 >>>>>>> 383eade348df9a810d0440773ee02244be18cef6
+=======
+    "import/no-extraneous-dependencies": 0,
+    "radix": 0
+>>>>>>> scraper
   }
 }
