@@ -1,4 +1,4 @@
-const scrape = require('./scrape/scrape')
+const scrape = require('./scrape')
 const dbWrite = require('./database/dbWrite.js')
 
 // Scheduled Functions
@@ -9,8 +9,13 @@ const everySecond = () => {
 }
 
 const everyTenMinutes = () => {
-  // scrape.teams().then(data => dbWrite.teams(data))
-  return
+  scrape.teams()
+    .then((data) => {
+      dbWrite.teams(data)
+      return data
+    })
+    .then(data => dbWrite.teamsForSchool(data))
+    .catch(err => console.log(err))
 }
 
 const everyHour = () => {
