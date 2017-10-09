@@ -105,7 +105,7 @@ const teamValues = html => new Promise((resolve, reject) => {
   const finalValues = {
     teamId: parseInt(teamId),
     name: teamName,
-    members: memberNumber,
+    members: parseInt(memberNumber),
     avatar: avatarURL,
     cover: coverURL,
   }

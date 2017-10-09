@@ -63,19 +63,19 @@ The worker process both scrapes/parses information from the web, and writes that
 
 You will need to request an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` from the project maintainers.
 
-Crate an environment variable file in the project root
+Create an environment variable file in the project root
 ```bash
 touch env.js
 ```
 
-Then Add the following lines to `env.js`
+Add the following lines to `env.js`
 ```javascript
 process.env.AWS_ACCESS_KEY_ID = 'YOURKEY'
 process.env.AWS_SECRET_ACCESS_KEY = 'YOURSECRETKEY'
 
 ```
 
-Finally, run the process
+Run the process
 ```bash
 node worker
 ```

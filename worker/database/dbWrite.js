@@ -39,7 +39,7 @@ const batchWrite = params => new Promise((resolve, reject) => {
 })
 
 
-// Wrtie Functions
+// Write Functions
 const raised = (data) => {
   const timeSlot = Math.floor(moment().utc().hour() / 6)
   const dateString = moment().utc().format(`YYYY-MM-DD-${timeSlot}`)
