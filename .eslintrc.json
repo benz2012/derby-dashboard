@@ -12,7 +12,5 @@
     "react/forbid-prop-types": 0,
     "import/no-extraneous-dependencies": 0,
     "radix": 0
-    "import/no-extraneous-dependencies": 0,
-    "radix": 0
   }
 }

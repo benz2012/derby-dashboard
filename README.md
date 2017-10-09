@@ -1,6 +1,9 @@
 # Derby Dashboard
 
-A web app that displays fundraising data, along with schedules and challenges
+A web app that displays fundraising data, along with schedules and challenges.
+[Live Website](https://derby-dashboard.herokuapp.com)
+
+![cover image of derby dashboard](public/og_image_v001.png)
 
 ## Table of Contents
 
@@ -33,6 +36,15 @@ npm install
 
 ## Usage
 
+#### Development
+
+Run the Node/Express server in development mode
+```bash
+npm run dev
+```
+
+Open a web browser and navigate to [localhost:8080](http://localhost:8080)
+
 #### Production
 
 Bundle & Build the web application using *Webpack*
@@ -45,14 +57,28 @@ Run the Node/Express server in production mode
 npm start
 ```
 
-#### Development
+#### Worker Process
 
-Run the Node/Express server in development mode
+The worker process both scrapes/parses information from the web, and writes that information to an AWS DynamoDB.
+
+You will need to request an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` from the project maintainers.
+
+Crate an environment variable file in the project root
 ```bash
-npm run dev
+touch env.js
 ```
 
-Open a web browser and navigate to [localhost:8080](http://localhost:8080)
+Then Add the following lines to `env.js`
+```javascript
+process.env.AWS_ACCESS_KEY_ID = 'YOURKEY'
+process.env.AWS_SECRET_ACCESS_KEY = 'YOURSECRETKEY'
+
+```
+
+Finally, run the process
+```bash
+node worker
+```
 
 #### Additional
 
@@ -63,11 +89,13 @@ npm run lint
 
 ## Resources
 
-##### Libraries Used
+##### Major Libraries Used
 - Express
 - React
 - Styled Components
 - Webpack with Babel
+- AWS SDK
+- Cheerio
 
 ##### Maintainers
 - [benz2012](https://github.com/benz2012)
