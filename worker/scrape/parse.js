@@ -20,7 +20,7 @@ const raisedValuesForSchool = html => new Promise((resolve, reject) => {
     const teamURI = dom(elm).children('.GroupRosterWidget-name').first().attr('href')
     const teamId = teamIdFromURI(teamURI)
     if (!teamId) {
-      reject(`failed to find teamId in teamURL: ${teamURI}`)
+      reject(`failed to find teamId in teamURI: ${teamURI}`)
     }
     const amount = dom(elm).children('.GroupRosterWidget-raised').first().text()
     const cleanAmount = amount.trim().replace('$', '').replace(',', '')
@@ -56,7 +56,7 @@ const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
     const teamURI = teamNode.attr('href')
     const teamId = teamIdFromURI(teamURI)
     if (!teamId) {
-      reject(`failed to find teamId in teamURL: ${teamURI}`)
+      reject(`failed to find teamId in teamURI: ${teamURI}`)
     }
     const shortTeamURI = teamURI.substring(0, teamURI.lastIndexOf('/'))
     const teamURL = `https://us-p2p.netdonor.net${shortTeamURI}`
@@ -82,9 +82,61 @@ const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
   }).catch(err => reject(err))
 })
 
+const teamValues = html => new Promise((resolve, reject) => {
+  const dom = cheerio.load(html)
+  const teamURL = dom("meta[property='og:url']").attr('content')
+  const teamId = teamIdFromURI(teamURL)
+  if (!teamId) {
+    reject(`failed to find teamId in teamURL: ${teamURL}`)
+  }
+
+  const teamName = dom('#page_name').text()
+  const avatarURL = dom('#page-image-camp').attr('src')
+  const coverURL = dom('#page-banner').attr('src')
+
+  const memberNode = dom('.group-member-count').first()
+  const memberText = memberNode.children().first().text()
+  const found = memberText.match(/(\d+).+/)
+  const memberNumber = found.length > 0 && found[1]
+  if (!memberNumber) {
+    reject(`failed to find number of members for team: ${teamId}`)
+  }
+
+  const finalValues = {
+    teamId: parseInt(teamId),
+    name: teamName,
+    members: memberNumber,
+    avatar: avatarURL,
+    cover: coverURL,
+  }
+
+  // validate data
+  if (!teamId.split('').every(c => (parseInt(c) || c === '0'))) {
+    // If any of the characters are not integers
+    reject(`teamId is not valid: ${teamId}`)
+  }
+  if (!memberNumber.split('').every(c => (parseInt(c) || c === '0'))) {
+    // If any of the characters are not integers
+    reject(`number of members is not valid: ${memberNumber}`)
+  }
+  const urlValidations = [
+    scrapeUtil.validURL(avatarURL),
+    scrapeUtil.validURL(coverURL),
+  ]
+  Promise.all(urlValidations).then((results) => {
+    if (results.every(result => result)) {
+      resolve(finalValues)
+    } else {
+      // if any urls are invalid
+      reject(`An invalid url was found when parsing team: ${teamId}`)
+    }
+  }).catch(err => reject(err))
+})
+
 
 // Exports
 module.exports = {
   raisedValuesForSchool,
   teamURLsForSchool,
+  teamValues,
 }

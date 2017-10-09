@@ -117,8 +117,33 @@ const teamsForSchool = (data) => {
   }).catch(err => console.log(err))
 }
 
+const teamValues = (data) => {
+  const teamUpdates = []
+  data.forEach((team) => {
+    teamUpdates.push(update({
+      TableName: 'Derby_Teams',
+      Key: { TeamId: team.teamId },
+      ExpressionAttributeNames: {
+        '#N': 'Name',
+        '#M': 'Members',
+        '#A': 'AvatarURL',
+        '#C': 'CoverURL',
+      },
+      ExpressionAttributeValues: {
+        ':n': team.name,
+        ':m': team.members,
+        ':a': team.avatar,
+        ':c': team.cover,
+      },
+      UpdateExpression: 'SET #N = :n, #M = :m, #A = :a, #C = :c',
+    }))
+  })
+  return Promise.all(teamUpdates)
+}
+
 module.exports = {
   raised,
   teams,
   teamsForSchool,
+  teamValues,
 }
