@@ -1,5 +1,7 @@
 const express = require('express')
 
+const dataRoutes = require('./dataRoutes')
+
 // Globals
 const app = express()
 
@@ -12,6 +14,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 // Routes
+app.use(dataRoutes) // defined in `./routes.js`
 app.use(express.static(`${process.cwd()}/public`))
 
 

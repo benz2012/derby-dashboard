@@ -7,8 +7,7 @@
   "main": "index.js",
   "repository": "https://github.com/benz2012/derby-dashboard",
   "scripts": {
-    "dev": "node server",
-    "start": "cross-env NODE_ENV=production node server",
+    "start": "node server",
     "build": "webpack --config ./internals/webpack.prod.config.js",
     "lint": "eslint --ext .jsx,.js src/**; exit 0"
   },
@@ -26,7 +25,6 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.17",
-    "cross-env": "^5.0.5",
     "eslint": "^4.8.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
