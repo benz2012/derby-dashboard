@@ -20,7 +20,7 @@ module.exports = merge({
     ],
   },
   output: {
-    filename: 'bundle.dev.js',
+    filename: 'bundle.dev.[hash].js',
   },
   devtool: 'inline-source-map',
   module: {

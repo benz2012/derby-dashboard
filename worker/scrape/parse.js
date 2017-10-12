@@ -20,7 +20,7 @@ const raisedValuesForSchool = html => new Promise((resolve, reject) => {
     const teamURI = dom(elm).children('.GroupRosterWidget-name').first().attr('href')
     const teamId = teamIdFromURI(teamURI)
     if (!teamId) {
-      reject(`failed to find teamId in teamURI: ${teamURI}`)
+      return reject(`failed to find teamId in teamURI: ${teamURI}`)
     }
     const amount = dom(elm).children('.GroupRosterWidget-raised').first().text()
     const cleanAmount = amount.trim().replace('$', '').replace(',', '')
@@ -29,20 +29,20 @@ const raisedValuesForSchool = html => new Promise((resolve, reject) => {
     // validate data
     if (!teamId.split('').every(c => (parseInt(c) || c === '0'))) {
       // If any of the characters are not integers
-      reject(`teamId is not valid: ${teamId}`)
+      return reject(`teamId is not valid: ${teamId}`)
     }
     if (!cleanAmount.split('').every(c => (parseInt(c) || ['0', '.'].includes(c)))) {
       // If any of the characters are not integers or '.'
-      reject(`amount raised is not valid: ${cleanAmount}`)
+      return reject(`amount raised is not valid: ${cleanAmount}`)
     }
     if (!floatAmount) {
       // If parsing the string to float failed
-      reject(`amount raised is not a valid float: ${cleanAmount}`)
+      return reject(`amount raised is not a valid float: ${cleanAmount}`)
     }
     // Data is valid, add it to the object
     raisedValues[teamId] = floatAmount
   })
-  resolve(raisedValues)
+  return resolve(raisedValues)
 })
 
 const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
@@ -56,7 +56,7 @@ const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
     const teamURI = teamNode.attr('href')
     const teamId = teamIdFromURI(teamURI)
     if (!teamId) {
-      reject(`failed to find teamId in teamURI: ${teamURI}`)
+      return reject(`failed to find teamId in teamURI: ${teamURI}`)
     }
     const shortTeamURI = teamURI.substring(0, teamURI.lastIndexOf('/'))
     const teamURL = `https://us-p2p.netdonor.net${shortTeamURI}`
@@ -64,7 +64,7 @@ const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
     // validate data
     if (!teamId.split('').every(c => (parseInt(c) || c === '0'))) {
       // If any of the characters are not integers
-      reject(`teamId is not valid: ${teamId}`)
+      return reject(`teamId is not valid: ${teamId}`)
     }
     urls[teamId] = { schoolId, url: teamURL, name: teamName }
   })
@@ -74,10 +74,10 @@ const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
   ))
   Promise.all(urlValidations).then((results) => {
     if (results.every(result => result)) {
-      resolve(urls)
+      return resolve(urls)
     } else {
       // if any urls are invalid
-      reject('An invalid url was found when parsing teamURLsForSchool')
+      return reject('An invalid url was found when parsing teamURLsForSchool')
     }
   }).catch(err => reject(err))
 })
@@ -87,7 +87,7 @@ const teamValues = html => new Promise((resolve, reject) => {
   const teamURL = dom("meta[property='og:url']").attr('content')
   const teamId = teamIdFromURI(teamURL)
   if (!teamId) {
-    reject(`failed to find teamId in teamURL: ${teamURL}`)
+    return reject(`failed to find teamId in teamURL: ${teamURL}`)
   }
 
   const teamName = dom('#page_name').text()
@@ -99,7 +99,7 @@ const teamValues = html => new Promise((resolve, reject) => {
   const found = memberText.match(/(\d+).+/)
   const memberNumber = found.length > 0 && found[1]
   if (!memberNumber) {
-    reject(`failed to find number of members for team: ${teamId}`)
+    return reject(`failed to find number of members for team: ${teamId}`)
   }
 
   const finalValues = {
@@ -113,11 +113,11 @@ const teamValues = html => new Promise((resolve, reject) => {
   // validate data
   if (!teamId.split('').every(c => (parseInt(c) || c === '0'))) {
     // If any of the characters are not integers
-    reject(`teamId is not valid: ${teamId}`)
+    return reject(`teamId is not valid: ${teamId}`)
   }
   if (!memberNumber.split('').every(c => (parseInt(c) || c === '0'))) {
     // If any of the characters are not integers
-    reject(`number of members is not valid: ${memberNumber}`)
+    return reject(`number of members is not valid: ${memberNumber}`)
   }
   const urlValidations = [
     scrapeUtil.validURL(avatarURL),
@@ -125,10 +125,10 @@ const teamValues = html => new Promise((resolve, reject) => {
   ]
   Promise.all(urlValidations).then((results) => {
     if (results.every(result => result)) {
-      resolve(finalValues)
+      return resolve(finalValues)
     } else {
       // if any urls are invalid
-      reject(`An invalid url was found when parsing team: ${teamId}`)
+      return reject(`An invalid url was found when parsing team: ${teamId}`)
     }
   }).catch(err => reject(err))
 })

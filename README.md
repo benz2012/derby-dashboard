@@ -47,8 +47,8 @@ touch env.js
 
 Add the following lines to `env.js`
 ```javascript
-process.env.AWS_ACCESS_KEY_ID = 'YOURKEY'
-process.env.AWS_SECRET_ACCESS_KEY = 'YOURSECRETKEY'
+process.env.AWS_ACCESS_KEY_ID_SERVER = 'YOURKEY'
+process.env.AWS_SECRET_ACCESS_KEY_SERVER = 'YOURSECRETKEY'
 
 ```
 
@@ -74,7 +74,7 @@ Deployable static files/assets will now live in the `/public` directory of your 
 
 The worker process both scrapes/parses information from the web, and writes that information to an AWS DynamoDB.
 
-You will need the following two environment variables: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, to connect to a database. You should create your own DynamoDB Tables and connect to that for testing. Contact project maintainers for proper database schema design.
+You will need the following two environment variables: `AWS_ACCESS_KEY_ID_WORKER` and `AWS_SECRET_ACCESS_KEY_WORKER`, to connect to a database. You should create your own DynamoDB Tables and connect to that for testing. Contact project maintainers for proper database schema design.
 
 Create an environment variable file in the project root
 ```bash
@@ -83,8 +83,8 @@ touch env.js
 
 Add the following lines to `env.js`
 ```javascript
-process.env.AWS_ACCESS_KEY_ID = 'YOURKEY'
-process.env.AWS_SECRET_ACCESS_KEY = 'YOURSECRETKEY'
+process.env.AWS_ACCESS_KEY_ID_WORKER = 'YOURKEY'
+process.env.AWS_SECRET_ACCESS_KEY_WORKER = 'YOURSECRETKEY'
 
 ```
 
