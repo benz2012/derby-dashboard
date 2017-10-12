@@ -38,12 +38,28 @@ npm install
 
 #### Development
 
-Run the Node/Express server in development mode
+You will need the following two environment variables to run the server in development: `AWS_ACCESS_KEY_ID_SERVER` and `AWS_SECRET_ACCESS_KEY_SERVER`. Request these from the project maintainers.
+
+Create an environment variable file in the project root
 ```bash
-npm run dev
+touch env.js
+```
+
+Add the following lines to `env.js`
+```javascript
+process.env.AWS_ACCESS_KEY_ID_SERVER = 'YOURKEY'
+process.env.AWS_SECRET_ACCESS_KEY_SERVER = 'YOURSECRETKEY'
+
+```
+
+Run the Node/Express server in development mode.
+```bash
+npm start
 ```
 
 Open a web browser and navigate to [localhost:8080](http://localhost:8080)
+
+This mode will simultaneously bundle your javascript code on every file save (nicknamed *Hot Module Replacement*).
 
 #### Production
 
@@ -52,30 +68,27 @@ Bundle & Build the web application using *Webpack*
 npm run build
 ```
 
-Run the Node/Express server in production mode
-```bash
-npm start
-```
+Deployable static files/assets will now live in the `/public` directory of your project.
 
 #### Worker Process
 
 The worker process both scrapes/parses information from the web, and writes that information to an AWS DynamoDB.
 
-You will need to request an `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` from the project maintainers.
+You will need the following two environment variables: `AWS_ACCESS_KEY_ID_WORKER` and `AWS_SECRET_ACCESS_KEY_WORKER`, to connect to a database. You should create your own DynamoDB Tables and connect to that for testing. Contact project maintainers for proper database schema design.
 
-Crate an environment variable file in the project root
+Create an environment variable file in the project root
 ```bash
 touch env.js
 ```
 
-Then Add the following lines to `env.js`
+Add the following lines to `env.js`
 ```javascript
-process.env.AWS_ACCESS_KEY_ID = 'YOURKEY'
-process.env.AWS_SECRET_ACCESS_KEY = 'YOURSECRETKEY'
+process.env.AWS_ACCESS_KEY_ID_WORKER = 'YOURKEY'
+process.env.AWS_SECRET_ACCESS_KEY_WORKER = 'YOURSECRETKEY'
 
 ```
 
-Finally, run the process
+Run the process
 ```bash
 node worker
 ```
@@ -98,7 +111,7 @@ npm run lint
 - Cheerio
 
 ##### Maintainers
-- [benz2012](https://github.com/benz2012)
+- [Ben Zenker](https://github.com/benz2012)
 
 ## Contributing
 

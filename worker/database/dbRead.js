@@ -8,8 +8,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Database Connection
 const db = new DynamoDB.DocumentClient({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID_WORKER,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_WORKER,
   apiVersion: '2012-08-10',
   region: 'us-east-1',
 })
@@ -18,14 +18,14 @@ const db = new DynamoDB.DocumentClient({
 // Utility Promises
 const get = params => new Promise((resolve, reject) => {
   db.get(params, (err, data) => {
-    if (err) { reject(err) }
-    resolve(data)
+    if (err) { return reject(err) }
+    return resolve(data)
   })
 })
 const scan = params => new Promise((resolve, reject) => {
   db.scan(params, (err, data) => {
-    if (err) { reject(err) }
-    resolve(data.Items)
+    if (err) { return reject(err) }
+    return resolve(data.Items)
   })
 })
 
