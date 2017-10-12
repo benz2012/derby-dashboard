@@ -7,16 +7,18 @@
   "main": "index.js",
   "repository": "https://github.com/benz2012/derby-dashboard",
   "scripts": {
-    "start": "node server",
+    "start": "nodemon server",
     "build": "webpack --config ./internals/webpack.prod.config.js",
     "lint": "eslint --ext .jsx,.js src/**; exit 0"
   },
   "dependencies": {
     "aws-sdk": "^2.130.0",
+    "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.1",
     "moment": "^2.18.1",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "socket.io": "^2.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -25,6 +27,7 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.17",
+    "connect-history-api-fallback": "^1.3.0",
     "eslint": "^4.8.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
@@ -32,12 +35,15 @@
     "eslint-plugin-react": "^7.4.0",
     "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.30.1",
+    "nodemon": "^1.12.1",
     "progress-bar-webpack-plugin": "^1.10.0",
     "promise-polyfill": "6.0.2",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-hot-loader": "^3.0.0-beta.7",
+    "react-router-dom": "^4.2.2",
+    "socket.io-client": "^2.0.3",
     "styled-components": "^2.2.0",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.6.0",
