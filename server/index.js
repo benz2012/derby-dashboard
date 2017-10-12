@@ -26,11 +26,20 @@ app.get('*', (req, res) => {
   res.sendFile(`${process.cwd()}/public/index.html`)
 })
 app.post('/live', (req, res) => {
-  // vaildate post came from lambda
-  // process.env.LAMBDA_ACCESS_KEY_ID_POST
-  // process.env.LAMBDA_SECRET_ACCESS_KEY_POST
-  console.log(req.body)
-  io.emit('liveUpdate', { data: req.body.update })
+  if (req.body) {
+    // vaildate post came from lambda
+    const keyChecks = [
+      req.body.key === process.env.LAMBDA_ACCESS_KEY_ID_POST,
+      req.body.secret === process.env.LAMBDA_SECRET_ACCESS_KEY_POST,
+    ]
+    if (keyChecks.every(k => k === true)) {
+      io.emit('liveUpdate', { data: req.body.update })
+    } else {
+      // post request is invalid
+      console.log('received invalid POST request')
+      res.status(403).send()
+    }
+  }
   res.end()
 })
 
