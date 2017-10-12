@@ -1,0 +1,16 @@
+{
+  "name": "trigger",
+  "version": "1.0.0",
+  "description": "A Lambda function that captures DynamoDB streams",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "compress": "zip -r -q ./build/build -@ < ./compress.txt && echo \"successfully zipped\" || echo \"failure\""
+  },
+  "author": "benz2012",
+  "license": "MIT",
+  "repository": "https://github.com/benz2012/derby-dashboard",
+  "dependencies": {
+    "request": "^2.83.0"
+  }
+}
