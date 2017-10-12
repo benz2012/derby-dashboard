@@ -89,15 +89,17 @@ class Live extends Component {
   }
   componentDidMount() {
     const socket = io()
-    socket.on('liveUpdate', ({ data }) => {
-      this.setState({ data })
+    socket.on('liveUpdate', (update) => {
+      this.setState({ data: update })
     })
   }
   render() {
+    const { data } = this.state
+    const disp = data && String(Object.keys(data).map(k => Object.keys(data[k])))
     return (
       <div>
         <h2>Live</h2>
-        <h4><em>{this.state.data}</em></h4>
+        <h4><em>{disp}</em></h4>
       </div>
     )
   }
