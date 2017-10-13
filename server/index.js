@@ -19,7 +19,7 @@ const io = socketIO(server)
 
 // Routes
 app.use('/data', dataEndpoints)
-// app.use(require('./routes/hot')) // Only triggers in development
+app.use(require('./routes/hot')) // Only triggers in development
 app.use(express.static(`${process.cwd()}/public`)) // main code & assets
 app.get('*', (req, res) => {
   // catch-all route for everything not defined, react-router will handle `404`
