@@ -109,6 +109,11 @@ const More = () => (
     <h2>More</h2>
   </div>
 )
+const NoMatch = () => (
+  <div>
+    <h2>404 Not Found :(</h2>
+  </div>
+)
 
 
 export default class App extends Component {
@@ -130,15 +135,17 @@ export default class App extends Component {
             </ul>
 
             <hr />
-
-            <Route exact path="/" component={Home} />
-            <Route path="/schedule" component={Schedule} />
-            <Route exact path="/teams" component={TeamSelection} />
-            <Route path="/teams/:teamId" component={Team} />
-            <Route exact path="/challenges" component={Challenges} />
-            <Route path="/challenges/:challengeId" component={Challenge} />
-            <Route path="/live" component={Live} />
-            <Route path="/more" component={More} />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/schedule" component={Schedule} />
+              <Route exact path="/teams" component={TeamSelection} />
+              <Route path="/teams/:teamId" component={Team} />
+              <Route exact path="/challenges" component={Challenges} />
+              <Route path="/challenges/:challengeId" component={Challenge} />
+              <Route path="/live" component={Live} />
+              <Route path="/more" component={More} />
+              <Route component={NoMatch} />
+            </Switch>
           </div>
         </Router>
       </AppStyle>

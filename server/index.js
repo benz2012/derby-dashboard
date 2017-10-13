@@ -13,18 +13,21 @@ const io = socketIO(server)
 
 
 // Routes
-app.use(dataRoutes)
+app.use('/data', dataRoutes)
+
+// Hot Module Replacement, development only
 if (process.env.NODE_ENV !== 'production') {
-  // Hot Module Replacement, development only
   const hotMiddleware = require('./hot') // eslint-disable-line global-require
   hotMiddleware(app)
 }
+
 app.use(express.static(`${process.cwd()}/public`))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.get('*', (req, res) => {
   res.sendFile(`${process.cwd()}/public/index.html`)
 })
+
 app.post('/live', (req, res) => {
   if (req.body) {
     // vaildate post came from lambda

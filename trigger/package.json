@@ -9,7 +9,6 @@
   },
   "author": "benz2012",
   "license": "MIT",
-  "repository": "https://github.com/benz2012/derby-dashboard",
   "dependencies": {
     "request": "^2.83.0"
   }

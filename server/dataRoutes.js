@@ -7,6 +7,13 @@ const placeholder = require('./placeholder')
 
 // Router Handler
 const router = express.Router()
+// Non-secure Request Validation
+router.use((req, res, next) => {
+  if (!req.header('sent-from-client-javascript')) {
+    return next('router')
+  }
+  return next()
+})
 
 
 // Utility Functions
@@ -40,7 +47,7 @@ const groupBy = (ungrouped, key) => (
 
 
 // Data Routes
-router.get('/data/raised/school', (req, res) => {
+router.get('/raised/school', (req, res) => {
   const timeSlot = Math.floor(moment().utc().hour() / 6) + 2
   const lastDateTimeString = moment().utc()
     .subtract(1, 'days').format(`YYYY-MM-DD-${timeSlot}`)
@@ -89,7 +96,7 @@ router.get('/data/raised/school', (req, res) => {
 })
 
 
-router.get('/data/raised/team/:id', (req, res) => {
+router.get('/raised/team/:id', (req, res) => {
   const teamId = parseInt(req.params.id)
   const timeSlot = Math.floor(moment().utc().hour() / 6) + 2
   const lastDateTimeString = moment().utc()
@@ -132,7 +139,7 @@ router.get('/data/raised/team/:id', (req, res) => {
 })
 
 
-router.get('/data/home', (req, res) => {
+router.get('/home', (req, res) => {
   const homeData = {}
   getSchool().then((school) => {
     homeData.homeTeamId = school.HomeTeamId
@@ -167,7 +174,7 @@ router.get('/data/home', (req, res) => {
 })
 
 
-router.get('/data/events', (req, res) => {
+router.get('/events', (req, res) => {
   dbRead.query({
     TableName: 'Derby_Events',
     ExpressionAttributeNames: { '#S': 'SchoolId' },
@@ -218,7 +225,7 @@ router.get('/data/events', (req, res) => {
 })
 
 
-router.get('/data/teams', (req, res) => {
+router.get('/teams', (req, res) => {
   getSchool().then((school) => {
     const teamKeys = school.Teams.map(t => ({ TeamId: t }))
     dbRead.batchGet({
@@ -247,7 +254,7 @@ router.get('/data/teams', (req, res) => {
 })
 
 
-router.get('/data/teams/:id', (req, res) => {
+router.get('/teams/:id', (req, res) => {
   const teamId = req.params.id
   dbRead.get({
     TableName: 'Derby_Teams',
@@ -298,7 +305,7 @@ router.get('/data/teams/:id', (req, res) => {
 })
 
 
-router.get('/data/challenges', (req, res) => {
+router.get('/challenges', (req, res) => {
   dbRead.query({
     TableName: 'Derby_Challenges',
     ExpressionAttributeNames: { '#S': 'SchoolId' },
@@ -338,7 +345,7 @@ router.get('/data/challenges', (req, res) => {
 })
 
 
-router.get('/data/challenges/:id', (req, res) => {
+router.get('/challenges/:id', (req, res) => {
   const challengeId = parseInt(req.params.id)
   dbRead.get({
     TableName: 'Derby_Challenges',
