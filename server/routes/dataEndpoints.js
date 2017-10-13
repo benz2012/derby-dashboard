@@ -1,9 +1,11 @@
 const express = require('express')
 const moment = require('moment')
 
-const config = require('./config')
-const dbRead = require('./dbRead')
-const placeholder = require('./placeholder')
+const database = require('../database')
+const config = require('../database/config')
+const params = require('../database/params')
+const placeholder = require('../database/placeholder')
+
 
 // Router Handler
 const router = express.Router()
@@ -22,14 +24,14 @@ const errorEnd = (err, res) => {
   res.status(500).send()
 }
 const getSchool = () => (
-  dbRead.get({
+  database.get({
     TableName: 'Derby_Schools',
     Key: { SchoolId: config.SCHOOL_ID_HARD },
   })
 )
 const teamNames = () => (
   getSchool().then(s => (
-    dbRead.batchGet({ RequestItems: { Derby_Teams: {
+    database.batchGet({ RequestItems: { Derby_Teams: {
       Keys: s.Teams.map(t => ({ TeamId: t })),
       AttributesToGet: ['TeamId', 'Name', 'Organization'],
     } } })
@@ -55,24 +57,8 @@ router.get('/raised/school', (req, res) => {
     const fundQueries = []
     school.Teams.forEach((tid) => {
       fundQueries.push(
-        dbRead.query({
-          TableName: 'Derby_Funds',
-          ExpressionAttributeNames: {
-            '#T': 'TeamId',
-            '#D': 'DateString',
-          },
-          ExpressionAttributeValues: {
-            ':tid': tid,
-            ':dts': lastDateTimeString,
-          },
-          KeyConditionExpression: '#T = :tid and #D >= :dts',
-        }),
-        dbRead.query({
-          TableName: 'Derby_ExternalFunds',
-          ExpressionAttributeNames: { '#T': 'TeamId' },
-          ExpressionAttributeValues: { ':tid': tid },
-          KeyConditionExpression: '#T = :tid',
-        })
+        database.query(params.fundsQuery(tid, lastDateTimeString)),
+        database.query(params.externalFundsQuery(tid))
       )
     })
     return Promise.all(fundQueries)
@@ -102,24 +88,8 @@ router.get('/raised/team/:id', (req, res) => {
   const lastDateTimeString = moment().utc()
     .subtract(1, 'days').format(`YYYY-MM-DD-${timeSlot}`)
   const fundQueries = [
-    dbRead.query({
-      TableName: 'Derby_Funds',
-      ExpressionAttributeNames: {
-        '#T': 'TeamId',
-        '#D': 'DateString',
-      },
-      ExpressionAttributeValues: {
-        ':tid': teamId,
-        ':dts': lastDateTimeString,
-      },
-      KeyConditionExpression: '#T = :tid and #D >= :dts',
-    }),
-    dbRead.query({
-      TableName: 'Derby_ExternalFunds',
-      ExpressionAttributeNames: { '#T': 'TeamId' },
-      ExpressionAttributeValues: { ':tid': teamId },
-      KeyConditionExpression: '#T = :tid',
-    }),
+    database.query(params.fundsQuery(teamId, lastDateTimeString)),
+    database.query(params.externalFundsQuery(teamId)),
   ]
   Promise.all(fundQueries).then((responses) => {
     let raised = 0
@@ -151,36 +121,26 @@ router.get('/home', (req, res) => {
     homeData.abbrv = school.Abbreviation
 
     const teamKeys = school.Teams.map(t => ({ TeamId: t }))
-    dbRead.batchGet({
-      RequestItems: {
-        Derby_Teams: {
-          Keys: teamKeys,
-        },
-      },
-    }).then((response) => {
-      homeData.teams = []
-      response.Derby_Teams.forEach((team) => {
-        homeData.teams.push({
-          name: team.Name,
-          org: team.Organization,
-          orgId: team.OrganizationId,
-          avatar: team.AvatarURL,
+    database.batchGet({ RequestItems: { Derby_Teams: { Keys: teamKeys } } })
+      .then((response) => {
+        homeData.teams = []
+        response.Derby_Teams.forEach((team) => {
+          homeData.teams.push({
+            name: team.Name,
+            org: team.Organization,
+            orgId: team.OrganizationId,
+            avatar: team.AvatarURL,
+          })
         })
-      })
-    }).then(() => {
-      res.send(JSON.stringify(homeData))
-    }).catch(err => errorEnd(err, res))
+      }).then(() => {
+        res.send(JSON.stringify(homeData))
+      }).catch(err => errorEnd(err, res))
   }).catch(err => errorEnd(err, res))
 })
 
 
 router.get('/events', (req, res) => {
-  dbRead.query({
-    TableName: 'Derby_Events',
-    ExpressionAttributeNames: { '#S': 'SchoolId' },
-    ExpressionAttributeValues: { ':sid': config.SCHOOL_ID_HARD },
-    KeyConditionExpression: '#S = :sid',
-  }).then((events) => {
+  database.query(params.eventsQuery(config.SCHOOL_ID_HARD)).then((events) => {
     const challengeKeys = []
     events.forEach((event) => {
       if (!(event.ChallengeId >= 0)) { return }
@@ -189,13 +149,11 @@ router.get('/events', (req, res) => {
         ChallengeId: event.ChallengeId,
       })
     })
-    dbRead.batchGet({
-      RequestItems: {
-        Derby_Challenges: {
-          Keys: challengeKeys,
-          AttributesToGet: ['ChallengeId', 'Description'],
-        },
-      },
+    database.batchGet({
+      RequestItems: { Derby_Challenges: {
+        Keys: challengeKeys,
+        AttributesToGet: ['ChallengeId', 'Description'],
+      } },
     }).then((response) => {
       const challenges = response.Derby_Challenges
       const hydratedEvents = events.map((event) => {
@@ -228,7 +186,7 @@ router.get('/events', (req, res) => {
 router.get('/teams', (req, res) => {
   getSchool().then((school) => {
     const teamKeys = school.Teams.map(t => ({ TeamId: t }))
-    dbRead.batchGet({
+    database.batchGet({
       RequestItems: {
         Derby_Teams: {
           Keys: teamKeys,
@@ -256,18 +214,14 @@ router.get('/teams', (req, res) => {
 
 router.get('/teams/:id', (req, res) => {
   const teamId = req.params.id
-  dbRead.get({
+  database.get({
     TableName: 'Derby_Teams',
     Key: { TeamId: parseInt(teamId) },
   }).then((team) => {
     // query all challenges that match school and teamId
-    dbRead.query({
-      TableName: 'Derby_Challenges',
-      ExpressionAttributeNames: { '#S': 'SchoolId' },
-      ExpressionAttributeValues: { ':sid': config.SCHOOL_ID_HARD },
-      KeyConditionExpression: '#S = :sid',
+    database.query(params.challengesQuery(config.SCHOOL_ID_HARD, {
       FilterExpression: 'attribute_exists(Scores)',
-    }).then(challenges => (
+    })).then(challenges => (
       challenges.filter(c => c.Scores.find(s => s.teamId === team.TeamId))
     )).then((challenges) => {
       // eslint-disable-next-line no-unused-vars
@@ -275,7 +229,7 @@ router.get('/teams/:id', (req, res) => {
         if (challenges.some(c => c.EventId >= 0)) {
           const eventKeys = challenges.filter(c => c.EventId >= 0)
             .map(c => ({ SchoolId: c.SchoolId, EventId: c.EventId }))
-          return resolve(dbRead.batchGet({
+          return resolve(database.batchGet({
             RequestItems: { Derby_Events: { Keys: eventKeys } },
           }))
         }
@@ -306,18 +260,13 @@ router.get('/teams/:id', (req, res) => {
 
 
 router.get('/challenges', (req, res) => {
-  dbRead.query({
-    TableName: 'Derby_Challenges',
-    ExpressionAttributeNames: { '#S': 'SchoolId' },
-    ExpressionAttributeValues: { ':sid': config.SCHOOL_ID_HARD },
-    KeyConditionExpression: '#S = :sid',
-  }).then((challenges) => {
+  database.query(params.challengesQuery(config.SCHOOL_ID_HARD)).then((challenges) => {
     if (challenges.some(c => c.EventId >= 0)) {
       const eventKeys = challenges.filter(c => c.EventId >= 0)
         .map(c => ({ SchoolId: c.SchoolId, EventId: c.EventId }))
       return Promise.all([
         challenges,
-        dbRead.batchGet({ RequestItems: { Derby_Events: { Keys: eventKeys } } }),
+        database.batchGet({ RequestItems: { Derby_Events: { Keys: eventKeys } } }),
         teamNames(),
       ])
     }
@@ -347,7 +296,7 @@ router.get('/challenges', (req, res) => {
 
 router.get('/challenges/:id', (req, res) => {
   const challengeId = parseInt(req.params.id)
-  dbRead.get({
+  database.get({
     TableName: 'Derby_Challenges',
     Key: { SchoolId: config.SCHOOL_ID_HARD, ChallengeId: challengeId },
   }).then((c) => {
@@ -355,7 +304,7 @@ router.get('/challenges/:id', (req, res) => {
       const eventKey = { SchoolId: c.SchoolId, EventId: c.EventId }
       return Promise.all([
         c,
-        dbRead.get({ TableName: 'Derby_Events', Key: eventKey }),
+        database.get({ TableName: 'Derby_Events', Key: eventKey }),
         teamNames(),
       ])
     }

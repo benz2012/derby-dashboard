@@ -3,7 +3,12 @@ const bodyParser = require('body-parser')
 const http = require('http')
 const socketIO = require('socket.io')
 
-const dataRoutes = require('./dataRoutes')
+if (process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line global-require
+  require('../env') // load environment variables
+}
+const dataEndpoints = require('./routes/dataEndpoints')
+const liveMiddleware = require('./routes/live')
 
 
 // Globals
@@ -13,38 +18,16 @@ const io = socketIO(server)
 
 
 // Routes
-app.use('/data', dataRoutes)
-
-// Hot Module Replacement, development only
-if (process.env.NODE_ENV !== 'production') {
-  const hotMiddleware = require('./hot') // eslint-disable-line global-require
-  hotMiddleware(app)
-}
-
-app.use(express.static(`${process.cwd()}/public`))
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use('/data', dataEndpoints)
+// app.use(require('./routes/hot')) // Only triggers in development
+app.use(express.static(`${process.cwd()}/public`)) // main code & assets
 app.get('*', (req, res) => {
+  // catch-all route for everything not defined, react-router will handle `404`
   res.sendFile(`${process.cwd()}/public/index.html`)
 })
-
-app.post('/live', (req, res) => {
-  if (req.body) {
-    // vaildate post came from lambda
-    const keyChecks = [
-      req.body.key === process.env.LAMBDA_ACCESS_KEY_ID_POST,
-      req.body.secret === process.env.LAMBDA_SECRET_ACCESS_KEY_POST,
-    ]
-    if (keyChecks.every(k => k === true)) {
-      io.emit('liveUpdate', { data: req.body.update })
-    } else {
-      // post request is invalid
-      console.log('received invalid POST request')
-      res.status(403).send()
-    }
-  }
-  res.end()
-})
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+liveMiddleware(app, io)
 
 
 // Socket Events

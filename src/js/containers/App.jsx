@@ -4,7 +4,8 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from 'react-router-dom'
 import styled from 'styled-components'
-import io from 'socket.io-client'
+
+import LivePage from './LivePage'
 
 const Home = () => (
   <div>
@@ -80,30 +81,6 @@ const Challenges = ({ match }) => (
     </ul>
   </div>
 )
-class Live extends Component {
-  constructor() {
-    super()
-    this.state = {
-      data: null,
-    }
-  }
-  componentDidMount() {
-    const socket = io()
-    socket.on('liveUpdate', (update) => {
-      this.setState({ data: update })
-    })
-  }
-  render() {
-    const { data } = this.state
-    const disp = data && String(Object.keys(data).map(k => Object.keys(data[k])))
-    return (
-      <div>
-        <h2>Live</h2>
-        <h4><em>{disp}</em></h4>
-      </div>
-    )
-  }
-}
 const More = () => (
   <div>
     <h2>More</h2>
@@ -142,7 +119,7 @@ export default class App extends Component {
               <Route path="/teams/:teamId" component={Team} />
               <Route exact path="/challenges" component={Challenges} />
               <Route path="/challenges/:challengeId" component={Challenge} />
-              <Route path="/live" component={Live} />
+              <Route path="/live" component={LivePage} />
               <Route path="/more" component={More} />
               <Route component={NoMatch} />
             </Switch>
