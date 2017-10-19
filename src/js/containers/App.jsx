@@ -1,31 +1,33 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import styled from 'styled-components'
+import { ThemeProvider } from 'styled-components'
 
 import ChallengePage from './ChallengePage'
 import ChallengesPage from './ChallengesPage'
 import HomePage from './HomePage'
 import LivePage from './LivePage'
 import MorePage from './MorePage'
+import NoMatch from './NoMatch'
 import SchedulePage from './SchedulePage'
 import TeamPage from './TeamPage'
 import TeamSelectionPage from './TeamSelectionPage'
 
+import { AppStyle, BodyStyle } from '../styles/app'
 import NavBar from '../components/NavBar'
-import NoMatch from '../components/NoMatch'
+import theme from '../styles/theme'
 
 export default class App extends Component {
   componentWillMount() {
-    document.body.style.backgroundColor = '#dddddd'
+    Object.keys(BodyStyle).forEach((attr) => {
+      document.body.style[attr] = BodyStyle[attr]
+    })
   }
   render() {
     return (
-      <AppStyle>
-        <Router>
-          <div>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <AppStyle>
             <NavBar />
-
-            <hr />
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route path="/schedule" component={SchedulePage} />
@@ -37,17 +39,9 @@ export default class App extends Component {
               <Route path="/more" component={MorePage} />
               <Route component={NoMatch} />
             </Switch>
-          </div>
-        </Router>
-      </AppStyle>
+          </AppStyle>
+        </ThemeProvider>
+      </Router>
     )
   }
 }
-
-const AppStyle = styled.div`
-  display: block;
-  margin: 0;
-  border: 0;
-  padding: 0;
-  color: black;
-`

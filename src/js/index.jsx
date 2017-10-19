@@ -18,7 +18,6 @@ import '../assets/images/og_image_v001.png'
 // Root Application Container
 import App from './containers/App'
 
-
 // Wrapper Function for rendering, allows HMR in development only, AppContainer
 // is disabled in production.
 const render = (Component) => {

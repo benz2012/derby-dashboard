@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client'
 
-const socket = io()
+import Page from '../components/Page'
+
+const socket = io({ autoConnect: false })
 
 export default class Live extends Component {
-  constructor() {
-    super()
-    this.state = {
-      data: null,
-    }
+  state = {
+    data: null,
   }
   componentDidMount() {
     socket.open()
@@ -28,10 +27,10 @@ export default class Live extends Component {
     const { data } = this.state
     const disp = data && String(Object.keys(data).map(k => Object.keys(data[k])))
     return (
-      <div>
+      <Page>
         <h2>Live</h2>
         <h4><em>{disp}</em></h4>
-      </div>
+      </Page>
     )
   }
 }

@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 
+import Page from '../components/Page'
+
 export default class MorePage extends Component {
   componentDidMount() {
     console.log('MorePage is mounted')
   }
   render() {
     return (
-      <div>
+      <Page>
         <h1>MorePage</h1>
-      </div>
+      </Page>
     )
   }
 }

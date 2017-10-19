@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import Page from '../components/Page'
+
 export default class TeamPage extends Component {
   componentDidMount() {
     console.log('TeamPage is mounted')
@@ -7,9 +9,9 @@ export default class TeamPage extends Component {
   render() {
     const { match } = this.props
     return (
-      <div>
+      <Page>
         <h1>TeamPage for team {match.params.teamId}</h1>
-      </div>
+      </Page>
     )
   }
 }
