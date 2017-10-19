@@ -49,6 +49,13 @@ const groupBy = (ungrouped, key) => (
 
 
 // Data Routes
+router.get('/year', (req, res) => {
+  getSchool().then((school) => {
+    res.send(JSON.stringify({ year: school.EventYear }))
+  })
+})
+
+
 router.get('/raised/school', (req, res) => {
   const timeSlot = Math.floor(moment().utc().hour() / 6) + 2
   const lastDateTimeString = moment().utc()
