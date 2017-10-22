@@ -7,8 +7,9 @@ if (process.env.NODE_ENV !== 'production') {
   // eslint-disable-next-line global-require
   require('../env') // load environment variables
 }
-const dataEndpoints = require('./routes/dataEndpoints')
-const liveMiddleware = require('./routes/live')
+const data = require('./routes/data')
+const live = require('./routes/live')
+const socketHandler = require('./socketHandler')
 
 
 // Globals
@@ -17,26 +18,20 @@ const server = http.Server(app)
 const io = socketIO(server)
 
 
-// Routes
-app.use('/data', dataEndpoints)
-app.use(require('./routes/hot')) // Only triggers in development
+// Routes & Middleware
+app.use('/data', data)
+if (process.env.NODE_ENV !== 'production') {
+  app.use(require('./routes/hot')) // eslint-disable-line global-require
+}
 app.use(express.static(`${process.cwd()}/public`)) // main code & assets
 app.get('*', (req, res) => {
-  // catch-all route for everything not defined, react-router will handle `404`
+  // catch-all route for everything not defined
   res.sendFile(`${process.cwd()}/public/index.html`)
 })
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-liveMiddleware(app, io)
-
-
-// Socket Events
-io.on('connection', (socket) => {
-  console.log(`connected ${socket.id}`)
-  socket.on('disconnect', () => {
-    console.log(`disconnected ${socket.id}`)
-  })
-})
+live(app, io) // handle POST requests to `/live`
+socketHandler(io)
 
 
 // Start Server

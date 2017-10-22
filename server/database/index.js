@@ -1,5 +1,8 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb')
 
+const config = require('./config')
+const placeholder = require('../database/placeholder')
+
 
 // Database Connection
 const db = new DynamoDB.DocumentClient({
@@ -49,10 +52,20 @@ const scan = params => new Promise((resolve, reject) => {
 })
 
 
+// Utility Functions
+const getSchool = () => (
+  get({
+    TableName: 'Derby_Schools',
+    Key: { SchoolId: config.SCHOOL_ID_HARD },
+  })
+)
+
+
 // Exports
 module.exports = {
   get,
   batchGet,
   query,
   scan,
+  getSchool,
 }
