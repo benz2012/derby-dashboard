@@ -1,9 +1,7 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb')
 
-if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line global-require
-  require('../env') // load environment variables
-}
+const config = require('./config')
+const placeholder = require('../database/placeholder')
 
 
 // Database Connection
@@ -54,10 +52,20 @@ const scan = params => new Promise((resolve, reject) => {
 })
 
 
+// Utility Functions
+const getSchool = () => (
+  get({
+    TableName: 'Derby_Schools',
+    Key: { SchoolId: config.SCHOOL_ID_HARD },
+  })
+)
+
+
 // Exports
 module.exports = {
   get,
   batchGet,
   query,
   scan,
+  getSchool,
 }

@@ -1,21 +1,9 @@
-const DynamoDB = require('aws-sdk/clients/dynamodb')
 const moment = require('moment')
 
+const connection = require('./connection')
 const dbRead = require('./dbRead')
 
-if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line global-require
-  require('../../env') // load environment variables
-}
-
-
-// Database Connection
-const db = new DynamoDB.DocumentClient({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID_WORKER,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_WORKER,
-  apiVersion: '2012-08-10',
-  region: 'us-east-1',
-})
+const db = connection()
 
 
 // Utility Promises
