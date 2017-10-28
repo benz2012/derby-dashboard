@@ -1,3 +1,5 @@
+/* eslint consistent-return: 0 */
+
 const cheerio = require('cheerio')
 
 const scrapeUtil = require('./utility')
@@ -42,6 +44,9 @@ const raisedValuesForSchool = html => new Promise((resolve, reject) => {
     // Data is valid, add it to the object
     raisedValues[teamId] = floatAmount
   })
+  if (Object.keys(raisedValues).length === 0) {
+    return reject('PARSE FAILED: raisedValues object was empty')
+  }
   return resolve(raisedValues)
 })
 
@@ -74,11 +79,13 @@ const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
   ))
   Promise.all(urlValidations).then((results) => {
     if (results.every(result => result)) {
+      // all urls must be valid
+      if (Object.keys(urls).length === 0) {
+        return reject('PARSE FAILED: urls object was empty')
+      }
       return resolve(urls)
-    } else {
-      // if any urls are invalid
-      return reject('An invalid url was found when parsing teamURLsForSchool')
     }
+    return reject('An invalid url was found when parsing teamURLsForSchool')
   }).catch(err => reject(err))
 })
 
@@ -125,11 +132,10 @@ const teamValues = html => new Promise((resolve, reject) => {
   ]
   Promise.all(urlValidations).then((results) => {
     if (results.every(result => result)) {
+      // all urls must be valid
       return resolve(finalValues)
-    } else {
-      // if any urls are invalid
-      return reject(`An invalid url was found when parsing team: ${teamId}`)
     }
+    return reject(`An invalid url was found when parsing team: ${teamId}`)
   }).catch(err => reject(err))
 })
 
