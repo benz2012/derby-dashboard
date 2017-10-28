@@ -41,6 +41,9 @@ const raised = (data) => {
       },
     },
   }))
+  if (updates.length === 0) {
+    throw 'WORKER ERROR: Length of raised updates was 0'
+  }
   return batchWrite({
     RequestItems: {
       Derby_Funds: updates,
