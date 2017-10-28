@@ -4,6 +4,7 @@ const Block = styled.div`
   width: 100%;
   height: auto;
   box-sizing: border-box;
+  overflow: hidden;
 
   margin-bottom: 10px;
   padding: 10px 10px;

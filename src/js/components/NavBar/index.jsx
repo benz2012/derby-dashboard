@@ -8,7 +8,7 @@ import { dataFetch } from '../../util'
 export default class NavBar extends Component {
   state = {
     menuOpen: false,
-    year: '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0',
+    year: null,
   }
   componentDidMount() {
     dataFetch('/data/year').then(res => res.json()).then((data) => {
@@ -25,7 +25,7 @@ export default class NavBar extends Component {
     return (
       <NavBarContainer>
         <MenuButton onClick={this.toggleMenu}>menu</MenuButton>
-        <TitleContainer>Derby Days {year}</TitleContainer>
+        <TitleContainer>{year ? `Derby Days ${year}` : '\u00a0'}</TitleContainer>
         { menuOpen && <Menu toggleMenu={this.toggleMenu} /> }
       </NavBarContainer>
     )
