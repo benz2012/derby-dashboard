@@ -12,7 +12,9 @@ router.get('/', (req, res) => {
       body: school.HomePageData.Body,
       learnMoreURL: school.HomePageData.LearnMoreURL,
       videoURL: school.HomePageData.VideoURL,
+      name: school.Name,
       abbrv: school.Abbreviation,
+      avatar: school.AvatarURL,
     }
     res.send(JSON.stringify(home))
   }).catch(err => errorEnd(err, res))

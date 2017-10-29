@@ -14,15 +14,15 @@ const fundQuery = teamId => ([
 ])
 
 const structureFunds = (databaseFunds) => {
-  let teamId = 0
   const structured = {
+    id: null,
     raised: 0,
     external: {},
   }
   databaseFunds.forEach((fund) => {
     if (fund[0] && fund[0].Raised) {
       const mostRecent = fund.pop()
-      teamId = mostRecent.TeamId
+      structured.id = mostRecent.TeamId
       structured.raised = mostRecent.Raised
     } else if (fund[0] && fund[0].EntryId) {
       fund.forEach((externalFund) => {
@@ -30,7 +30,7 @@ const structureFunds = (databaseFunds) => {
       })
     }
   })
-  return { [teamId]: structured }
+  return structured
 }
 
 

@@ -3,7 +3,7 @@ const dataFetch = url => (
     headers: new Headers({
       'sent-from-client-javascript': true,
     }),
-  })
+  }).then(res => res.json())
 )
 
 const embedURL = (src) => {

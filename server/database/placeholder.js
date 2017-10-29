@@ -42,11 +42,11 @@ const teams = [
 ]
 
 const raised = [
-  { 111115: { raised: 2000, external: {} } },
-  { 111116: { raised: 1450, external: {} } },
-  { 111117: { raised: 850, external: {} } },
-  { 111118: { raised: 450, external: {} } },
-  { 111119: { raised: 1600, external: {} } },
+  { id: 111115, raised: 2376, external: {} },
+  { id: 111116, raised: 578, external: {} },
+  { id: 111117, raised: 3837, external: {} },
+  { id: 111118, raised: 557, external: {} },
+  { id: 111119, raised: 2467, external: { 10: 1000 } },
 ]
 
 module.exports = {
