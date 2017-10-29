@@ -30,8 +30,6 @@ const TeamName = styled.div`
   font-weight: 700;
 `
 const TeamSubName = styled.div`
-  font-size: 16px;
-  font-weight: 300;
   color: ${props => props.theme.textDampen}
 `
 

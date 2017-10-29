@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 
+import Currency from './Currency'
+import ExternalLink from './ExternalLink'
+
 const Header = styled.div`
   padding-left: 15px;
   padding-right: 15px;
@@ -15,15 +18,10 @@ const Ranking = styled.div`
   color: ${props => props.theme.textDampen}
 `
 
-const Currency = styled.div`
-  font-size: 16px;
-  font-weight: 700;
-  color: rgb(69, 194, 80);
-`
-
 export {
   Header,
   Body,
   Ranking,
   Currency,
+  ExternalLink,
 }

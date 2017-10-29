@@ -5,31 +5,37 @@ import Block from '../components/Block'
 import Heading from '../components/Heading'
 import Video from '../components/Video'
 import TeamBlock from '../components/TeamBlock'
-import { Header, Body, Ranking, Currency } from '../components/Content'
-import ExternalLink from '../components/Content/ExternalLink'
+import { Header, Body, Ranking,
+  Currency, ExternalLink } from '../components/Content'
 import { dataFetch } from '../util'
+import { sumTeamFunds, sumSchoolFunds } from '../util/currency'
 
 export default class HomePage extends Component {
   state = {
     home: null,
     raised: null,
     teams: null,
+    schoolTotal: null,
   }
   componentDidMount() {
-    dataFetch('/data/home').then(res => res.json()).then((data) => {
+    dataFetch('/data/home').then((data) => {
       this.setState({ home: data })
     })
-    dataFetch('/data/raised').then(res => res.json()).then((data) => {
+    dataFetch('/data/raised').then((data) => {
       this.setState({ raised: data })
+      const schoolTotal = sumSchoolFunds(data)
+      this.setState({ schoolTotal })
     })
-    dataFetch('/data/teams').then(res => res.json()).then((data) => {
+    dataFetch('/data/teams').then((data) => {
       this.setState({ teams: data })
     })
   }
+
   buildHomeTeam(teams, raised) {
     if (!teams || !raised) { return null }
-    const homeTeam = teams.filter(t => t.homeTeam)[0]
-    const homeTeamRaised = raised.filter(t => homeTeam.id in t)[0][homeTeam.id]
+    const homeTeam = teams.find(t => t.homeTeam)
+    const homeTeamRaised = raised.find(t => t.id === homeTeam.id)
+    const teamTotal = sumTeamFunds(homeTeamRaised)
     return (
       <TeamBlock
         key={homeTeam.id}
@@ -37,7 +43,7 @@ export default class HomePage extends Component {
         subName={homeTeam.orgId}
         avatar={homeTeam.avatar}
         left={<Ranking style={{ color: 'white' }}>0</Ranking>}
-        right={<Currency>${homeTeamRaised.raised}</Currency>}
+        right={<Currency>{teamTotal}</Currency>}
       />
     )
   }
@@ -45,9 +51,9 @@ export default class HomePage extends Component {
     if (!teams || !raised) { return null }
     const teamsData = teams.filter(t => !t.homeTeam)
     teamsData.forEach((team) => {
-      const tRaised = raised.find(t => team.id in t)[team.id].raised
+      const tRaised = raised.find(t => t.id === team.id)
       const tIndex = teamsData.findIndex(t => t.id === team.id)
-      teamsData[tIndex].raised = tRaised
+      teamsData[tIndex].raised = sumTeamFunds(tRaised)
     })
     teamsData.sort((a, b) => (b.raised - a.raised))
     return teamsData.map((t, idx) => (
@@ -57,12 +63,12 @@ export default class HomePage extends Component {
         subName={t.orgId}
         avatar={t.avatar}
         left={<Ranking>{idx + 1}</Ranking>}
-        right={<Currency>${t.raised}</Currency>}
+        right={<Currency>{t.raised}</Currency>}
       />
     ))
   }
   render() {
-    const { home, raised, teams } = this.state
+    const { home, raised, teams, schoolTotal } = this.state
     const homeTeam = this.buildHomeTeam(teams, raised)
     const teamsRaised = this.buildTeamsRaised(teams, raised)
     if (!home) { return null }
@@ -80,9 +86,16 @@ export default class HomePage extends Component {
         </Block>
 
         <Block>
-          {homeTeam}
+          <TeamBlock
+            name={`${home.abbrv} Total`}
+            avatar={home.avatar}
+            left={<Ranking style={{ color: 'white' }}>0</Ranking>}
+            right={<Currency>{schoolTotal}</Currency>}
+          />
         </Block>
+
         <Block>
+          {homeTeam}
           {teamsRaised}
         </Block>
       </Page>

@@ -11,7 +11,7 @@ export default class NavBar extends Component {
     year: null,
   }
   componentDidMount() {
-    dataFetch('/data/year').then(res => res.json()).then((data) => {
+    dataFetch('/data/year').then((data) => {
       this.setState({ year: data.year })
     })
   }
