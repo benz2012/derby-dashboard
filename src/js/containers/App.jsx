@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactGA from 'react-ga'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 
@@ -13,11 +14,13 @@ import TeamPage from './TeamPage'
 import TeamSelectionPage from './TeamSelectionPage'
 
 import { AppStyle, BodyStyle } from '../styles/app'
-import NavBar from '../components/NavBar'
 import theme from '../styles/theme'
+import NavBar from '../components/NavBar'
+import { logPageView } from '../util/analytics'
 
 export default class App extends Component {
   componentWillMount() {
+    ReactGA.initialize('UA-108915943-1')
     Object.keys(BodyStyle).forEach((attr) => {
       document.body.style[attr] = BodyStyle[attr]
     })
@@ -27,6 +30,7 @@ export default class App extends Component {
       <Router>
         <ThemeProvider theme={theme}>
           <AppStyle>
+            <Route component={logPageView} />
             <NavBar />
             <Switch>
               <Route exact path="/" component={HomePage} />
