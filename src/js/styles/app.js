@@ -20,7 +20,7 @@ const AppStyle = styled.div`
 const BodyStyle = {
   margin: 0,
   boxSizing: 'border-box',
-  backgroundColor: 'rgb(219, 226, 240)',
+  backgroundColor: 'hsl(220, 10%, 92%)',
   webkitTextSizeAdjust: '100%',
 }
 
