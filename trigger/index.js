@@ -18,6 +18,11 @@ const processEvent = (event, context, callback) => {
     console.log(record.eventName)
     console.log('DynamoDB Record: %j', record.dynamodb)
 
+    if (record.eventName === 'REMOVE') {
+      console.log(null, 'Irrelevent event type.')
+      return
+    }
+
     let teamId
     let fundType
     let fundAmount
@@ -44,7 +49,8 @@ const processEvent = (event, context, callback) => {
     }
 
     if (!(teamId && fundType && fundAmount)) {
-      callback(`UNSUCCESSFUL. Didn't process ${event.Records.length} records.`, null)
+      console.log(null, "UNSUCCESSFUL: Didn't process this record. No retry attempt will be made.")
+      return
     }
 
     // trigger post request
@@ -63,18 +69,21 @@ const processEvent = (event, context, callback) => {
     }
     request(options, (err, res, body) => {
       if (err) {
-        console.log(`POST error: ${err}`)
+        console.log(null, `POST error: ${err}`)
+        return
       }
       if (!err && res.statusCode !== 200) {
-        console.log(`POST returned with status code: ${res.statusCode}`)
+        console.log(null, `POST returned with status code: ${res.statusCode}`)
+        return
       }
       if (!err && res.statusCode === 200) {
-        console.log('POST Successfully sent to server')
+        console.log(null, 'POST Successfully sent to server')
+        return
       }
     })
   })
 
-  callback(null, `Successfully processed ${event.Records.length} records.`)
+  return callback(null, `Successfully processed ${event.Records.length} records.`)
 }
 
 exports.handler = (event, context, callback) => {
