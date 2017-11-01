@@ -2,21 +2,13 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
-const Menu = ({ toggleMenu }) => {
+const Menu = ({ linkData, toggleMenu }) => {
   const activeStyle = {
     fontWeight: '700',
     color: 'black',
   }
-  const linkNames = [
-    { to: '/', display: 'Home', exact: true },
-    { to: '/schedule', display: 'Schedule' },
-    { to: '/teams', display: 'My Team' },
-    { to: '/challenges', display: 'Challenges' },
-    { to: '/live', display: 'Live' },
-    { to: '/more', display: 'More' },
-  ]
 
-  const links = linkNames.map(link => (
+  const links = linkData.map(link => (
     <li key={link.to}><NavLinkStyled
       onClick={toggleMenu}
       activeStyle={activeStyle}

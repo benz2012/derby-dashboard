@@ -31,7 +31,14 @@ export default class App extends Component {
         <ThemeProvider theme={theme}>
           <AppStyle>
             <Route component={logPageView} />
-            <NavBar />
+            <NavBar linkData={[
+              { to: '/', display: 'Home', exact: true },
+              { to: '/schedule', display: 'Schedule' },
+              { to: '/teams', display: 'My Team' },
+              { to: '/challenges', display: 'Challenges' },
+              { to: '/live', display: 'Live' },
+              { to: '/more', display: 'More' },
+            ]} />
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route path="/schedule" component={SchedulePage} />
