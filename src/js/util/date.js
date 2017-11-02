@@ -10,6 +10,23 @@ const dateSort = (dateA, dateB) => {
   return 0
 }
 
+const timeParse = t => moment(t, 'HH:mm')
+
+const timeSort = (timeA, timeB) => {
+  const datetimeA = timeParse(timeA)
+  const datetimeB = timeParse(timeB)
+  if (datetimeA.isBefore(datetimeB)) {
+    return -1
+  }
+  if (datetimeA.isAfter(datetimeB)) {
+    return 1
+  }
+  return 0
+}
+
+
 export {
-  dateSort // eslint-disable-line
+  dateSort,
+  timeSort,
+  timeParse,
 }

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Currency from './Currency'
 import ExternalLink from './ExternalLink'
 import CleanLink from './CleanLink'
+import IconLink from './IconLink'
 
 const Header = styled.div`
   padding-left: 15px;
@@ -26,4 +27,5 @@ export {
   Currency,
   ExternalLink,
   CleanLink,
+  IconLink,
 }

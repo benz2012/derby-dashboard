@@ -48,7 +48,7 @@ export default class SchedulePage extends Component {
     if (!events) { return null }
 
     const firstDate = this.selectFirstDate(events)
-    const urlDateMatch = new RegExp(`${match.url}/(\\d{4}-\\d{2}-\\d{2})$`)
+    const urlDateMatch = new RegExp(`${match.url}/(\\d{4}-\\d{2}-\\d{2}).*`)
     const dateMatch = location.pathname.match(urlDateMatch)
     if (!dateMatch) {
       return (
