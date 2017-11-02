@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const AppStyle = styled.div`
   display: block;
@@ -24,4 +24,13 @@ const BodyStyle = {
   webkitTextSizeAdjust: '100%',
 }
 
-export { AppStyle, BodyStyle }
+const Blur = css`
+  filter: url(#svgBlur);
+  filter: blur(5px);
+`
+
+export {
+  AppStyle,
+  BodyStyle,
+  Blur,
+}

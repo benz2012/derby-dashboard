@@ -1,11 +1,11 @@
 import React from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
-import Event from '../Event'
-import EventCard from '../EventCard'
-import NoMatch from '../../containers/NoMatch'
-import { objectSort } from '../../util'
-import { timeParse, timeSort } from '../../util/date'
+import Event from './Event'
+import EventCard from './EventCard'
+import NoMatch from '../containers/NoMatch'
+import { objectSort } from '../util'
+import { timeParse, timeSort } from '../util/date'
 
 
 const tfmt = t => timeParse(t).format('h:mm a')
