@@ -2,6 +2,8 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
+import Close from '../Button/Close'
+
 const Menu = ({ linkData, toggleMenu }) => {
   const activeStyle = {
     fontWeight: '700',
@@ -69,16 +71,6 @@ const NavLinkStyled = styled(NavLink)`
   &:visited {
     text-decoration: none;
   }
-`
-
-const Close = styled.span`
-  font-size: 70px;
-  font-weight: 300;
-  position: fixed;
-  top: -10px;
-  right: 15px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 `
 
 export default Menu

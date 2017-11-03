@@ -1,9 +1,9 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 const AppStyle = styled.div`
   display: block;
-  box-sizing: : border-box;
-  overflow-y: scroll;
+  box-sizing: border-box;
+  overflow: scroll;
 
   width: 100%;
   margin: 0;
@@ -24,13 +24,8 @@ const BodyStyle = {
   webkitTextSizeAdjust: '100%',
 }
 
-const Blur = css`
-  filter: url(#svgBlur);
-  filter: blur(5px);
-`
 
 export {
   AppStyle,
   BodyStyle,
-  Blur,
 }

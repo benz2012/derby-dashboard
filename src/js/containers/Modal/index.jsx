@@ -1,9 +1,10 @@
 /* eslint react/sort-comp: 0 */
-import { Component } from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
-import { Blur } from '../styles/app'
-
+import { AppStyle } from '../../styles/app'
+import { Blur, Backdrop } from './style'
+import SVGBlur from './SVGBlur'
 
 export default class Modal extends Component {
   modalRoot = document.getElementById('modal')
@@ -12,17 +13,25 @@ export default class Modal extends Component {
   componentDidMount() {
     this.modalRoot.appendChild(this.el)
     const app = document.getElementById('app')
-    app.setAttribute('style', Blur)
+    const radius = this.props.radius || 5
+    app.setAttribute('style', Blur(radius))
   }
   componentWillUnmount() {
     this.modalRoot.removeChild(this.el)
     const app = document.getElementById('app')
     app.setAttribute('style', '')
   }
-
   render() {
+    const radius = this.props.radius || 5
+    const modal = (
+      <AppStyle>
+        {this.props.children}
+        <Backdrop />
+        <SVGBlur radius={radius} />
+      </AppStyle>
+    )
     return ReactDOM.createPortal(
-      this.props.children,
+      modal,
       this.el,
     )
   }
