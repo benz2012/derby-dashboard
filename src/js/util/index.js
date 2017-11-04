@@ -4,10 +4,18 @@ const dataFetch = url => (
       'sent-from-client-javascript': true,
     }),
   }).then((res) => {
-    if (res.ok) { return res }
-    throw new Error(`Status ${res.status} is not OK`)
-  }).then(res => res.json())
-    .catch(err => console.log(`Data Fetch failed for ${url}. Error: ${err.message || err}`))
+    if (!res.ok) {
+      throw new Error(`Response Status ${res.status}. Expected 200-299.`)
+    }
+    const contentType = res.headers.get('Content-Type')
+    if (!(contentType && contentType.includes('application/json'))) {
+      console.log(res.text())
+      throw new Error(`Content Type ${contentType}. Expected application/json.`)
+    }
+    return res.json()
+  }).catch((err) => {
+    console.log(`Data Fetch failed for ${url}. Error: ${err.message || err}`)
+  })
 )
 
 const embedURL = (src) => {

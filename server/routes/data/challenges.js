@@ -33,7 +33,7 @@ router.get('/', (req, res) => {
         scores: c.Scores,
       })
     })
-    res.send(JSON.stringify(challengesHydrated))
+    res.json(challengesHydrated)
   }).catch(err => errorEnd(err, res))
 })
 
@@ -70,7 +70,7 @@ router.get('/:id', (req, res) => {
         name: event.Name,
       }
     }
-    res.send(JSON.stringify(challengeData))
+    res.json(challengeData)
   }).catch(err => errorEnd(err, res))
 })
 

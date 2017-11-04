@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
       avatar: t.AvatarURL,
       homeTeam: t.TeamId === homeTeamId,
     }))
-    res.send(JSON.stringify(teams))
+    res.json(teams)
   }).catch(err => errorEnd(err, res))
 })
 
@@ -51,11 +51,11 @@ router.get('/:id', (req, res) => {
   if (placeholder.teams.find(t => t.TeamId === teamId)) {
     const placeholderTeam = placeholder.teams.find(t => t.TeamId === teamId)
     const teamData = mapTeam(placeholderTeam)
-    res.send(JSON.stringify(teamData))
+    res.json(teamData)
   }
   get({ TableName: 'Derby_Teams', Key: { TeamId: teamId } }).then((team) => {
     const teamData = mapTeam(team)
-    res.send(JSON.stringify(teamData))
+    res.json(teamData)
   }).catch(err => errorEnd(err, res))
 })
 

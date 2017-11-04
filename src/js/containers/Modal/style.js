@@ -13,7 +13,7 @@ const Backdrop = styled.div`
   left: 0;
   right: 0;
 
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.35);
   -webkit-overflow-scrolling: touch;
 `
 

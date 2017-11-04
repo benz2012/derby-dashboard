@@ -29,6 +29,7 @@ const EventOutline = styled.div`
   border: 1px solid rgba(255, 255, 255, 1);
   border-radius: 4px;
   color: white;
+  cursor: auto;
 `
 const EventContent = styled.div`
   padding: 10px;

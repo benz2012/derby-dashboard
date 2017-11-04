@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
       return event
     })
     const eventsGrouped = groupBy(eventsHydrated, 'date')
-    res.send(JSON.stringify(eventsGrouped))
+    res.json(eventsGrouped)
   }).catch(err => errorEnd(err, res))
 })
 

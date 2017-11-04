@@ -49,7 +49,7 @@ router.get('/', (req, res) => {
       eachTeamRaised.push(fundsForTeam)
     })
     eachTeamRaised.push(...placeholder.raised) // TODO: remove placeholder data
-    res.send(JSON.stringify(eachTeamRaised))
+    res.json(eachTeamRaised)
   }).catch(err => errorEnd(err, res))
 })
 
@@ -60,11 +60,11 @@ router.get('/:id', (req, res) => {
   if (placeholder.raised.filter(r => r.hasOwnProperty(teamId)).length > 0) {
     // eslint-disable-next-line no-prototype-builtins
     const fundsForTeam = placeholder.raised.filter(r => r.hasOwnProperty(teamId))[0]
-    res.send(JSON.stringify(fundsForTeam))
+    res.json(fundsForTeam)
   }
   Promise.all(fundQuery(teamId)).then((responses) => {
     const fundsForTeam = structureFunds(responses)
-    res.send(JSON.stringify(fundsForTeam))
+    res.json(fundsForTeam)
   }).catch(err => errorEnd(err, res))
 })
 

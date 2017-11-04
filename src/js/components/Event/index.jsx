@@ -1,9 +1,19 @@
 import React, { Component } from 'react'
 
 import Modal from '../../containers/Modal'
+import { dataFetch } from '../../util'
 import { EventContainer, EventOutline, EventContent, EventClose } from './style'
 
 export default class Event extends Component {
+  state = {
+    event: null,
+  }
+  componentDidMount() {
+    const { eventId } = this.props.match.params
+    dataFetch(`/data/event/${eventId}`).then((data) => {
+      this.setState({ event: data })
+    })
+  }
   back = (e) => {
     e.stopPropagation()
     const targetClasses = e.target.className.split(' ')
@@ -14,16 +24,15 @@ export default class Event extends Component {
     }
   }
   render() {
-    const { match } = this.props
+    const { event } = this.state
+    if (!event) { return null }
     return (
       <div onClick={this.back}>
         <Modal>
           <EventContainer className="close-modal">
             <EventOutline>
               <EventContent>
-                <h4>Viewing EventId: {match.params.eventId}</h4>
-                <p>Rikitikitavi, bitch!Save it for the Semantics Dome, E.B.White.I do not have discolored butthole flaps.I just wanna die!</p>
-                <p>Rikitikitavi, bitch!Save it for the Semantics Dome, E.B.White.I do not have discolored butthole flaps.I just wanna die!</p>
+                <p>{event.name}</p>
               </EventContent>
               <EventClose className="close-modal">Close</EventClose>
             </EventOutline>
