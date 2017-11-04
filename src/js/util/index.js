@@ -3,7 +3,11 @@ const dataFetch = url => (
     headers: new Headers({
       'sent-from-client-javascript': true,
     }),
+  }).then((res) => {
+    if (res.ok) { return res }
+    throw new Error(`Status ${res.status} is not OK`)
   }).then(res => res.json())
+    .catch(err => console.log(`Data Fetch failed for ${url}. Error: ${err.message || err}`))
 )
 
 const embedURL = (src) => {

@@ -12,7 +12,9 @@ export default class NavBar extends Component {
   }
   componentDidMount() {
     dataFetch('/data/year').then((data) => {
-      this.setState({ year: data.year })
+      if (data) {
+        this.setState({ year: data.year })
+      }
     })
   }
   toggleMenu = () => {
