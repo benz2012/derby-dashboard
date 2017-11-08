@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import PlainButton from '../Button/PlainButton'
+import { LeftPad } from '../Content'
 
 const EventContainer = styled.div`
   z-index: 70;
@@ -37,6 +38,14 @@ const EventContent = styled.div`
   overflow: scroll;
   margin-bottom: 34px;
 `
+const EventDetail = styled.div`
+  display: flex;
+  align-items: flex-start;
+  padding-bottom: 16px;
+`
+const EventDetailText = styled(LeftPad)`
+  padding-top: 4px;
+`
 const EventClose = styled(PlainButton)`
   position: absolute;
   bottom: 0px;
@@ -47,9 +56,12 @@ const EventClose = styled(PlainButton)`
   font: 300 18px 'Roboto', sans-serif;
 `
 
+
 export {
   EventContainer,
   EventOutline,
   EventContent,
+  EventDetail,
+  EventDetailText,
   EventClose,
 }

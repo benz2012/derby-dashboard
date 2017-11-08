@@ -11,6 +11,8 @@ const dateSort = (dateA, dateB) => {
 }
 
 const timeParse = t => moment(t, 'HH:mm')
+const tfmt = t => timeParse(t).format('h:mm a')
+const durationString = (start, end) => `${tfmt(start)} - ${tfmt(end)}`
 
 const timeSort = (timeA, timeB) => {
   const datetimeA = timeParse(timeA)
@@ -28,5 +30,5 @@ const timeSort = (timeA, timeB) => {
 export {
   dateSort,
   timeSort,
-  timeParse,
+  durationString,
 }

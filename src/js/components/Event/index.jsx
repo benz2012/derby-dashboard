@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
 
 import Modal from '../../containers/Modal'
-import { dataFetch } from '../../util'
-import { EventContainer, EventOutline, EventContent, EventClose } from './style'
+import { durationString } from '../../util/date'
+import { LeftPad, IconWhite } from '../Content'
+import Heading from '../Heading'
+import { EventContainer, EventOutline, EventContent,
+  EventDetail, EventDetailText, EventClose } from './style'
 
 export default class Event extends Component {
-  state = {
-    event: null,
-  }
-  componentDidMount() {
-    const { eventId } = this.props.match.params
-    dataFetch(`/data/event/${eventId}`).then((data) => {
-      this.setState({ event: data })
-    })
-  }
   back = (e) => {
     e.stopPropagation()
     const targetClasses = e.target.className.split(' ')
@@ -24,15 +18,35 @@ export default class Event extends Component {
     }
   }
   render() {
-    const { event } = this.state
+    const { match, events } = this.props
+    if (!events) { return null }
+    const event = events.find(e => e.id === parseInt(match.params.eventId))
     if (!event) { return null }
+    const duration = durationString(event.time.start, event.time.end)
     return (
-      <div onClick={this.back}>
-        <Modal>
+      <div role="button" onClick={this.back} tabIndex={0}>
+        <Modal radius={8}>
           <EventContainer className="close-modal">
             <EventOutline>
               <EventContent>
-                <p>{event.name}</p>
+                <Heading>{event.name}</Heading>
+                <p>{event.description}</p>
+
+                <EventDetail>
+                  <IconWhite fontSize={24}>watch_later</IconWhite>
+                  <EventDetailText>{duration}</EventDetailText>
+                </EventDetail>
+                <EventDetail>
+                  <IconWhite fontSize={24}>place</IconWhite>
+                  <EventDetailText>{event.location}</EventDetailText>
+                </EventDetail>
+                {
+                  event.challenge &&
+                  <EventDetail>
+                    <IconWhite fontSize={24}>stars</IconWhite>
+                    <EventDetailText>{event.challenge}</EventDetailText>
+                  </EventDetail>
+                }
               </EventContent>
               <EventClose className="close-modal">Close</EventClose>
             </EventOutline>

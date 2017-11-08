@@ -9,7 +9,7 @@ const dataFetch = url => (
     }
     const contentType = res.headers.get('Content-Type')
     if (!(contentType && contentType.includes('application/json'))) {
-      console.log(res.text())
+      res.text().then((t) => { console.log(t) })
       throw new Error(`Content Type ${contentType}. Expected application/json.`)
     }
     return res.json()

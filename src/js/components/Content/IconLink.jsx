@@ -1,7 +1,7 @@
 import React from 'react'
 
 import CleanLink from './CleanLink'
-import FontIcon from '../FontIcon'
+import { FontIcon } from '../Content'
 
 const IconLink = ({ to, children, ...rest }) => (
   <CleanLink to={to}>

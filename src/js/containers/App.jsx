@@ -21,6 +21,7 @@ import { logPageView } from '../util/analytics'
 export default class App extends Component {
   componentWillMount() {
     ReactGA.initialize('UA-108915943-1')
+    document.documentElement.style.height = '100%'
     Object.keys(BodyStyle).forEach((attr) => {
       document.body.style[attr] = BodyStyle[attr]
     })

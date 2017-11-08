@@ -5,10 +5,7 @@ import Event from './Event'
 import EventCard from './EventCard'
 import NoMatch from '../containers/NoMatch'
 import { objectSort } from '../util'
-import { timeParse, timeSort } from '../util/date'
-
-
-const tfmt = t => timeParse(t).format('h:mm a')
+import { timeSort, durationString } from '../util/date'
 
 const Day = ({ match, events }) => {
   if (!events) { return null }
@@ -17,7 +14,7 @@ const Day = ({ match, events }) => {
 
   const sortedEvents = objectSort(dayEvents, 'time.start', timeSort)
   const cards = sortedEvents.map((e) => {
-    const time = `${tfmt(e.time.start)} - ${tfmt(e.time.end)}`
+    const time = durationString(e.time.start, e.time.end)
     return (
       <EventCard
         key={e.id}
@@ -31,7 +28,10 @@ const Day = ({ match, events }) => {
   return (
     <div>
       {cards}
-      <Route path={`${match.url}/:eventId`} component={Event} />
+      <Route
+        path={`${match.url}/:eventId`}
+        render={props => <Event {...props} events={dayEvents} />}
+      />
     </div>
   )
 }
