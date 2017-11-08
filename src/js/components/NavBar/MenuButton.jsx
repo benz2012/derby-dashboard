@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
 
-import FontIcon from '../FontIcon'
+import { FontIcon } from '../Content'
 import PlainButton from '../Button/PlainButton'
 
 const MenuButton = ({ children, onClick, theme }) => (

@@ -1,23 +1,16 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import Page from '../components/Page'
 
-export default class NoMatch extends Component {
-  componentDidMount() {
-    console.log('NoMatch is mounted')
-  }
-  render() {
-    return (
-      <Page>
-        <NotFoundMessage>
-          no page found :(<br /><br />
-          try something other than: {this.props.location.pathname}
-        </NotFoundMessage>
-      </Page>
-    )
-  }
-}
+const NoMatch = () => (
+  <Page>
+    <NotFoundMessage>
+      no page found :(<br /><br />
+      try something other than: {window.location.pathname}
+    </NotFoundMessage>
+  </Page>
+)
 
 const NotFoundMessage = styled.h1`
   width: 100%;
@@ -27,3 +20,5 @@ const NotFoundMessage = styled.h1`
 
   color: ${props => props.theme.textDampen};
 `
+
+export default NoMatch

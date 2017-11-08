@@ -27,5 +27,9 @@ router.use('/raised', raised)
 router.use('/teams', teams)
 router.use('/year', year)
 
+router.get('/*', (req, res) => {
+  res.json({ message: 'Error: Endpoint does not exist.' })
+})
+
 
 module.exports = router

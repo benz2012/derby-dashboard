@@ -23,8 +23,10 @@ export default class HomePage extends Component {
     })
     dataFetch('/data/raised').then((data) => {
       this.setState({ raised: data })
-      const schoolTotal = sumSchoolFunds(data)
-      this.setState({ schoolTotal })
+      if (data) {
+        const schoolTotal = sumSchoolFunds(data)
+        this.setState({ schoolTotal })
+      }
     })
     dataFetch('/data/teams').then((data) => {
       this.setState({ teams: data })

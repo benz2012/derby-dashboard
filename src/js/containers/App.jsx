@@ -21,6 +21,7 @@ import { logPageView } from '../util/analytics'
 export default class App extends Component {
   componentWillMount() {
     ReactGA.initialize('UA-108915943-1')
+    document.documentElement.style.height = '100%'
     Object.keys(BodyStyle).forEach((attr) => {
       document.body.style[attr] = BodyStyle[attr]
     })
@@ -31,7 +32,14 @@ export default class App extends Component {
         <ThemeProvider theme={theme}>
           <AppStyle>
             <Route component={logPageView} />
-            <NavBar />
+            <NavBar linkData={[
+              { to: '/', display: 'Home', exact: true },
+              { to: '/schedule', display: 'Schedule' },
+              { to: '/teams', display: 'My Team' },
+              { to: '/challenges', display: 'Challenges' },
+              { to: '/live', display: 'Live' },
+              { to: '/more', display: 'More' },
+            ]} />
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route path="/schedule" component={SchedulePage} />

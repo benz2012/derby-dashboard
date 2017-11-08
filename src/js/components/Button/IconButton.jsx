@@ -1,6 +1,6 @@
 import React from 'react'
 
-import FontIcon from '../FontIcon'
+import { FontIcon } from '../Content'
 import PlainButton from './PlainButton'
 
 const IconButton = ({ children, onClick, fontSize }) => (

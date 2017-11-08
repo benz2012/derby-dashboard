@@ -2,14 +2,14 @@ import styled from 'styled-components'
 
 const AppStyle = styled.div`
   display: block;
-  box-sizing: : border-box;
-  overflow-y: scroll;
+  box-sizing: border-box;
+  overflow: scroll;
 
   width: 100%;
   margin: 0;
-  margin-bottom: 50px;
   border: 0;
   padding: 0;
+  padding-bottom: 50px;
 
   color: ${props => props.theme.contentFG};
   font-family: ${props => props.theme.fontBody};
@@ -19,9 +19,14 @@ const AppStyle = styled.div`
 
 const BodyStyle = {
   margin: 0,
+  height: '100%',
   boxSizing: 'border-box',
   backgroundColor: 'hsl(220, 10%, 92%)',
   webkitTextSizeAdjust: '100%',
 }
 
-export { AppStyle, BodyStyle }
+
+export {
+  AppStyle,
+  BodyStyle,
+}

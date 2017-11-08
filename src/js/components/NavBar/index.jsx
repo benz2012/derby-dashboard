@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Menu from './Menu'
 import MenuButton from './MenuButton'
-import { NavBarContainer, TitleContainer } from './style'
+import { NavBarContainer, NavBarShadow, TitleContainer } from './style'
 import { dataFetch } from '../../util'
 
 export default class NavBar extends Component {
@@ -12,7 +12,9 @@ export default class NavBar extends Component {
   }
   componentDidMount() {
     dataFetch('/data/year').then((data) => {
-      this.setState({ year: data.year })
+      if (data) {
+        this.setState({ year: data.year })
+      }
     })
   }
   toggleMenu = () => {
@@ -21,13 +23,15 @@ export default class NavBar extends Component {
     }))
   }
   render() {
+    const { linkData } = this.props
     const { menuOpen, year } = this.state
-    return (
-      <NavBarContainer>
+    return [
+      <NavBarContainer key={0}>
         <MenuButton onClick={this.toggleMenu}>menu</MenuButton>
         <TitleContainer>{year ? `Derby Days ${year}` : '\u00a0'}</TitleContainer>
-        { menuOpen && <Menu toggleMenu={this.toggleMenu} /> }
-      </NavBarContainer>
-    )
+        { menuOpen && <Menu linkData={linkData} toggleMenu={this.toggleMenu} /> }
+      </NavBarContainer>,
+      <NavBarShadow key={1} />,
+    ]
   }
 }

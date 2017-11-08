@@ -7,11 +7,18 @@ const NavBarContainer = styled.div`
   align-items: center;
 
   top: 0;
-  z-index: 100;
+  z-index: 50;
   width: 100%;
   height: 50px;
 
   background-color: ${props => props.theme.headerBG};
+`
+const NavBarShadow = styled.div`
+  position: fixed;
+  top: 0;
+  z-index: 40;
+  width: 100%;
+  height: 50px;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
 `
 
@@ -27,5 +34,6 @@ const TitleContainer = styled.div`
 
 export {
   NavBarContainer,
+  NavBarShadow,
   TitleContainer,
 }

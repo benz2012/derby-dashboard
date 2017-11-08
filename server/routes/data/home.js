@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
       abbrv: school.Abbreviation,
       avatar: school.AvatarURL,
     }
-    res.send(JSON.stringify(home))
+    res.json(home)
   }).catch(err => errorEnd(err, res))
 })
 
