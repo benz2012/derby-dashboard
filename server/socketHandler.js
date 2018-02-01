@@ -1,7 +1,7 @@
-const clients = {}
-const cheering = {}
-
 const socketHandler = (io) => {
+  const clients = {}
+  const cheering = {}
+
   io.on('connection', (socket) => {
     console.log(`connected ${socket.id}`)
     clients[socket.id] = true
