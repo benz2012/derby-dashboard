@@ -1,7 +1,6 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb')
 
 const config = require('./config')
-const placeholder = require('../database/placeholder')
 
 
 // Database Connection

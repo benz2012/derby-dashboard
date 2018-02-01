@@ -28,7 +28,7 @@ const teams = [
     Name: 'Ladies in Grey',
     Organization: 'Zeta Tau Alpha',
     OrganizationId: 'Iota Psi',
-    AvatarURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-1/p200x200/16298714_10155058800994797_320135251807191447_n.jpg?oh=92ccc3f8b94cf46bb1296deb446ca2c7&oe=5A644C29',
+    AvatarURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/16298714_10155058800994797_320135251807191447_n.jpg?oh=9125e7ebd04be8ae4d525cc670495283&oe=5B2520AE',
     CoverURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/13697103_10154417752359797_7824310842252206267_n.jpg?oh=7460ad21c57b99abd7d5326fa5e40360&oe=5A79FC61',
   },
   {
@@ -36,7 +36,7 @@ const teams = [
     Name: 'Ladies in Purple',
     Organization: 'Sigma Sigma Sigma',
     OrganizationId: 'Epsilon Psi',
-    AvatarURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-1/p200x200/19511291_1471873526204709_3405939982259809593_n.png?oh=927d89ff3c0bebbf90f9b854aff14d54&oe=5A718A0C',
+    AvatarURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/19511291_1471873526204709_3405939982259809593_n.png?oh=1c7dadb7d004a228b6c12c89b6f4fe22&oe=5AEA928B',
     CoverURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/21728974_1540996869292374_4527059636847351927_o.jpg?oh=cbe30018999303d183b0c9ab7124940d&oe=5A68F552',
   },
 ]
