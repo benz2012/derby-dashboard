@@ -1,12 +1,11 @@
+if (process.env.NODE_ENV !== 'production') { // load environment variables
+  require('../env') // eslint-disable-line
+}
+const opbeat = require('opbeat').start() // Initialize first for logging/tracing
 const express = require('express')
 const bodyParser = require('body-parser')
 const http = require('http')
 const socketIO = require('socket.io')
-
-if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line global-require
-  require('../env') // load environment variables
-}
 const data = require('./routes/data')
 const live = require('./routes/live')
 const socketHandler = require('./socketHandler')
@@ -32,6 +31,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 live(app, io) // handle POST requests to `/live`
 socketHandler(io)
+// Log anything from above routes/middleware to Opbeat
+app.use(opbeat.middleware.express())
 
 
 // Start Server
