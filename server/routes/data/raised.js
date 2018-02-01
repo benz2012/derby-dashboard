@@ -9,29 +9,40 @@ const router = express.Router()
 
 // Shared Functions
 const fundQuery = teamId => ([
-  query(params.fundsQuery(teamId, lastDateTimeString())),
+  query(params.fundsQuery(teamId, lastDateTimeString(), { ScanIndexForward: false })),
   query(params.externalFundsQuery(teamId)),
 ])
+const fundQueryNoDate = teamId => (
+  query(params.fundsQueryNoDate(teamId, { ScanIndexForward: false, Limit: 4 }))
+)
 
-const structureFunds = (databaseFunds) => {
-  const structured = {
-    id: null,
-    raised: 0,
-    external: {},
-  }
-  databaseFunds.forEach((fund) => {
-    if (fund[0] && fund[0].Raised) {
-      const mostRecent = fund.pop()
-      structured.id = mostRecent.TeamId
-      structured.raised = mostRecent.Raised
-    } else if (fund[0] && fund[0].EntryId) {
-      fund.forEach((externalFund) => {
-        structured.external[externalFund.EntryId] = externalFund.Amount
+const getFundsForTeam = teamId => (
+  // Query for the funds, trying two methods in case entires are not up-to-date
+  Promise.all(fundQuery(teamId)).then((responses) => {
+    const [fundsRaised, fundsExternal] = responses
+    if (fundsRaised.length === 0) {
+      return Promise.all([fundQueryNoDate(teamId), fundsExternal])
+    }
+    return responses
+  }).then((responses) => {
+    // Structure the results
+    const [fundsRaised, fundsExternal] = responses
+    const structured = {
+      id: teamId,
+      raised: 0,
+      external: {},
+    }
+    if (fundsRaised[0] && fundsRaised[0].Raised) {
+      structured.raised = fundsRaised[0].Raised
+    }
+    if (fundsExternal[0] && fundsExternal[0].EntryId) {
+      fundsExternal.forEach((fund) => {
+        structured.external[fund.EntryId] = fund.Amount
       })
     }
-  })
-  return structured
-}
+    return structured
+  }).catch((err) => { throw err })
+)
 
 
 // Routes
@@ -39,15 +50,11 @@ router.get('/', (req, res) => {
   getSchool().then((school) => {
     const fundQueries = []
     school.Teams.forEach((tid) => {
-      fundQueries.push(Promise.all(fundQuery(tid)))
+      fundQueries.push(getFundsForTeam(tid))
     })
     return Promise.all(fundQueries)
   }).then((responses) => {
-    const eachTeamRaised = []
-    responses.forEach((teamResponse) => {
-      const fundsForTeam = structureFunds(teamResponse)
-      eachTeamRaised.push(fundsForTeam)
-    })
+    const eachTeamRaised = responses
     eachTeamRaised.push(...placeholder.raised) // TODO: remove placeholder data
     res.json(eachTeamRaised)
   }).catch(err => errorEnd(err, res))
@@ -60,12 +67,12 @@ router.get('/:id', (req, res) => {
   if (placeholder.raised.filter(r => r.hasOwnProperty(teamId)).length > 0) {
     // eslint-disable-next-line no-prototype-builtins
     const fundsForTeam = placeholder.raised.filter(r => r.hasOwnProperty(teamId))[0]
-    res.json(fundsForTeam)
+    return res.json(fundsForTeam)
   }
-  Promise.all(fundQuery(teamId)).then((responses) => {
-    const fundsForTeam = structureFunds(responses)
+  getFundsForTeam(teamId).then((fundsForTeam) => {
     res.json(fundsForTeam)
   }).catch(err => errorEnd(err, res))
+  return null
 })
 
 

@@ -51,12 +51,13 @@ router.get('/:id', (req, res) => {
   if (placeholder.teams.find(t => t.TeamId === teamId)) {
     const placeholderTeam = placeholder.teams.find(t => t.TeamId === teamId)
     const teamData = mapTeam(placeholderTeam)
-    res.json(teamData)
+    return res.json(teamData)
   }
   get({ TableName: 'Derby_Teams', Key: { TeamId: teamId } }).then((team) => {
     const teamData = mapTeam(team)
     res.json(teamData)
   }).catch(err => errorEnd(err, res))
+  return null
 })
 
 

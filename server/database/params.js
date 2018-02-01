@@ -11,6 +11,17 @@ const fundsQuery = (teamId, dataString, additional) => (Object.assign({
   KeyConditionExpression: '#T = :tid and #D >= :dts',
 }, additional))
 
+const fundsQueryNoDate = (teamId, additional) => (Object.assign({
+  TableName: 'Derby_Funds',
+  ExpressionAttributeNames: {
+    '#T': 'TeamId',
+  },
+  ExpressionAttributeValues: {
+    ':tid': teamId,
+  },
+  KeyConditionExpression: '#T = :tid',
+}, additional))
+
 const externalFundsQuery = (teamId, additional) => (Object.assign({
   TableName: 'Derby_ExternalFunds',
   ExpressionAttributeNames: {
@@ -46,6 +57,7 @@ const challengesQuery = (schoolId, additional) => (Object.assign({
 
 module.exports = {
   fundsQuery,
+  fundsQueryNoDate,
   externalFundsQuery,
   eventsQuery,
   challengesQuery,
