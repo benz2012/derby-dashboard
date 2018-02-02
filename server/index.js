@@ -17,6 +17,17 @@ const server = http.Server(app)
 const io = socketIO(server)
 
 
+// Redirects
+app.enable('trust proxy')
+// redirect any http requests to https
+app.use((req, res, next) => {
+  if (!req.secure) {
+    return res.redirect(`https://${req.headers.host}${req.url}`)
+  }
+  return next()
+})
+
+
 // Routes & Middleware
 app.use('/data', data)
 if (process.env.NODE_ENV !== 'production') {
@@ -27,6 +38,7 @@ app.get('*', (req, res) => {
   // catch-all route for everything not defined
   res.sendFile(`${process.cwd()}/public/index.html`)
 })
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 live(app, io) // handle POST requests to `/live`
