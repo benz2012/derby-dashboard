@@ -15,10 +15,10 @@ const live = (app, io) => {
       } else {
         // post request is invalid
         console.log('received invalid POST request')
-        res.status(403).send()
+        return res.status(403).send()
       }
     }
-    res.end()
+    return res.end()
   })
 }
 

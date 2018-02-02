@@ -1,4 +1,5 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb')
+const opbeat = require('opbeat')
 
 const config = require('./config')
 
@@ -14,7 +15,11 @@ const db = new DynamoDB.DocumentClient({
 
 // Read Promises
 const get = params => new Promise((resolve, reject) => {
+  const trace = opbeat.buildTrace()
+  if (trace) { trace.start(params.TableName, 'db.dynamodb.get') }
+
   db.get(params, (err, data) => {
+    if (trace) { trace.end() }
     if (err) { return reject(err) }
     if (!data || !data.Item) {
       return reject(`database response was invalid for: ${params}`)
@@ -22,8 +27,13 @@ const get = params => new Promise((resolve, reject) => {
     return resolve(data.Item)
   })
 })
+
 const batchGet = params => new Promise((resolve, reject) => {
+  const trace = opbeat.buildTrace()
+  if (trace) { trace.start('Batch Get', 'db.dynamodb.batchGet') }
+
   db.batchGet(params, (err, data) => {
+    if (trace) { trace.end() }
     if (err) { return reject(err) }
     if (!data || !data.Responses) {
       return reject(`database response was invalid for: ${params}`)
@@ -31,8 +41,13 @@ const batchGet = params => new Promise((resolve, reject) => {
     return resolve(data.Responses)
   })
 })
+
 const query = params => new Promise((resolve, reject) => {
+  const trace = opbeat.buildTrace()
+  if (trace) { trace.start(params.TableName, 'db.dynamodb.query') }
+
   db.query(params, (err, data) => {
+    if (trace) { trace.end() }
     if (err) { return reject(err) }
     if (!data || !data.Items) {
       return reject(`database response was invalid for: ${params}`)
@@ -40,8 +55,13 @@ const query = params => new Promise((resolve, reject) => {
     return resolve(data.Items)
   })
 })
+
 const scan = params => new Promise((resolve, reject) => {
+  const trace = opbeat.buildTrace()
+  if (trace) { trace.start(params.TableName, 'db.dynamodb.scan') }
+
   db.scan(params, (err, data) => {
+    if (trace) { trace.end() }
     if (err) { return reject(err) }
     if (!data || !data.Items) {
       return reject(`database response was invalid for: ${params}`)
