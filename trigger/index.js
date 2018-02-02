@@ -44,7 +44,7 @@ const processEvent = (event, context, callback) => {
       }
     }
 
-    if (!(teamId && fundType && fundAmount)) {
+    if (!(teamId && fundType && (fundAmount || fundAmount === 0))) {
       console.log("UNSUCCESSFUL: Didn't process this record. No retry attempt will be made.")
       return
     }
