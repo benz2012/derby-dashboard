@@ -37,7 +37,7 @@ const raisedValuesForSchool = html => new Promise((resolve, reject) => {
       // If any of the characters are not integers or '.'
       return reject(`amount raised is not valid: ${cleanAmount}`)
     }
-    if (!floatAmount) {
+    if (!floatAmount && floatAmount !== 0) {
       // If parsing the string to float failed
       return reject(`amount raised is not a valid float: ${cleanAmount}`)
     }
