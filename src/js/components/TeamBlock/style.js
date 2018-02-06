@@ -6,6 +6,7 @@ const TeamBlockContainer = styled.div`
   align-items: center;
 
   padding: 10px 0px;
+  text-decoration: none;
 `
 
 const TeamBlockLeft = styled.div`
