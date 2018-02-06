@@ -5,6 +5,7 @@ import ExternalLink from './ExternalLink'
 import CleanLink from './CleanLink'
 import FontIcon, { IconWhite } from './FontIcon'
 import IconLink from './IconLink'
+import RightArrow from './RightArrow'
 
 const Header = styled.div`
   padding-left: 15px;
@@ -33,4 +34,5 @@ export {
   IconWhite,
   CleanLink,
   IconLink,
+  RightArrow,
 }
