@@ -10,7 +10,7 @@ const router = express.Router()
 const mapTeam = team => ({
   id: team.TeamId,
   name: team.Name,
-  org: team.Organization,
+  org: team.Organization || team.Name,
   orgId: team.OrganizationId,
   avatar: team.AvatarURL,
   cover: team.CoverURL,
@@ -33,14 +33,11 @@ router.get('/', (req, res) => {
     const responsePlaceholder = {
       Derby_Teams: [...response.Derby_Teams, ...placeholder.teams],
     }
-    const teams = responsePlaceholder.Derby_Teams.map(t => ({
-      id: t.TeamId,
-      name: t.Name,
-      org: t.Organization,
-      orgId: t.OrganizationId,
-      avatar: t.AvatarURL,
-      homeTeam: t.TeamId === homeTeamId,
-    }))
+    const teams = responsePlaceholder.Derby_Teams.map((t) => {
+      const structured = mapTeam(t)
+      structured.homeTeam = t.TeamId === homeTeamId
+      return structured
+    })
     res.json(teams)
   }).catch(err => errorEnd(err, res))
 })

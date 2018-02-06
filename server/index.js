@@ -21,7 +21,7 @@ const io = socketIO(server)
 app.enable('trust proxy')
 // redirect any http requests to https
 app.use((req, res, next) => {
-  if (!req.secure) {
+  if (!req.secure && process.env.NODE_ENV === 'production') {
     return res.redirect(`https://${req.headers.host}${req.url}`)
   }
   return next()
