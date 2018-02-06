@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Modal from '../../containers/Modal'
 import { durationString } from '../../util/date'
 import { LeftPad, IconWhite } from '../Content'
-import Heading from '../Heading'
+import HeadingText from '../HeadingText'
 import { EventContainer, EventOutline, EventContent,
   EventDetail, EventDetailText, EventClose } from './style'
 
@@ -29,7 +29,7 @@ export default class Event extends Component {
           <EventContainer className="close-modal">
             <EventOutline>
               <EventContent>
-                <Heading>{event.name}</Heading>
+                <HeadingText>{event.name}</HeadingText>
                 <p>{event.description}</p>
 
                 <EventDetail>
