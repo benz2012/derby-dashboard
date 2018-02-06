@@ -22,12 +22,16 @@ const Ranking = styled.div`
 const LeftPad = styled.div`
   padding-left: ${props => props.length ? `${props.length}px` : '8px'};
 `
+const Centered = styled.div`
+  text-align: center;
+`
 
 export {
   Header,
   Body,
   Ranking,
   LeftPad,
+  Centered,
   Currency,
   ExternalLink,
   FontIcon,

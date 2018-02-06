@@ -2,18 +2,21 @@ import React, { Component } from 'react'
 
 import Page from '../components/Page'
 import Block from '../components/Block'
-import { Body, Currency } from '../components/Content'
+import { Body, Centered, Currency } from '../components/Content'
 import Loading from '../components/Loading'
 import TeamHeader from '../components/TeamHeader'
+import { HeadingText2 } from '../components/HeadingText'
+import { LargeLine } from '../components/Chart'
 import FullWidthButton from '../components/Button/FullWidthButton'
 import { storageEnabled, storageGet, storageSet, dataFetch } from '../util'
-import { sumTeamFunds } from '../util/currency'
+import { sumTeamFunds, joinFundsHistory } from '../util/currency'
 
 export default class TeamPage extends Component {
   state = {
     thisTeamIsSaved: false,
     team: null,
     raised: null,
+    history: null,
   }
   componentDidMount() {
     this.isThisTheSavedTeam()
@@ -22,8 +25,12 @@ export default class TeamPage extends Component {
       this.setState({ team: data })
     })
     dataFetch(`/data/raised/${teamId}`).then((data) => {
-      const total = sumTeamFunds(data)
-      this.setState({ raised: total })
+      const raised = sumTeamFunds(data)
+      this.setState({ raised })
+    })
+    dataFetch(`/data/history/${teamId}`).then((data) => {
+      const history = joinFundsHistory(data)
+      this.setState({ history })
     })
   }
   isThisTheSavedTeam() {
@@ -48,10 +55,10 @@ export default class TeamPage extends Component {
     </Body></Block>
   )
   render() {
-    const { thisTeamIsSaved, team, raised } = this.state
+    const { thisTeamIsSaved, team, raised, history } = this.state
     const unsave = thisTeamIsSaved ? this.unsaveButton() : null
 
-    if (!(team && raised)) { return <Loading /> }
+    if (team === null || raised === null) { return <Loading /> }
     return (
       <Page>
         <TeamHeader
@@ -62,15 +69,14 @@ export default class TeamPage extends Component {
           cover={team.cover}
         />
 
-        <Block>
-          <div style={{ textAlign: 'center' }}>
-            <Currency fontSize={48}>{raised}</Currency>
-            <Body>Total Raised to Date</Body>
-          </div>
-        </Block>
+        <Block><Centered>
+          <Currency fontSize={48} muted>{raised}</Currency>
+          <Body>Total Raised to Date</Body>
+        </Centered></Block>
 
         <Block>
-          <h2>Graph</h2>
+          <HeadingText2>Two Week History</HeadingText2>
+          { history && <LargeLine values={history} /> }
         </Block>
 
         <Block>

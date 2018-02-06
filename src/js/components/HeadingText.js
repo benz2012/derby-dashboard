@@ -11,4 +11,18 @@ const HeadingText = styled.h1`
   letter-spacing: 1px;
 `
 
+const HeadingText2 = styled.h2`
+  margin: 0px;
+  margin-top: 3px;
+  margin-bottom: 8px;
+
+  font-family: ${props => props.theme.fontHeading};
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1px;
+`
+
 export default HeadingText
+export {
+  HeadingText2,
+}
