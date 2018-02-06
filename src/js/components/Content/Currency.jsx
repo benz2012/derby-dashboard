@@ -12,7 +12,7 @@ const Currency = ({ children, ...rest }) => {
 const CurrencyContainer = styled.div`
   font-size: ${props => props.fontSize ? `${props.fontSize}px` : '16px'};
   font-weight: 700;
-  color: rgb(69, 194, 80);
+  color: ${props => props.muted ? props.theme.buttonBG : 'rgb(69, 194, 80)'};
 `
 
 export default Currency

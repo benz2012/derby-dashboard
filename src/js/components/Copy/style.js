@@ -13,7 +13,7 @@ const fadeInAndOut = keyframes`
 `
 
 const Container = styled.div`
-  position: absolute;
+  position: fixed;
   width: 120px;
   height: 150px;
   left: calc(50% - 60px);
@@ -25,9 +25,9 @@ const Container = styled.div`
   justify-content: center;
 
   color: white;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.75);
   border-radius: 12px;
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
   animation: ${fadeInAndOut} 3s 1 ease-in-out both;
 `
 

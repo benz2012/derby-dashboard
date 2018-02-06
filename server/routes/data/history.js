@@ -13,9 +13,10 @@ const fundsHistory = teamId => (
 const structureRaisedHistory = (history) => {
   const twoWeeksAgo = twoWeekTimeString()
   return (
-    history.map(item => (
-      { dateString: item.DateString, raised: item.Raised }
-    )).filter(item => item.dateString > twoWeeksAgo)
+    history
+      .filter(item => item.DateString > twoWeeksAgo)
+      .map(item => ({ dateString: item.DateString, raised: item.Raised }))
+      .reverse()
   )
 }
 const structureExternalHistory = history => (

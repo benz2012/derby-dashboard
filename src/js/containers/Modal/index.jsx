@@ -24,7 +24,7 @@ export default class Modal extends Component {
   render() {
     const radius = this.props.radius || 5
     const modal = (
-      <AppStyle>
+      <AppStyle style={{ paddingBottom: '0px' }}>
         {this.props.children}
         <Backdrop />
         <SVGBlur radius={radius} />

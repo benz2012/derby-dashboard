@@ -6,6 +6,7 @@ import { AppContainer } from 'react-hot-loader'
 // Load Polyfills
 import Promise from 'promise-polyfill'
 import 'whatwg-fetch'
+import './util/polyfill'
 
 if (!window.Promise) {
   window.Promise = Promise
