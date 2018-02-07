@@ -3,9 +3,9 @@ import React from 'react'
 import { FontIcon } from '../Content'
 import PlainButton from './PlainButton'
 
-const IconButton = ({ children, onClick, fontSize }) => (
+const IconButton = ({ children, onClick, ...rest }) => (
   <PlainButton onClick={onClick}>
-    <FontIcon className="material-icons" fontSize={fontSize}>
+    <FontIcon className="material-icons" {...rest}>
       {children}
     </FontIcon>
   </PlainButton>

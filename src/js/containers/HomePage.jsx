@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 
 import Page from '../components/Page'
 import Block from '../components/Block'
-import Heading from '../components/Heading'
+import HeadingText from '../components/HeadingText'
 import Video from '../components/Video'
 import TeamBlock from '../components/TeamBlock'
+import Loading from '../components/Loading'
 import { Header, Body, Ranking,
   Currency, ExternalLink } from '../components/Content'
 import { dataFetch } from '../util'
@@ -40,7 +41,6 @@ export default class HomePage extends Component {
     const teamTotal = sumTeamFunds(homeTeamRaised)
     return (
       <TeamBlock
-        key={homeTeam.id}
         name={homeTeam.org}
         subName={homeTeam.orgId}
         avatar={homeTeam.avatar}
@@ -73,12 +73,12 @@ export default class HomePage extends Component {
     const { home, raised, teams, schoolTotal } = this.state
     const homeTeam = this.buildHomeTeam(teams, raised)
     const teamsRaised = this.buildTeamsRaised(teams, raised)
-    if (!home) { return null }
+    if (!home) { return <Loading /> }
     return (
       <Page>
         <Block>
           <Header>
-            <Heading>{home.header}</Heading>
+            <HeadingText>{home.header}</HeadingText>
             <Body>{home.body}</Body>
             <ExternalLink href={home.learnMoreURL}>Learn More &gt;</ExternalLink>
           </Header>

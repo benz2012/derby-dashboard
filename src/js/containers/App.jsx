@@ -8,7 +8,6 @@ import ChallengesPage from './ChallengesPage'
 import HomePage from './HomePage'
 import LivePage from './LivePage'
 import MorePage from './MorePage'
-import NoMatch from './NoMatch'
 import SchedulePage from './SchedulePage'
 import TeamPage from './TeamPage'
 import TeamSelectionPage from './TeamSelectionPage'
@@ -16,7 +15,9 @@ import TeamSelectionPage from './TeamSelectionPage'
 import { AppStyle, BodyStyle } from '../styles/app'
 import theme from '../styles/theme'
 import NavBar from '../components/NavBar'
+import NoMatch from '../components/NoMatch'
 import { logPageView } from '../util/analytics'
+import { removeTrailingSlash } from '../util/string'
 
 export default class App extends Component {
   componentWillMount() {
@@ -31,6 +32,7 @@ export default class App extends Component {
       <Router>
         <ThemeProvider theme={theme}>
           <AppStyle>
+            <Route component={removeTrailingSlash} />
             <Route component={logPageView} />
             <NavBar linkData={[
               { to: '/', display: 'Home', exact: true },
@@ -47,8 +49,8 @@ export default class App extends Component {
               <Route path="/teams/:teamId" component={TeamPage} />
               <Route exact path="/challenges" component={ChallengesPage} />
               <Route path="/challenges/:challengeId" component={ChallengePage} />
-              <Route path="/live" component={LivePage} />
-              <Route path="/more" component={MorePage} />
+              <Route exact path="/live" component={LivePage} />
+              <Route exact path="/more" component={MorePage} />
               <Route component={NoMatch} />
             </Switch>
           </AppStyle>

@@ -48,10 +48,9 @@ const getFundsForTeam = teamId => (
 // Routes
 router.get('/', (req, res) => {
   getSchool().then((school) => {
-    const fundQueries = []
-    school.Teams.forEach((tid) => {
-      fundQueries.push(getFundsForTeam(tid))
-    })
+    const fundQueries = school.Teams.map(tid => (
+      getFundsForTeam(tid)
+    ))
     return Promise.all(fundQueries)
   }).then((responses) => {
     const eachTeamRaised = responses

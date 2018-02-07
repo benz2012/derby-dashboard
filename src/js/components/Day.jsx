@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom'
 
 import Event from './Event'
 import EventCard from './EventCard'
-import NoMatch from '../containers/NoMatch'
+import NoMatch from './NoMatch'
 import { objectSort } from '../util'
 import { timeSort, durationString } from '../util/date'
 

@@ -2,6 +2,7 @@ const express = require('express')
 
 const challenges = require('./challenges')
 const events = require('./events')
+const history = require('./history')
 const home = require('./home')
 const raised = require('./raised')
 const teams = require('./teams')
@@ -22,6 +23,7 @@ router.use((req, res, next) => {
 // Routes
 router.use('/challenges', challenges)
 router.use('/events', events)
+router.use('/history', history)
 router.use('/home', home)
 router.use('/raised', raised)
 router.use('/teams', teams)

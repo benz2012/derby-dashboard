@@ -1,7 +1,7 @@
 export default {
   headerFG: 'white',
   headerBG: '#00a0df',
-  contentFG: '#1d2630',
+  contentFG: '#222d39',
   contentBG: 'white',
   textAccent: '#3ea543',
   textDampen: '#acb7c4',

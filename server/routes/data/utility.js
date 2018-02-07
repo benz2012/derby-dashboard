@@ -13,13 +13,23 @@ const groupBy = (ungrouped, key) => (
   }, {})
 )
 
+const TimeString = (distanceInDays, timeSlot) => (
+  moment().utc().subtract(distanceInDays, 'days').format(`YYYY-MM-DD-${timeSlot}`)
+)
+
 const lastDateTimeString = () => {
   const timeSlot = Math.floor(moment().utc().hour() / 6) + 3
-  return moment().utc().subtract(1, 'days').format(`YYYY-MM-DD-${timeSlot}`)
+  return TimeString(1, timeSlot)
+}
+
+const twoWeekTimeString = () => {
+  const timeSlot = Math.floor(moment().utc().hour() / 6)
+  return TimeString(14, timeSlot)
 }
 
 module.exports = {
   errorEnd,
   groupBy,
   lastDateTimeString,
+  twoWeekTimeString,
 }
