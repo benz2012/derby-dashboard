@@ -49,8 +49,8 @@ export default class App extends Component {
               <Route path="/teams/:teamId" component={TeamPage} />
               <Route exact path="/challenges" component={ChallengesPage} />
               <Route path="/challenges/:challengeId" component={ChallengePage} />
-              <Route path="/live" component={LivePage} />
-              <Route path="/more" component={MorePage} />
+              <Route exact path="/live" component={LivePage} />
+              <Route exact path="/more" component={MorePage} />
               <Route component={NoMatch} />
             </Switch>
           </AppStyle>
