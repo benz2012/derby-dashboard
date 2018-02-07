@@ -1,7 +1,11 @@
-if (process.env.NODE_ENV !== 'production') { // load environment variables
+// load environment variables
+if (process.env.NODE_ENV !== 'production') {
   require('../env') // eslint-disable-line
 }
-const opbeat = require('opbeat').start() // Initialize first for logging/tracing
+// Initialize first for logging/tracing
+const opbeat = require('opbeat').start({
+  active: process.env.NODE_ENV === 'production',
+})
 const express = require('express')
 const bodyParser = require('body-parser')
 const http = require('http')
