@@ -13,7 +13,7 @@ export default class LineConfig {
         pointBackgroundColor: color,
         pointHoverRadius: 3,
         pointHitRadius: 3,
-        lineTension: 0.2,
+        lineTension: 0,
         borderJoinStyle: 'round',
       }],
     }
@@ -28,13 +28,13 @@ export default class LineConfig {
         display: false,
       },
       scales: {
-        yAxes: [{
-          ticks: {
-            max: scale,
-            min: 0,
-            stepSize: scale / 2,
-          },
-        }],
+        // yAxes: [{
+        //   ticks: {
+        //     max: scale,
+        //     min: 0,
+        //     stepSize: scale / 2,
+        //   },
+        // }],
         xAxes: [{
           display: false,
         }],
