@@ -25,6 +25,13 @@ const LeftPad = styled.div`
 const Centered = styled.div`
   text-align: center;
 `
+const Ellipsis = styled.div`
+  display: block;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`
 
 export {
   Header,
@@ -39,4 +46,5 @@ export {
   CleanLink,
   IconLink,
   RightArrow,
+  Ellipsis,
 }

@@ -2,14 +2,18 @@ import React, { Component } from 'react'
 
 import Page from '../components/Page'
 import Block from '../components/Block'
-import { Body, Centered, Currency } from '../components/Content'
 import Loading from '../components/Loading'
 import TeamHeader from '../components/TeamHeader'
+import TeamChallengeRank from '../components/TeamChallengeRank'
+import FullWidthButton from '../components/Button/FullWidthButton'
+
+import { Body, Centered, Currency } from '../components/Content'
 import { HeadingText2 } from '../components/HeadingText'
 import { LargeLine } from '../components/Chart'
-import FullWidthButton from '../components/Button/FullWidthButton'
+
 import { storageEnabled, storageGet, storageSet, dataFetch } from '../util'
 import { sumTeamFunds, joinFundsHistory } from '../util/currency'
+import { filterChallenges } from '../util/manageIncomingData'
 
 export default class TeamPage extends Component {
   state = {
@@ -17,6 +21,7 @@ export default class TeamPage extends Component {
     team: null,
     raised: null,
     history: null,
+    challenges: null,
   }
   componentDidMount() {
     this.isThisTheSavedTeam()
@@ -31,6 +36,10 @@ export default class TeamPage extends Component {
     dataFetch(`/data/history/${teamId}`).then((data) => {
       const history = joinFundsHistory(data)
       this.setState({ history })
+    })
+    dataFetch('/data/challenges').then((data) => {
+      const challenges = filterChallenges(data, parseInt(teamId))
+      this.setState({ challenges })
     })
   }
   isThisTheSavedTeam() {
@@ -54,11 +63,24 @@ export default class TeamPage extends Component {
       </FullWidthButton>
     </Body></Block>
   )
+  buildChallengeBlocks = challenges => (
+    challenges.map(c => (
+      <TeamChallengeRank
+        key={c.id}
+        id={c.id}
+        name={c.name}
+        description={c.description}
+        rank={c.rank}
+        score={c.score}
+      />
+    ))
+  )
   render() {
-    const { thisTeamIsSaved, team, raised, history } = this.state
-    const unsave = thisTeamIsSaved ? this.unsaveButton() : null
-
+    const { thisTeamIsSaved, team, raised, history, challenges } = this.state
     if (team === null || raised === null) { return <Loading /> }
+
+    const unsave = thisTeamIsSaved ? this.unsaveButton() : null
+    const challengeBlocks = challenges && this.buildChallengeBlocks(challenges)
     return (
       <Page>
         <TeamHeader
@@ -69,25 +91,19 @@ export default class TeamPage extends Component {
           cover={team.cover}
         />
 
-        <Block><Centered>
-          <Currency fontSize={48} muted>{raised}</Currency>
-          <Body>Total Raised to Date</Body>
-        </Centered></Block>
+        <Block>
+          <Centered>
+            <Currency fontSize={48} muted>{raised}</Currency>
+            <Body>Total Raised to Date</Body>
+          </Centered>
+        </Block>
 
         <Block>
           <HeadingText2>Two Week History</HeadingText2>
           { history && <LargeLine values={history} /> }
         </Block>
 
-        <Block>
-          <p>Challenge 1</p>
-        </Block>
-        <Block>
-          <p>Challenge 2</p>
-        </Block>
-        <Block>
-          <p>Challenge 3</p>
-        </Block>
+        {challengeBlocks}
 
         {unsave}
       </Page>
