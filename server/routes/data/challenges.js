@@ -30,6 +30,7 @@ router.get('/', (req, res) => {
       return ({
         id: c.ChallengeId,
         name,
+        description: c.Description,
         scores: c.Scores,
       })
     })
