@@ -7,7 +7,7 @@ import HeadingText from '../components/HeadingText'
 import TeamBlock from '../components/TeamBlock'
 import Loading from '../components/Loading'
 import SaveSelection from '../components/Button/SaveSelection'
-import { Header, CleanLink, RightArrow } from '../components/Content'
+import { SidePad, CleanLink, RightArrow } from '../components/Content'
 import { dataFetch, objectSort, storageEnabled,
   storageSet, storageGet } from '../util'
 import { stringSort } from '../util/string'
@@ -98,14 +98,14 @@ export default class TeamSelectionPage extends Component {
     return (
       <Page>
         <Block>
-          <Header>
+          <SidePad>
             <HeadingText>Which team would you like to view?</HeadingText>
             <SaveSelection selected={save} onClick={this.handleSaveClick} />
             {
               storageIsEnabled === false &&
               <em>Saving is not available in your browser</em>
             }
-          </Header>
+          </SidePad>
         </Block>
 
         {loading}

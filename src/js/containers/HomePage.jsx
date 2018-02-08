@@ -6,7 +6,7 @@ import HeadingText from '../components/HeadingText'
 import Video from '../components/Video'
 import TeamBlock from '../components/TeamBlock'
 import Loading from '../components/Loading'
-import { Header, Body, Ranking,
+import { SidePad, Body, Ranking,
   Currency, ExternalLink } from '../components/Content'
 import { dataFetch } from '../util'
 import { sumTeamFunds, sumSchoolFunds } from '../util/currency'
@@ -77,11 +77,11 @@ export default class HomePage extends Component {
     return (
       <Page>
         <Block>
-          <Header>
+          <SidePad>
             <HeadingText>{home.header}</HeadingText>
             <Body>{home.body}</Body>
             <ExternalLink href={home.learnMoreURL}>Learn More &gt;</ExternalLink>
-          </Header>
+          </SidePad>
         </Block>
         <Block>
           <Video src={home.videoURL} />

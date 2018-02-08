@@ -1,4 +1,10 @@
 const moment = require('moment')
+const marked = require('marked')
+const sanitizeHTML = require('sanitize-html')
+
+marked.setOptions({
+  breaks: true,
+})
 
 const errorEnd = (err, res) => {
   console.log(err)
@@ -27,9 +33,16 @@ const twoWeekTimeString = () => {
   return TimeString(14, timeSlot)
 }
 
+const markdownToHTML = input => (
+  sanitizeHTML(marked(input), {
+    allowedTags: sanitizeHTML.defaults.allowedTags.concat(['img', 'h1', 'h2']),
+  })
+)
+
 module.exports = {
   errorEnd,
   groupBy,
   lastDateTimeString,
   twoWeekTimeString,
+  markdownToHTML,
 }
