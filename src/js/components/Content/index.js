@@ -7,13 +7,21 @@ import FontIcon, { IconWhite } from './FontIcon'
 import IconLink from './IconLink'
 import RightArrow from './RightArrow'
 
-const Header = styled.div`
+const SidePad = styled.div`
   padding-left: 15px;
   padding-right: 15px;
+`
+const FullPad = styled.div`
+  padding: ${props => props.length ? `${props.length}px` : '15px'};
 `
 const Body = styled.div`
   font-weight: 300;
   padding-bottom: 3px;
+`
+const BodyFromMarkdown = styled(Body)`
+  > div > p > img {
+    width: 100%;
+  }
 `
 const Ranking = styled.div`
   font-size: 12px;
@@ -34,8 +42,10 @@ const Ellipsis = styled.div`
 `
 
 export {
-  Header,
+  SidePad,
+  FullPad,
   Body,
+  BodyFromMarkdown,
   Ranking,
   LeftPad,
   Centered,

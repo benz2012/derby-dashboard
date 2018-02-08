@@ -1,5 +1,6 @@
 const express = require('express')
 
+const application = require('./application')
 const challenges = require('./challenges')
 const events = require('./events')
 const history = require('./history')
@@ -21,6 +22,7 @@ router.use((req, res, next) => {
 
 
 // Routes
+router.use('/application', application)
 router.use('/challenges', challenges)
 router.use('/events', events)
 router.use('/history', history)
