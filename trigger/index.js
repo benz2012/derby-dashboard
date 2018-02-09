@@ -14,11 +14,6 @@ const processEvent = (event, context, callback) => {
     console.log(record.eventName)
     console.log('DynamoDB Record: %j', record.dynamodb)
 
-    if (record.eventName === 'REMOVE') {
-      console.log('Irrelevent event type.')
-      return
-    }
-
     let teamId
     let fundType
     let fundAmount
@@ -26,19 +21,34 @@ const processEvent = (event, context, callback) => {
     // decipher change
     const change = record.dynamodb
     if (!objectEmpty(change)) {
-      const newChange = change.NewImage
-      if (!objectEmpty(newChange)) {
-        teamId = parseInt(newChange.TeamId.N)
-        if (newChange.Raised) {
-          // change to derby funds
-          fundType = 'raised'
-          fundAmount = parseFloat(newChange.Raised.N)
-        } else if (newChange.Amount) {
-          // change to external funds
-          fundType = 'external'
-          const entryId = parseInt(newChange.EntryId.N)
-          fundAmount = {
-            [entryId]: parseFloat(newChange.Amount.N),
+      if (record.eventName === 'REMOVE') {
+        const oldKeys = change.Keys
+        if (!objectEmpty(oldKeys)) {
+          if (oldKeys.EntryId) {
+            teamId = parseInt(oldKeys.TeamId.N)
+            fundType = 'external'
+            const entryId = parseInt(oldKeys.EntryId.N)
+            fundAmount = {
+              [entryId]: 0,
+            }
+          }
+        }
+      } else {
+        // event type was INSERT or MODIFY
+        const newChange = change.NewImage
+        if (!objectEmpty(newChange)) {
+          teamId = parseInt(newChange.TeamId.N)
+          if (newChange.Raised) {
+            // change to derby funds
+            fundType = 'raised'
+            fundAmount = parseFloat(newChange.Raised.N)
+          } else if (newChange.Amount) {
+            // change to external funds
+            fundType = 'external'
+            const entryId = parseInt(newChange.EntryId.N)
+            fundAmount = {
+              [entryId]: parseFloat(newChange.Amount.N),
+            }
           }
         }
       }
@@ -57,7 +67,8 @@ const processEvent = (event, context, callback) => {
         key: KEY,
         secret: SECRET,
         update: {
-          [teamId]: {
+          teamId,
+          mergable: {
             [fundType]: fundAmount,
           },
         },

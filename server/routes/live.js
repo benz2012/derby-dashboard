@@ -11,7 +11,8 @@ const live = (app, io) => {
         req.body.secret === process.env.LAMBDA_SECRET_ACCESS_KEY_POST,
       ]
       if (keyChecks.every(k => k === true)) {
-        io.emit('liveUpdate', { data: req.body.update })
+        console.log('sending live update to clients', req.body.update)
+        io.emit('liveUpdate', req.body.update)
       } else {
         // post request is invalid
         console.log('received invalid POST request')
