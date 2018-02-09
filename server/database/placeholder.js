@@ -17,21 +17,11 @@ const teams = [
     CoverURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/13697103_10154417752359797_7824310842252206267_n.jpg?oh=1fe9b3bf12b6ce35a34dc5862ba1fda4&oe=5B183061',
     URL: 'https://us-p2p.netdonor.net/223/derby-challenge/954/',
   },
-  {
-    TeamId: 111119,
-    Name: 'Ladies in Purple',
-    Organization: 'Sigma Sigma Sigma',
-    OrganizationId: 'Epsilon Psi',
-    AvatarURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/19511291_1471873526204709_3405939982259809593_n.png?oh=1c7dadb7d004a228b6c12c89b6f4fe22&oe=5AEA928B',
-    CoverURL: 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/13406767_1218684024818246_6520316270310595527_n.jpg?oh=0ab0b68b0970429f405adf9b1ab81e5f&oe=5B24EC3F',
-    URL: 'https://us-p2p.netdonor.net/223/derby-challenge/954/',
-  },
 ]
 
 const raised = [
   { id: 111115, raised: 2376, external: {} },
   { id: 111118, raised: 557, external: {} },
-  { id: 111119, raised: 2467, external: { 10: 1000 } },
 ]
 
 module.exports = {
