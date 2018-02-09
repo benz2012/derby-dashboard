@@ -101,7 +101,7 @@ const teamsForSchool = (data) => {
         ExpressionAttributeValues: {
           ':newTeamsList': newTeamIds,
         },
-        UpdateExpression: 'SET #Teams = :newTeamsList',
+        UpdateExpression: 'SET #Teams = list_append(#Teams, :newTeamsList)',
       }))
     })
     return Promise.all(schoolUpdates)
