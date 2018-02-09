@@ -67,9 +67,9 @@ const processEvent = (event, context, callback) => {
         key: KEY,
         secret: SECRET,
         update: {
-          teamId,
-          fundType,
-          fundAmount,
+          [teamId]: {
+            [fundType]: fundAmount,
+          },
         },
       },
     }
