@@ -3,9 +3,12 @@ import io from 'socket.io-client'
 
 import Page from '../components/Page'
 import Block from '../components/Block'
+import Card from '../components/Card'
 import TeamBlock from '../components/TeamBlock'
 import Loading from '../components/Loading'
-import { Currency } from '../components/Content'
+import StickyFooter from '../components/StickyFooter'
+import { Currency, Centered, IconWhite } from '../components/Content'
+import { HeadingText2 } from '../components/HeadingText'
 import { dataFetch } from '../util'
 import { sumTeamFunds, sumSchoolFunds } from '../util/currency'
 
@@ -32,10 +35,9 @@ export default class Live extends Component {
     this.enableSocketListeners()
   }
   componentWillUnmount() {
-    socket.off('liveUpdate')
-    socket.off('address')
-    socket.off('watching')
-    socket.off('cheering')
+    this.disableSocketListeners([
+      'liveUpdate', 'address', 'watching', 'cheering',
+    ])
     socket.close()
   }
   enableSocketListeners() {
@@ -55,6 +57,12 @@ export default class Live extends Component {
       const { address } = this.state
       const teamChoice = (data && address) && data[address]
       this.setState({ teamChoice })
+    })
+  }
+  disableSocketListeners(events) {
+    // Iterate over a list of socket events (strings), and disable event listener
+    events.forEach((eventName) => {
+      socket.off(eventName)
     })
   }
   mergeLiveUpdate(teamId, mergable) {
@@ -77,13 +85,15 @@ export default class Live extends Component {
       teamsData[tIndex].raised = sumTeamFunds(tRaised)
     })
     return teamsData.map(t => (
-      <TeamBlock
-        key={t.id}
-        name={t.org}
-        subName={t.orgId}
-        avatar={t.avatar}
-        right={<Currency>{t.raised}</Currency>}
-      />
+      <Card>
+        <TeamBlock
+          key={t.id}
+          name={t.org}
+          subName={t.orgId}
+          avatar={t.avatar}
+          right={<Currency>{t.raised}</Currency>}
+        />
+      </Card>
     ))
   }
   handleTeamClick = (e) => {
@@ -98,17 +108,20 @@ export default class Live extends Component {
     const schoolTotal = sumSchoolFunds(raised)
     return (
       <Page>
-        <Block>
-          <h2>Live</h2>
-          <h2><Currency>{schoolTotal}</Currency></h2>
-          <h3>Watching: {watching}</h3>
-        </Block>
+        <Block><Centered>
+          <Currency fontSize={48}>{schoolTotal}</Currency>
+        </Centered></Block>
 
-        <Block>
+        <div>
           {teamsRaised}
-        </Block>
+        </div>
 
         <p><em>{ !teamChoice && 'Choose a team to cheer for!' }</em></p>
+
+        <StickyFooter>
+          <IconWhite fontSize={36}>remove_red_eye</IconWhite>
+          <HeadingText2 style={{ margin: '0' }}>{watching} Watching Live</HeadingText2>
+        </StickyFooter>
 
       </Page>
     )
