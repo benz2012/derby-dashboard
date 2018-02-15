@@ -13,6 +13,9 @@ import '../../assets/images/icon_on_home.png'
 export default class MorePage extends Component {
   state = {
     more: null,
+    telephone: '',
+    subscribed: null,
+    statusText: null,
   }
   componentDidMount() {
     dataFetch('/data/application/more').then((data) => {
@@ -22,6 +25,25 @@ export default class MorePage extends Component {
   htmlString = html => (
     <div dangerouslySetInnerHTML={{ __html: html }} /> // eslint-disable-line
   )
+  handleNumberChange = (e) => {
+    this.setState({ telephone: e.target.value })
+  }
+  handleSubscribe = () => {
+    fetch('/sms', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ number: this.state.telephone }),
+    }).then((res) => {
+      this.setState({
+        statusText: res.ok ? 'Successfully Subscribed!' : res.statusText,
+        subscribed: res.ok,
+      })
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
   render() {
     const { more } = this.state
     if (!more) { return <Loading /> }
@@ -53,6 +75,21 @@ export default class MorePage extends Component {
             <BodyFromMarkdown>
               {this.htmlString(more.texting)}
             </BodyFromMarkdown>
+
+            <label htmlFor="telNumber">Cell: </label>
+            <input
+              id="telNumber"
+              type="tel"
+              placeholder="123-456-7891"
+              required
+              value={this.state.telephone}
+              onChange={this.handleNumberChange}
+            />
+            <button onClick={this.handleSubscribe}>Subscribe</button>
+            {
+              this.state.subscribed !== null &&
+              <div style={this.state.subscribed ? { color: 'green' } : { color: 'red' }}>{this.state.statusText}</div>
+            }
           </FullPad>
         </Block>
 
