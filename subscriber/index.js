@@ -33,10 +33,14 @@ exports.handler = (event, context, callback) => {
       // coerce all values to a string
       const numberAsString = String(body.number)
       // strip any non-digit caracters
-      const cleanNumber = numberAsString.replace(/\D/g, '')
+      let cleanNumber = numberAsString.replace(/\D/g, '')
       // baseline telephone number validation
       if (baselineValidation(cleanNumber) === false) {
         return endTransaction(400, callback)
+      }
+      // gauruntees a US country code
+      if (cleanNumber.length === 10) {
+        cleanNumber = `1${cleanNumber}`
       }
 
       console.log(`attempting to subscribe: ${cleanNumber}`)
