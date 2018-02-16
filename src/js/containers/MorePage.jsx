@@ -4,6 +4,9 @@ import Page from '../components/Page'
 import Block from '../components/Block'
 import Loading from '../components/Loading'
 import Video from '../components/Video'
+import Status from '../components/Status'
+import Telephone from '../components/Input/Telephone'
+import FullButton from '../components/Button/MediumFullButton'
 import HeadingText, { HeadingText2 } from '../components/HeadingText'
 import { BodyFromMarkdown, FullPad } from '../components/Content'
 import { dataFetch } from '../util'
@@ -14,6 +17,7 @@ export default class MorePage extends Component {
   state = {
     more: null,
     telephone: '',
+    subInProgress: false,
     subscribed: null,
     statusText: null,
   }
@@ -29,6 +33,7 @@ export default class MorePage extends Component {
     this.setState({ telephone: e.target.value })
   }
   handleSubscribe = () => {
+    this.setState({ subInProgress: true })
     fetch('/sms', {
       method: 'POST',
       headers: {
@@ -36,8 +41,14 @@ export default class MorePage extends Component {
       },
       body: JSON.stringify({ number: this.state.telephone }),
     }).then((res) => {
+      const statuses = {
+        200: 'Successfully Subscribed!',
+        400: 'Invalid Phone Number!',
+        500: 'Server Error Occured',
+      }
       this.setState({
-        statusText: res.ok ? 'Successfully Subscribed!' : res.statusText,
+        subInProgress: false,
+        statusText: statuses[res.status] || 'An Unknown Error Occured',
         subscribed: res.ok,
       })
     }).catch((err) => {
@@ -45,7 +56,7 @@ export default class MorePage extends Component {
     })
   }
   render() {
-    const { more } = this.state
+    const { more, telephone, subInProgress, subscribed, statusText } = this.state
     if (!more) { return <Loading /> }
     return (
       <Page>
@@ -76,20 +87,10 @@ export default class MorePage extends Component {
               {this.htmlString(more.texting)}
             </BodyFromMarkdown>
 
-            <label htmlFor="telNumber">Cell: </label>
-            <input
-              id="telNumber"
-              type="tel"
-              placeholder="123-456-7891"
-              required
-              value={this.state.telephone}
-              onChange={this.handleNumberChange}
-            />
-            <button onClick={this.handleSubscribe}>Subscribe</button>
-            {
-              this.state.subscribed !== null &&
-              <div style={this.state.subscribed ? { color: 'green' } : { color: 'red' }}>{this.state.statusText}</div>
-            }
+            <Telephone value={telephone} onChange={this.handleNumberChange} />
+            <FullButton onClick={this.handleSubscribe} primary fill>Subscribe</FullButton>
+            <Status show={subscribed !== null} success={subscribed} message={statusText} />
+            { subInProgress && <Loading style={{ marginTop: '20px' }} /> }
           </FullPad>
         </Block>
 
