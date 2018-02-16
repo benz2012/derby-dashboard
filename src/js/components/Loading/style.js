@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components'
 
 const Container = styled.div`
-  margin: 150px auto 0;
+  margin: 150px auto 0 auto;
   width: 100px;
   text-align: center;
 `
