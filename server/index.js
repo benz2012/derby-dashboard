@@ -12,6 +12,7 @@ const http = require('http')
 const socketIO = require('socket.io')
 const data = require('./routes/data')
 const live = require('./routes/live')
+const subscribe = require('./routes/subscribe')
 const socketHandler = require('./socketHandler')
 
 
@@ -45,6 +46,7 @@ app.get('*', (req, res) => {
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use('/sms', subscribe)
 live(app, io) // handle POST requests to `/live`
 socketHandler(io)
 // Log anything from above routes/middleware to Opbeat
