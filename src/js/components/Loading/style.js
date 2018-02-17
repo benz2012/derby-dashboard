@@ -28,7 +28,17 @@ const Dot = styled.div`
   animation-delay: ${props => props.delay};
 `
 
+const WaitingText = styled.div`
+  margin: 20px auto 0 auto;
+  width: 50%;
+  text-align: center;
+  font-weight: 700;
+  font-size: 24px;
+  color: ${props => props.theme.textDampen};
+`
+
 export {
   Container,
   Dot,
+  WaitingText,
 }
