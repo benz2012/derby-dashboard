@@ -3,12 +3,13 @@ import io from 'socket.io-client'
 
 import Page from '../components/Page'
 import Block from '../components/Block'
-import Card from '../components/Card'
-import TeamBlock from '../components/TeamBlock'
 import Loading from '../components/Loading'
 import StickyFooter from '../components/StickyFooter'
+import LiveCard from '../components/LiveCard'
+
 import { Currency, Centered, IconWhite } from '../components/Content'
 import { HeadingText2 } from '../components/HeadingText'
+import { CardFlexContainer } from '../components/Card'
 import { dataFetch } from '../util'
 import { sumTeamFunds, sumSchoolFunds } from '../util/currency'
 
@@ -23,6 +24,7 @@ export default class Live extends Component {
     teams: null,
     raised: null,
     schoolTotal: null,
+    initial: true,
   }
   componentDidMount() {
     dataFetch('/data/raised').then((data) => {
@@ -42,6 +44,7 @@ export default class Live extends Component {
   }
   enableSocketListeners() {
     socket.on('liveUpdate', (update) => {
+      this.setState({ initial: false }) // will prevent resorting of the list after initial render
       console.log('liveUpdate: ', update)
       const { teamId, mergable } = update
       this.mergeLiveUpdate(teamId, mergable)
@@ -76,24 +79,36 @@ export default class Live extends Component {
       }
     })
   }
-  buildTeamsRaised(teams, raised) {
+  sumCheersForTeam = (cheering, teamId) => {
+    if (!cheering || !teamId) { return 0 }
+    return Object.keys(cheering).reduce((accum, key) => (
+      parseInt(cheering[key]) === parseInt(teamId) ? accum + 1 : accum
+    ), 0)
+  }
+  buildTeams(teams, raised, initial, teamChoice, cheering) {
     if (!teams || !raised) { return null }
     const teamsData = teams
     teamsData.forEach((team) => {
       const tRaised = raised.find(t => t.id === team.id)
       const tIndex = teamsData.findIndex(t => t.id === team.id)
       teamsData[tIndex].raised = sumTeamFunds(tRaised)
+      teamsData[tIndex].cheering = this.sumCheersForTeam(cheering, team.id)
     })
+    if (initial) {
+      teamsData.sort((a, b) => (b.raised - a.raised))
+    }
     return teamsData.map(t => (
-      <Card>
-        <TeamBlock
-          key={t.id}
-          name={t.org}
-          subName={t.orgId}
-          avatar={t.avatar}
-          right={<Currency>{t.raised}</Currency>}
-        />
-      </Card>
+      <LiveCard
+        key={t.id}
+        id={t.id}
+        raised={t.raised}
+        org={t.org}
+        orgId={t.orgId}
+        selected={parseInt(teamChoice) === parseInt(t.id)}
+        onClick={this.handleTeamClick}
+        cheering={t.cheering}
+        showGraphs={false} // TODO: set this as state
+      />
     ))
   }
   handleTeamClick = (e) => {
@@ -101,26 +116,24 @@ export default class Live extends Component {
     socket.emit('cheering', { cheeringFor: e.currentTarget.id })
   }
   render() {
-    const { watching, teamChoice, teams, raised } = this.state
+    const { watching, teamChoice, teams, raised, initial, cheering } = this.state
     if (!(teams && raised)) { return <Loading /> }
 
-    const teamsRaised = this.buildTeamsRaised(teams, raised)
+    const teamCards = this.buildTeams(teams, raised, initial, teamChoice, cheering)
     const schoolTotal = sumSchoolFunds(raised)
     return (
       <Page>
         <Block><Centered>
-          <Currency fontSize={48}>{schoolTotal}</Currency>
+          <Currency fontSize={50}>{schoolTotal}</Currency>
         </Centered></Block>
 
-        <div>
-          {teamsRaised}
-        </div>
-
-        <p><em>{ !teamChoice && 'Choose a team to cheer for!' }</em></p>
+        <CardFlexContainer>
+          {teamCards}
+        </CardFlexContainer>
 
         <StickyFooter>
-          <IconWhite fontSize={36}>remove_red_eye</IconWhite>
-          <HeadingText2 style={{ margin: '0' }}>{watching} Watching Live</HeadingText2>
+          <IconWhite fontSize={36} style={{ paddingLeft: '10px' }}>remove_red_eye</IconWhite>
+          <HeadingText2 style={{ margin: '0', paddingLeft: '10px' }}>{watching} Watching Live</HeadingText2>
         </StickyFooter>
 
       </Page>

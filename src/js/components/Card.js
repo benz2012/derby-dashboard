@@ -9,4 +9,24 @@ const Card = styled.div`
   position: relative;
 `
 
-export default Card
+const HalfCardGutter = 8
+const CardFlexContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: calc(100% - ${2 * HalfCardGutter}px);
+  padding: 0 ${HalfCardGutter}px;
+`
+const HalfCard = styled(Card)`
+  width: calc(50% - ${2 * HalfCardGutter}px);
+  margin: ${HalfCardGutter}px;
+
+  box-shadow: ${props => (
+    props.selected && '0px 0px 10px 3px rgba(232, 30, 99, 0.5)'
+  )};
+`
+
+export {
+  Card,
+  CardFlexContainer,
+  HalfCard,
+}

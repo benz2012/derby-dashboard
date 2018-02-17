@@ -7,11 +7,11 @@ const StickyFooter = styled.div`
   bottom: 0;
 
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 
   padding: 5px;
   color: ${props => props.theme.contentBG};
-  background-color: rgba(123, 65, 217, 0.75);
+  background-color: ${props => props.theme['Team Activity']};
 `
 
 export default StickyFooter
