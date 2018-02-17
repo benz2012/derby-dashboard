@@ -9,4 +9,7 @@ export default {
   buttonBG: '#179e83',
   fontHeading: "'Cabin', sans-serif",
   fontBody: "'Roboto', sans-serif",
+  'Individual Activity': 'rgb(6, 150, 136)',
+  'Team Activity': 'rgb(232, 30, 99)',
+  'Public Event': 'rgb(63, 81, 180)',
 }

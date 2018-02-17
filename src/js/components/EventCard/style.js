@@ -1,16 +1,10 @@
 import styled from 'styled-components'
 
-const typeColors = {
-  'Individual Activity': 'rgb(6, 150, 136)',
-  'Team Activity': 'rgb(232, 30, 99)',
-  'Public Event': 'rgb(63, 81, 180)',
-}
-const colored = type => typeColors[type]
 const EventType = styled.div`
   padding: 4px 10px;
   font-weight: 700;
   color: white;
-  background-color: ${props => props.children && typeColors[props.children]};
+  background-color: ${props => props.children && props.theme[props.children]};
 `
 
 const EventContent = styled.div`
@@ -39,6 +33,5 @@ export {
   EventContent,
   EventName,
   EventTime,
-  colored,
   IconContainer,
 }
