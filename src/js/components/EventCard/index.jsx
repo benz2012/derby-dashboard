@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Card from '../Card'
+import { Card } from '../Card'
 import { IconLink } from '../Content'
 import { EventType, EventContent, EventName,
   EventTime, IconContainer } from './style'
