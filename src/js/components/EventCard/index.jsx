@@ -1,9 +1,10 @@
 import React from 'react'
 
-import Card from '../Card'
+import { Card } from '../Card'
 import { IconLink } from '../Content'
 import { EventType, EventContent, EventName,
-  EventTime, IconContainer, colored } from './style'
+  EventTime, IconContainer } from './style'
+import theme from '../../styles/theme'
 
 const EventCard = ({ name, type, time, eventUrl }) => (
   <Card>
@@ -15,7 +16,7 @@ const EventCard = ({ name, type, time, eventUrl }) => (
     <IconContainer>
       <IconLink
         to={eventUrl}
-        color={colored(type)}
+        color={theme[type]}
         fontSize={30}
       >
         info_outline

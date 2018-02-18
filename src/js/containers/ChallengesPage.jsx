@@ -2,21 +2,61 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 import Page from '../components/Page'
+import Block from '../components/Block'
+import Loading from '../components/Loading'
+import HeadingText from '../components/HeadingText'
+import { CleanLink, RightArrow } from '../components/Content'
+import { dataFetch } from '../util'
 
 export default class ChallengesPage extends Component {
+  state = {
+    challenges: null,
+    teams: null,
+  }
   componentDidMount() {
-    console.log('ChallengesPage is mounted')
+    dataFetch('/data/challenges').then((data) => {
+      this.setState({ challenges: data })
+    })
+    dataFetch('/data/teams').then((data) => {
+      this.setState({ teams: data })
+    })
+  }
+  buildBlocks(challenges, teams) {
+    const { match } = this.props
+    return challenges.map((ch) => {
+      const scores = ch.scores && this.buildScores(ch.scores, teams)
+      return (
+        <Block key={ch.id}>
+          <CleanLink to={`${match.url}/${ch.id}`}><HeadingText>
+            <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
+              {ch.name}<RightArrow />
+            </div>
+          </HeadingText></CleanLink>
+          <p>{ch.description}</p>
+          <ul>{scores}</ul>
+        </Block>
+      )
+    })
+  }
+  buildScores = (scores, teams) => {
+    scores.sort((a, b) => (b.score - a.score))
+    return scores.map((sc) => {
+      const thisTeam = teams.find(t => parseInt(t.id) === parseInt(sc.teamId))
+      if (!thisTeam) { return null }
+      const teamName = thisTeam.org
+      return (
+        <li key={sc.teamId}>{sc.score} | {teamName}</li>
+      )
+    })
   }
   render() {
-    const { match } = this.props
+    const { challenges, teams } = this.state
+    if (!(challenges && teams)) { return <Loading /> }
+
+    const challengeBlocks = this.buildBlocks(challenges, teams)
     return (
       <Page>
-        <h1>ChallengesPage</h1>
-        <ul>
-          <li><Link to={`${match.url}/1`}>Challenge 1</Link></li>
-          <li><Link to={`${match.url}/2`}>Challenge 2</Link></li>
-          <li><Link to={`${match.url}/3`}>Challenge 3</Link></li>
-        </ul>
+        {challengeBlocks}
       </Page>
     )
   }
