@@ -88,7 +88,7 @@ export default class MorePage extends Component {
             </BodyFromMarkdown>
 
             <Telephone value={telephone} onChange={this.handleNumberChange} />
-            <FullButton onClick={this.handleSubscribe} primary fill>Subscribe</FullButton>
+            <FullButton onClick={this.handleSubscribe} primary>Subscribe</FullButton>
             <Status show={subscribed !== null} success={subscribed} message={statusText} />
             { subInProgress && <Loading style={{ marginTop: '20px' }} /> }
           </FullPad>
