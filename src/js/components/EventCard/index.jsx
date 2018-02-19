@@ -18,6 +18,7 @@ const EventCard = ({ name, type, time, eventUrl }) => (
         to={eventUrl}
         color={theme[type]}
         fontSize={30}
+        replace
       >
         info_outline
       </IconLink>

@@ -3,8 +3,8 @@ import React from 'react'
 import CleanLink from './CleanLink'
 import { FontIcon } from '../Content'
 
-const IconLink = ({ to, children, ...rest }) => (
-  <CleanLink to={to}>
+const IconLink = ({ to, children, replace, ...rest }) => (
+  <CleanLink to={to} replace={replace}>
     <FontIcon className="material-icons" {...rest}>{children}</FontIcon>
   </CleanLink>
 )

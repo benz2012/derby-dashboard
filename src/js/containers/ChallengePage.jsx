@@ -56,9 +56,8 @@ export default class ChallengePage extends Component {
         {
           challenge.linkedEvent &&
           <Block>
-            <Link to={`${match.url}/${challenge.linkedEvent.id}`}>
+            <Link to={`${match.url}/${challenge.linkedEvent.id}`} replace>
               <FullWidthButton>View Linked Event</FullWidthButton>
-
             </Link>
           </Block>
         }

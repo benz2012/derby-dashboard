@@ -14,7 +14,7 @@ export default class Event extends Component {
     if (targetClasses.includes('close-modal')) {
       const { history, match } = this.props
       const base = match.path.replace(`/:${Object.keys(match.params)[0]}`, '')
-      history.push(base)
+      history.replace(base)
     }
   }
   render() {
