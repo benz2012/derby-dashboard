@@ -1,7 +1,6 @@
 const express = require('express')
 
 const { getSchool, batchGet, get } = require('../../database')
-const placeholder = require('../../database/placeholder')
 const { errorEnd } = require('./utility')
 
 const router = express.Router()
@@ -29,11 +28,7 @@ router.get('/', (req, res) => {
       RequestItems: { Derby_Teams: { Keys: teamKeys } },
     })
   }).then((response) => {
-    // TODO: remove placeholder data
-    const responsePlaceholder = {
-      Derby_Teams: [...response.Derby_Teams, ...placeholder.teams],
-    }
-    const teams = responsePlaceholder.Derby_Teams.map((t) => {
+    const teams = response.Derby_Teams.map((t) => {
       const structured = mapTeam(t)
       structured.homeTeam = t.TeamId === homeTeamId
       return structured
@@ -44,12 +39,6 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const teamId = parseInt(req.params.id)
-  // TODO: remove placeholder data
-  if (placeholder.teams.find(t => t.TeamId === teamId)) {
-    const placeholderTeam = placeholder.teams.find(t => t.TeamId === teamId)
-    const teamData = mapTeam(placeholderTeam)
-    return res.json(teamData)
-  }
   get({ TableName: 'Derby_Teams', Key: { TeamId: teamId } }).then((team) => {
     const teamData = mapTeam(team)
     res.json(teamData)

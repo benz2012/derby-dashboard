@@ -2,7 +2,6 @@ const express = require('express')
 
 const { query, getSchool } = require('../../database')
 const params = require('../../database/params')
-const placeholder = require('../../database/placeholder')
 const { errorEnd, lastDateTimeString } = require('./utility')
 
 const router = express.Router()
@@ -53,21 +52,12 @@ router.get('/', (req, res) => {
     ))
     return Promise.all(fundQueries)
   }).then((responses) => {
-    const eachTeamRaised = responses
-    eachTeamRaised.push(...placeholder.raised) // TODO: remove placeholder data
-    res.json(eachTeamRaised)
+    res.json(responses)
   }).catch(err => errorEnd(err, res))
 })
 
 router.get('/:id', (req, res) => {
   const teamId = parseInt(req.params.id)
-  // TODO: remove placeholder data
-  // eslint-disable-next-line no-prototype-builtins
-  if (placeholder.raised.filter(r => r.hasOwnProperty(teamId)).length > 0) {
-    // eslint-disable-next-line no-prototype-builtins
-    const fundsForTeam = placeholder.raised.filter(r => r.hasOwnProperty(teamId))[0]
-    return res.json(fundsForTeam)
-  }
   getFundsForTeam(teamId).then((fundsForTeam) => {
     res.json(fundsForTeam)
   }).catch(err => errorEnd(err, res))
