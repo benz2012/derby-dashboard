@@ -15,6 +15,7 @@ if (!window.Promise) {
 // Load Extraneous Assets
 import '../assets/favicons/favicons' // all favicons
 import '../assets/images/og_image_v001.png'
+import '../assets/legal/legal'
 
 // Root Application Container
 import App from './containers/App'
