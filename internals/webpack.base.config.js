@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   entry: {
     app: path.resolve(process.cwd(), './src/js/index'),
+    admin: path.resolve(process.cwd(), './src/js/indexAdmin'),
   },
   output: {
     path: path.resolve(process.cwd(), 'public'),
@@ -43,7 +44,14 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(process.cwd(), './src/index.html'),
       inject: true,
+      excludeChunks: ['admin'],
     }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(process.cwd(), './src/admin.html'),
+      inject: true,
+      filename: 'admin.html',
+      excludeChunks: ['app'],
+    })
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
