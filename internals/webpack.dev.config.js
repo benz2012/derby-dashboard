@@ -18,11 +18,6 @@ module.exports = merge({
       'webpack-hot-middleware/client',
       path.resolve(process.cwd(), './src/js/index'),
     ],
-    admin: [
-      'react-hot-loader/patch',
-      'webpack-hot-middleware/client',
-      path.resolve(process.cwd(), './src/js/indexAdmin'),
-    ],
   },
   output: {
     filename: '[name].dev.[hash].js',

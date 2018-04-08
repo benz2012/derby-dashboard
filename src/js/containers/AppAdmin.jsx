@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 
+import AdminPage from './AdminPage'
 import LoginPage from './LoginPage'
 
 import { AppStyle, BodyStyle } from '../styles/app'
@@ -21,12 +22,12 @@ export default class AdminApp extends Component {
       <Router>
         <ThemeProvider theme={theme}>
           <AppStyle>
-            <LoginPage />
-            {/* <Route component={removeTrailingSlash} /> */}
-            {/* <Switch> */}
-              {/* <Route exact path="/admin" component={LoginPage} /> */}
-              {/* <Route component={NoMatch} /> */}
-            {/* </Switch> */}
+            <Route component={removeTrailingSlash} />
+            <Switch>
+              <Route path="/admin" component={AdminPage} />
+              <Route exact path="/admin/login" component={LoginPage} />
+              <Route component={NoMatch} />
+            </Switch>
           </AppStyle>
         </ThemeProvider>
       </Router>
