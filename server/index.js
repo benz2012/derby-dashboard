@@ -13,6 +13,7 @@ const socketIO = require('socket.io')
 const data = require('./routes/data')
 const live = require('./routes/live')
 const subscribe = require('./routes/subscribe')
+const admin = require('./routes/admin')
 const socketHandler = require('./socketHandler')
 
 
@@ -39,6 +40,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(require('./routes/hot')) // eslint-disable-line global-require
 }
 app.use(express.static(`${process.cwd()}/public`)) // main code & assets
+app.use('/admin', admin)
 app.get('*', (req, res) => {
   // catch-all route for everything not defined
   res.sendFile(`${process.cwd()}/public/index.html`)
