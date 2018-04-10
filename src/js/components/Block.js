@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import media from '../styles/media'
+
 const Block = styled.div`
   width: 100%;
   height: auto;
@@ -11,6 +13,11 @@ const Block = styled.div`
 
   background-color: ${props => props.theme.contentBG};
   color: ${props => props.theme.contentFG};
+
+  ${media.desktop`
+    width: 600px;
+    margin: auto;
+  `}
 `
 
 export default Block
