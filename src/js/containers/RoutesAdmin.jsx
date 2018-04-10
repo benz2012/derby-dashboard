@@ -6,6 +6,7 @@ import RoutesPanel from './RoutesPanel'
 
 import NoMatch from '../components/NoMatch'
 import Loading from '../components/Loading'
+import { dataFetch } from '../util'
 
 export default class RoutesAdmin extends Component {
   state = {
@@ -33,13 +34,16 @@ export default class RoutesAdmin extends Component {
   authStatusHandler = (response) => {
     console.log(response)
     if (response.status === 'connected') {
-      const authorized = true // TODO: verify that response.userID is authorized in dynamoDB
-      if (authorized) {
-        this.setState({ stage: 'AUTHORIZED' })
-      } else {
-        // user is not an authorized administrator
-        this.setState({ stage: 'LOGGED_IN' })
-      }
+      const uid = response.authResponse.userID
+      dataFetch(`/auth?uid=${uid}`).then((authData) => {
+        const authorized = authData.AdminPanel.indexOf(uid) !== -1
+        if (authorized) {
+          this.setState({ stage: 'AUTHORIZED' })
+        } else {
+          // user is not an authorized administrator
+          this.setState({ stage: 'LOGGED_IN' })
+        }
+      })
     } else {
       this.setState({ stage: 'LOGGED_OUT' })
     }
