@@ -25,8 +25,23 @@ const BodyStyle = {
   webkitTextSizeAdjust: '100%',
 }
 
+const loadCSS = (location, id) => {
+  if (document.getElementById(id)) return // prevents double loading
+  const linkRef = document.createElement('link')
+  linkRef.setAttribute('rel', 'stylesheet')
+  linkRef.setAttribute('type', 'text/css')
+  linkRef.setAttribute('href', location)
+  linkRef.setAttribute('id', id)
+  document.getElementsByTagName('head')[0].appendChild(linkRef)
+}
+
+const loadBootstrapCSS = () => {
+  loadCSS('/bootstrap.min.css', 'bootstrap-css')
+  loadCSS('/dashboard.css', 'bootstrap-dashboard-css')
+}
 
 export {
   AppStyle,
   BodyStyle,
+  loadBootstrapCSS,
 }
