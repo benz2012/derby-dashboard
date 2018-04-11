@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 
 import LoginPage from './LoginPage'
 import RoutesPanel from './RoutesPanel'
+import UnauthorizedPage from './UnauthorizedPage'
 
 import NoMatch from '../components/NoMatch'
 import Loading from '../components/Loading'
@@ -35,6 +36,7 @@ export default class RoutesAdmin extends Component {
     console.log(response)
     if (response.status === 'connected') {
       const uid = response.authResponse.userID
+      this.setState({ uid })
       dataFetch(`/auth?uid=${uid}`).then((authData) => {
         const authorized = authData.AdminPanel.indexOf(uid) !== -1
         if (authorized) {
@@ -52,13 +54,13 @@ export default class RoutesAdmin extends Component {
     if (stage === 'CHECKING') {
       return <Loading />
     } else if (stage === 'LOGGED_IN') {
-      return (<div>Fuck off</div>)
+      return <UnauthorizedPage uid={this.state.uid} />
     } else if (stage === 'LOGGED_OUT') {
       return <LoginPage statusChangeCallback={this.authStatusHandler} />
     } else if (stage === 'AUTHORIZED') {
       return <RoutesPanel statusChangeCallback={this.authStatusHandler} />
     }
-    return () => (<div>Fuck off</div>)
+    return <UnauthorizedPage uid={this.state.uid} />
   }
   render() {
     const { match } = this.props
