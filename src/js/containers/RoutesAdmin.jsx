@@ -15,6 +15,10 @@ export default class RoutesAdmin extends Component {
     uid: null,
   }
   componentDidMount() {
+    if (document.getElementById('facebook-jssdk') && window.FB) {
+      // the api was loaded on a previous mounting
+      window.FB.getLoginStatus(this.authStatusHandler)
+    }
     this.loadFacebookAPI(document, 'script', 'facebook-jssdk')
     window.fbAsyncInit = () => {
       window.FB.init({
@@ -51,16 +55,23 @@ export default class RoutesAdmin extends Component {
     }
   }
   contents = (stage) => {
+    const { uid } = this.state
     if (stage === 'CHECKING') {
       return <Loading />
     } else if (stage === 'LOGGED_IN') {
-      return <UnauthorizedPage uid={this.state.uid} />
+      return <UnauthorizedPage uid={uid} />
     } else if (stage === 'LOGGED_OUT') {
       return <LoginPage statusChangeCallback={this.authStatusHandler} />
     } else if (stage === 'AUTHORIZED') {
-      return <RoutesPanel statusChangeCallback={this.authStatusHandler} />
+      return (
+        <RoutesPanel
+          uid={uid}
+          match={this.props.match}
+          statusChangeCallback={this.authStatusHandler}
+        />
+      )
     }
-    return <UnauthorizedPage uid={this.state.uid} />
+    return <UnauthorizedPage uid={uid} />
   }
   render() {
     const { match } = this.props
@@ -70,7 +81,7 @@ export default class RoutesAdmin extends Component {
       <div>
         <div id="fb-root" />
         <Switch>
-          <Route exact path={`${match.url}`} render={() => contents} />
+          <Route path={match.url} render={() => contents} />
           <Route component={NoMatch} />
         </Switch>
       </div>
