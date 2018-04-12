@@ -3,8 +3,8 @@ import ReactGA from 'react-ga'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 
-import RoutesAdmin from './RoutesAdmin'
 import RoutesPublic from './RoutesPublic'
+import RoutesAdmin from '../containersAdmin/RoutesAdmin'
 
 import { AppStyle, BodyStyle } from '../styles/app'
 import theme from '../styles/theme'
