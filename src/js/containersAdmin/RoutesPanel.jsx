@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
+
+import GeneralPage from './GeneralPage'
+import TeamsPage from './TeamsPage'
+import FundsPage from './FundsPage'
+import EventsPage from './EventsPage'
+import ChallengesPage from './ChallengesPage'
+import ReportsPage from './ReportsPage'
 
 import TopNav, { NavBrand, NavDropDown } from '../componentsAdmin/TopNav'
 import SideNav from '../componentsAdmin/SideNav'
 import Avatar from '../components/TeamBlock/Avatar'
-
 import { loadBootstrapCSS } from '../styles/app'
 
 export default class RoutesPanel extends Component {
@@ -52,7 +58,14 @@ export default class RoutesPanel extends Component {
               ]}
             />
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-5">
-              blip
+              <Switch>
+                <Route exact path={match.url} component={GeneralPage} />
+                <Route path={`${match.url}/teams`} component={TeamsPage} />
+                <Route path={`${match.url}/funds`} component={FundsPage} />
+                <Route path={`${match.url}/events`} component={EventsPage} />
+                <Route path={`${match.url}/challenges`} component={ChallengesPage} />
+                <Route path={`${match.url}/reports`} component={ReportsPage} />
+              </Switch>
             </main>
           </div>
         </div>
