@@ -12,10 +12,11 @@ if (!window.Promise) {
   window.Promise = Promise
 }
 
-// Load Extraneous Assets
-import '../assets/favicons/favicons' // all favicons
+// Load Assets
+import '../assets/favicons/favicons'
 import '../assets/images/og_image_v001.png'
 import '../assets/legal/legal'
+import '../css/css'
 
 // Root Application Container
 import App from './containers/App'

@@ -24,7 +24,7 @@ const embedURL = (src) => {
   return `https://www.youtube.com/embed/${id}?rel=0`
 }
 
-const resolve = (path, obj) => (
+const resolvePath = (path, obj) => (
   path.split('.').reduce((prev, curr) => (
     prev ? prev[curr] : undefined
   ), obj || self)
@@ -32,8 +32,8 @@ const resolve = (path, obj) => (
 
 const objectSort = (objectsList, attribute, compareFunction) => (
   objectsList.sort((objA, objB) => {
-    const valueA = resolve(attribute, objA)
-    const valueB = resolve(attribute, objB)
+    const valueA = resolvePath(attribute, objA)
+    const valueB = resolvePath(attribute, objB)
     return compareFunction(valueA, valueB)
   })
 )

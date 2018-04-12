@@ -55,10 +55,22 @@ const challengesQuery = (schoolId, additional) => (Object.assign({
   KeyConditionExpression: '#S = :sid',
 }, additional))
 
+const reportsQuery = (schoolId, additional) => (Object.assign({
+  TableName: 'Derby_Reports',
+  ExpressionAttributeNames: {
+    '#S': 'SchoolId',
+  },
+  ExpressionAttributeValues: {
+    ':sid': schoolId,
+  },
+  KeyConditionExpression: '#S = :sid',
+}, additional))
+
 module.exports = {
   fundsQuery,
   fundsQueryNoDate,
   externalFundsQuery,
   eventsQuery,
   challengesQuery,
+  reportsQuery,
 }
