@@ -20,7 +20,6 @@ export default class GeneralPage extends Component {
   render() {
     const { general } = this.state
     if (!general) return <Loading />
-    console.log(general)
     return (
       <div>
         <h2 className="mb-4">Derby Dashboard Admin Panel</h2>
@@ -32,15 +31,17 @@ export default class GeneralPage extends Component {
               <a className="card-link" target="_blank" href={general.schoolURL}>{general.schoolURL}</a>
             </span>
           }
+          onEdit={() => null}
         />
         <DataCard
           head="Event Information"
           body={
             <span>
               Event Year: {general.year}<br />
-              Text Alert Date Range: YYYY-MM-DD to YYYY-MM-DD
+              Text Alert Date Range: {general.alertRange.start} to {general.alertRange.end}
             </span>
           }
+          onEdit={() => null}
         />
         <DataCard
           head="HomePage Information"
@@ -51,6 +52,7 @@ export default class GeneralPage extends Component {
               <a className="card-link" target="_blank" href={general.videoURL}>{general.videoURL}</a>
             </span>
           }
+          onEdit={() => null}
         />
       </div>
     )

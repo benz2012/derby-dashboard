@@ -34,7 +34,6 @@ export default class TeamsPage extends Component {
           </span>
         )}
         onEdit={this.itemClick}
-        onDelete={this.itemClick}
       />
     )
   }

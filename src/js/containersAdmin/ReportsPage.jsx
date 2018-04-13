@@ -12,20 +12,14 @@ export default class ReportsPage extends Component {
   }
   componentDidMount() {
     dataFetch('/data/reports').then((data) => {
-      if (data[0] && data[0].date) {
-        objectSort(data, 'date', dateSort)
-        const dataWithIds = data.map(d => d)
-        Object.keys(dataWithIds).forEach((k) => {
-          dataWithIds[k].id = `${dataWithIds[k].date}-${k}`
-          if (!this.state.unmounting) this.setState({ reports: dataWithIds })
-        })
-      }
+      if (data[0] && data[0].date) objectSort(data, 'date', dateSort)
+      if (!this.state.unmounting) this.setState({ reports: data })
     })
   }
   componentWillUnmount() {
     this.setState({ unmounting: true })
   }
-  itemClick = id => console.log(this.state.reports.find(t => t.id === id))
+  itemClick = id => console.log(this.state.reports.find(t => t.date === id))
   render() {
     const { reports } = this.state
     if (!reports) return <Loading />
@@ -34,6 +28,7 @@ export default class ReportsPage extends Component {
         <button className="btn btn-success mb-4">+ Add Report</button>
         <DataBin
           items={reports}
+          id={r => r.date}
           head={r => r.header}
           body={r => (
             <span>
