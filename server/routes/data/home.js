@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
       avatar: school.AvatarURL,
       schoolURL: school.URL,
       year: school.EventYear,
+      alertRange: school.AlertDateRange,
     }
     res.json(home)
   }).catch(err => errorEnd(err, res))

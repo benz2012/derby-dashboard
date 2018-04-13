@@ -19,16 +19,16 @@ export default class ReportsPage extends Component {
   componentWillUnmount() {
     this.setState({ unmounting: true })
   }
-  itemClick = id => console.log(this.state.reports.find(t => t.id === id))
+  itemClick = id => console.log(this.state.reports.find(t => t.date === id))
   render() {
     const { reports } = this.state
     if (!reports) return <Loading />
-    console.log(reports)
     return (
       <div>
         <button className="btn btn-success mb-4">+ Add Report</button>
         <DataBin
           items={reports}
+          id={r => r.date}
           head={r => r.header}
           body={r => (
             <span>
