@@ -12,8 +12,14 @@ export default class ReportsPage extends Component {
   }
   componentDidMount() {
     dataFetch('/data/reports').then((data) => {
-      if (data[0] && data[0].date) objectSort(data, 'date', dateSort)
-      if (!this.state.unmounting) this.setState({ reports: data })
+      if (data[0] && data[0].date) {
+        objectSort(data, 'date', dateSort)
+        const dataWithIds = data.map(d => d)
+        Object.keys(dataWithIds).forEach((k) => {
+          dataWithIds[k].id = `${dataWithIds[k].date}-${k}`
+          if (!this.state.unmounting) this.setState({ reports: dataWithIds })
+        })
+      }
     })
   }
   componentWillUnmount() {
@@ -23,7 +29,6 @@ export default class ReportsPage extends Component {
   render() {
     const { reports } = this.state
     if (!reports) return <Loading />
-    console.log(reports)
     return (
       <div>
         <button className="btn btn-success mb-4">+ Add Report</button>
