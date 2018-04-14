@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { query, batchGet, get } = require('../../database')
+const { query, batchGet, get, update, put } = require('../../database')
 const config = require('../../database/config')
 const params = require('../../database/params')
 const { errorEnd, groupBy } = require('./utility')
@@ -8,6 +8,15 @@ const { errorEnd, groupBy } = require('./utility')
 const router = express.Router()
 
 // Shared Functions
+const keyMap = {
+  name: 'Name',
+  location: 'Location',
+  description: 'Description',
+  time: 'Time',
+  date: 'DateString',
+  type: 'Type',
+  challengeId: 'ChallengeId',
+}
 const mapEvent = event => ({
   id: event.EventId,
   location: event.Location,
@@ -40,7 +49,10 @@ router.get('/', (req, res) => {
       const event = mapEvent(e)
       const linkedChallenge = challenges.find(c => c.ChallengeId === e.ChallengeId)
       if (linkedChallenge && linkedChallenge.Description) {
-        return Object.assign(event, { challenge: linkedChallenge.Description })
+        return Object.assign(event, {
+          challenge: linkedChallenge.Description,
+          challengeId: linkedChallenge.ChallengeId,
+        })
       }
       return event
     })
@@ -63,8 +75,96 @@ router.get('/:id', (req, res) => {
   }).then((c) => {
     const eventData = mapEvent(event)
     eventData.challenge = c.Description
+    eventData.challengeId = c.ChallengeId
     res.json(eventData)
   }).catch(err => errorEnd(err, res))
 })
+
+router.post('/:id', (req, res) => {
+  const eventId = parseInt(req.params.id)
+  if (req.body) {
+    return Promise.all(
+      req.body.map((u) => {
+        const k = Object.keys(u)[0]
+        let v = u[k]
+
+        if (k === 'challengeId') {
+          v = parseInt(v)
+          return query(params.eventsQuery(config.SCHOOL_ID_HARD))
+            .then((events) => {
+              const alreadyLinked = events.find(e => e.ChallengeId === v)
+              if (alreadyLinked) {
+                return update(params.attrRemove(
+                  'Derby_Events',
+                  { SchoolId: config.SCHOOL_ID_HARD, EventId: alreadyLinked.EventId },
+                  'ChallengeId'
+                ))
+              }
+              return null
+            })
+            .then(() => query(params.challengesQuery(config.SCHOOL_ID_HARD)))
+            .then((challenges) => {
+              const alreadyLinked = challenges.find(c => c.EventId === eventId)
+              if (alreadyLinked) {
+                return update(params.attrRemove(
+                  'Derby_Challenges',
+                  { SchoolId: config.SCHOOL_ID_HARD, ChallengeId: alreadyLinked.ChallengeId },
+                  'EventId'
+                ))
+              }
+              return null
+            })
+            .then(() => (
+              update(params.attrUpdate(
+                'Derby_Events',
+                { SchoolId: config.SCHOOL_ID_HARD, EventId: eventId },
+                keyMap[k],
+                v
+              ))
+            ))
+            .then(() => (
+              update(params.attrUpdate(
+                'Derby_Challenges',
+                { SchoolId: config.SCHOOL_ID_HARD, ChallengeId: v },
+                'EventId',
+                eventId
+              ))
+            ))
+            .catch(err => errorEnd(err, res))
+        }
+
+        if (k === 'time') {
+          v = {
+            Start: v.start,
+            End: v.end,
+          }
+        }
+
+        return update(params.attrUpdate(
+          'Derby_Events',
+          { SchoolId: config.SCHOOL_ID_HARD, EventId: eventId },
+          keyMap[k],
+          v
+        ))
+      })
+    ).then(data => res.json(data)).catch(err => errorEnd(err, res))
+  }
+  return errorEnd('Missing a request body', res)
+})
+
+// router.put('/', (req, res) => {
+//   if (req.body) {
+//     const item = req.body.reduce((accum, curr) => {
+//       const k = Object.keys(curr)[0]
+//       accum[keymap[k]] = curr[k]
+//       return accum
+//     }, {})
+//     put({
+//       TableName: 'Derby_Events',
+//       Item: item,
+//     })
+//   }
+//   return errorEnd('Missing a request body', res)
+// })
 
 module.exports = router

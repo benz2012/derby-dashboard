@@ -31,8 +31,8 @@ const EditView = ({ history, match, children, submit, ...rest }) => {
             >
               <span aria-hidden="true" className="close-modal">&times;</span>
             </button>
+            <Status show={show} success={success} message={message} />
             <ViewContent>
-              <Status show={show} success={success} message={message} />
               {children}
             </ViewContent>
             <ViewActions>

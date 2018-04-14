@@ -1,8 +1,9 @@
 import React from 'react'
 
+import InputContainer from './InputContainer'
+
 const TextInput = ({ id, label, value, onChange, ...rest }) => (
-  <div className="form-group">
-    <label key={`${id}-label`} htmlFor={id}>{label}</label>
+  <InputContainer id={id} label={label} help={rest.help}>
     <input
       key={`${id}-input`}
       type="text"
@@ -12,7 +13,7 @@ const TextInput = ({ id, label, value, onChange, ...rest }) => (
       onChange={onChange}
       {...rest}
     />
-  </div>
+  </InputContainer>
 )
 
 export default TextInput
