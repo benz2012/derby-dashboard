@@ -1,17 +1,17 @@
 import React from 'react'
 
+import InputContainer from './InputContainer'
+
 const TextAreaInput = ({ id, label, value, onChange, ...rest }) => (
-  <div className="form-group">
-    <label key={`${id}-label`} htmlFor={id}>{label}</label>
+  <InputContainer id={id} label={label} help={rest.help}>
     <textarea
-      key={`${id}-input`}
       className="form-control"
       id={id}
       value={value}
       onChange={onChange}
       {...rest}
     />
-  </div>
+  </InputContainer>
 )
 
 export default TextAreaInput

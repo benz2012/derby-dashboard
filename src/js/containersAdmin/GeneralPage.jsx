@@ -119,14 +119,14 @@ export default class GeneralPage extends Component {
 
         <EditRoute {...this.props} path={'event'} close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
           <Form>
-            <TextInput id="input.year" label="Event Year" value={input.year} onChange={this.setValue} />
+            <TextInput id="input.year" label="Event Year" value={input.year} onChange={this.setValue} help="YYYY" />
             <TextInput
               id="general.alertRange"
               label="Text Alert Date Range"
               value={`${general.alertRange.start} to ${general.alertRange.end}`}
               readOnly
             />
-            <TextInput id="input.alertTime" label="Daily Text Alert Time" value={input.alertTime} onChange={this.setValue} />
+            <TextInput id="input.alertTime" label="Daily Text Alert Time" value={input.alertTime} onChange={this.setValue} help="HH:MM (24hr)" />
           </Form>
         </EditRoute>
 

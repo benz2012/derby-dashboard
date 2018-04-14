@@ -92,6 +92,15 @@ const attrUpdate = (table, key, attr, val, additional) => (Object.assign({
   ReturnValues: 'UPDATED_NEW',
 }, additional))
 
+const attrRemove = (table, key, attr, additional) => (Object.assign({
+  TableName: table,
+  Key: key,
+  ExpressionAttributeNames: {
+    '#attr': attr,
+  },
+  UpdateExpression: 'REMOVE #attr',
+}, additional))
+
 module.exports = {
   fundsQuery,
   fundsQueryNoDate,
@@ -101,4 +110,5 @@ module.exports = {
   reportsQuery,
   accessUpdate,
   attrUpdate,
+  attrRemove,
 }
