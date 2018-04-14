@@ -66,6 +66,32 @@ const reportsQuery = (schoolId, additional) => (Object.assign({
   KeyConditionExpression: '#S = :sid',
 }, additional))
 
+const accessUpdate = (uid, token, additional) => (Object.assign({
+  TableName: 'Derby_App',
+  Key: { DataName: 'Authorized' },
+  ExpressionAttributeNames: {
+    '#access': 'AccessTokens',
+    '#uid': uid,
+  },
+  ExpressionAttributeValues: {
+    ':token': token,
+  },
+  UpdateExpression: 'SET #access.#uid = :token',
+}, additional))
+
+const attrUpdate = (table, key, attr, val, additional) => (Object.assign({
+  TableName: table,
+  Key: key,
+  ExpressionAttributeNames: {
+    '#attr': attr,
+  },
+  ExpressionAttributeValues: {
+    ':val': val,
+  },
+  UpdateExpression: 'SET #attr = :val',
+  ReturnValues: 'UPDATED_NEW',
+}, additional))
+
 module.exports = {
   fundsQuery,
   fundsQueryNoDate,
@@ -73,4 +99,6 @@ module.exports = {
   eventsQuery,
   challengesQuery,
   reportsQuery,
+  accessUpdate,
+  attrUpdate,
 }

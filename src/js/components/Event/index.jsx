@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Modal from '../../containers/Modal'
 import { durationString } from '../../util/date'
-import { LeftPad, IconWhite } from '../Content'
+import { IconWhite } from '../Content'
 import HeadingText from '../HeadingText'
 import { EventContainer, EventOutline, EventContent,
   EventDetail, EventDetailText, EventClose } from './style'

@@ -7,12 +7,13 @@ import UnauthorizedPage from './UnauthorizedPage'
 
 import NoMatch from '../components/NoMatch'
 import Loading from '../components/Loading'
-import { dataFetch } from '../util'
+import { dataFetch, dataSend } from '../util'
 
 export default class RoutesAdmin extends Component {
   state = {
     stage: 'CHECKING',
     uid: null,
+    token: null,
   }
   componentDidMount() {
     if (document.getElementById('facebook-jssdk') && window.FB) {
@@ -40,11 +41,12 @@ export default class RoutesAdmin extends Component {
     console.log(response)
     if (response.status === 'connected') {
       const uid = response.authResponse.userID
-      this.setState({ uid })
-      dataFetch(`/auth?uid=${uid}`).then((authData) => {
-        const authorized = authData.AdminPanel.indexOf(uid) !== -1
+      const token = response.authResponse.accessToken
+      this.setState({ uid, token })
+      dataFetch(`/data/auth?uid=${uid}`).then(({ authorized }) => {
         if (authorized) {
           this.setState({ stage: 'AUTHORIZED' })
+          dataSend('/data/auth/access', uid, token, { uid, token })
         } else {
           // user is not an authorized administrator
           this.setState({ stage: 'LOGGED_IN' })
@@ -54,6 +56,7 @@ export default class RoutesAdmin extends Component {
       this.setState({ stage: 'LOGGED_OUT' })
     }
   }
+  authValues = () => ({ uid: this.state.uid, token: this.state.token })
   contents = (stage) => {
     const { uid } = this.state
     if (stage === 'CHECKING') {
@@ -65,7 +68,7 @@ export default class RoutesAdmin extends Component {
     } else if (stage === 'AUTHORIZED') {
       return (
         <RoutesPanel
-          uid={uid}
+          authValues={this.authValues}
           match={this.props.match}
           statusChangeCallback={this.authStatusHandler}
         />

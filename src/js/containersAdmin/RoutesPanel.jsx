@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import GeneralPage from './GeneralPage'
 import TeamsPage from './TeamsPage'
@@ -20,7 +20,7 @@ export default class RoutesPanel extends Component {
   }
   componentWillMount() {
     loadBootstrapCSS() // prevents the public site from needing to load it
-    const { uid } = this.props
+    const { uid } = this.props.authValues()
     window.FB.api(`/${uid}?fields=id,name,picture`, 'GET', {}, (res) => {
       this.setState({
         name: res.name,
@@ -49,7 +49,7 @@ export default class RoutesPanel extends Component {
           <div className="row">
             <SideNav
               linkData={[
-                { to: match.url, display: 'General', exact: true },
+                { to: `${match.url}/general`, display: 'General' },
                 { to: `${match.url}/teams`, display: 'Teams' },
                 { to: `${match.url}/funds`, display: 'Funds' },
                 { to: `${match.url}/events`, display: 'Events' },
@@ -59,12 +59,43 @@ export default class RoutesPanel extends Component {
             />
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-5">
               <Switch>
-                <Route exact path={match.url} component={GeneralPage} />
-                <Route path={`${match.url}/teams`} component={TeamsPage} />
-                <Route path={`${match.url}/funds`} component={FundsPage} />
-                <Route path={`${match.url}/events`} component={EventsPage} />
-                <Route path={`${match.url}/challenges`} component={ChallengesPage} />
-                <Route path={`${match.url}/reports`} component={ReportsPage} />
+                <Redirect exact from={match.url} to={`${match.url}/general`} />
+                <Route
+                  path={`${match.url}/general`}
+                  render={props => (
+                    <GeneralPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
+                <Route
+                  path={`${match.url}/teams`}
+                  render={props => (
+                    <TeamsPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
+                <Route
+                  path={`${match.url}/funds`}
+                  render={props => (
+                    <FundsPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
+                <Route
+                  path={`${match.url}/events`}
+                  render={props => (
+                    <EventsPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
+                <Route
+                  path={`${match.url}/challenges`}
+                  render={props => (
+                    <ChallengesPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
+                <Route
+                  path={`${match.url}/reports`}
+                  render={props => (
+                    <ReportsPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
               </Switch>
             </main>
           </div>

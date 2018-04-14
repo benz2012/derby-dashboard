@@ -1,6 +1,7 @@
 const express = require('express')
 
 const application = require('./application')
+const auth = require('./auth')
 const challenges = require('./challenges')
 const events = require('./events')
 const history = require('./history')
@@ -10,20 +11,48 @@ const reports = require('./reports')
 const teams = require('./teams')
 const year = require('./year')
 
+const { get } = require('../../database')
+const { errorEnd } = require('./utility')
 
 // Router Handler
 const router = express.Router()
-// Non-secure Request Validation
+// Non-secure & Secure Request Validation
 router.use((req, res, next) => {
-  if (!req.header('sent-from-client-javascript')) {
-    return next('router')
+
+  if (req.method === 'GET') {
+    if (!req.header('sent-from-client-javascript')) {
+      return next('router')
+    }
+    return next()
+  } else if (req.method === 'POST') {
+    if (req.url === '/auth/access') {
+      if (!req.header('sent-from-client-javascript')) {
+        return next('router')
+      }
+      return next()
+    }
+    const client = req.header('sent-from-client-javascript')
+    const uid = req.header('auth-uid')
+    const clientToken = req.header('auth-token')
+    return get({
+      TableName: 'Derby_App',
+      Key: { DataName: 'Authorized' },
+    }).then((data) => {
+      const serverToken = data.AccessTokens[uid]
+      const secure = serverToken === clientToken
+      if (client && secure) {
+        return next()
+      }
+      return errorEnd('UNAUTHORIZED POST REQUEST', res)
+    }).catch(err => errorEnd(`ERROR AUTHORIZING POST REQUEST: ${err}`, res))
   }
-  return next()
+  return next('router')
 })
 
 
 // Routes
 router.use('/application', application)
+router.use('/auth', auth)
 router.use('/challenges', challenges)
 router.use('/events', events)
 router.use('/history', history)
