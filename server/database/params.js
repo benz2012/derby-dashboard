@@ -79,6 +79,19 @@ const accessUpdate = (uid, token, additional) => (Object.assign({
   UpdateExpression: 'SET #access.#uid = :token',
 }, additional))
 
+const attrUpdate = (table, key, attr, val, additional) => (Object.assign({
+  TableName: table,
+  Key: key,
+  ExpressionAttributeNames: {
+    '#attr': attr,
+  },
+  ExpressionAttributeValues: {
+    ':val': val,
+  },
+  UpdateExpression: 'SET #attr = :val',
+  ReturnValues: 'UPDATED_NEW',
+}, additional))
+
 module.exports = {
   fundsQuery,
   fundsQueryNoDate,
@@ -87,4 +100,5 @@ module.exports = {
   challengesQuery,
   reportsQuery,
   accessUpdate,
+  attrUpdate,
 }

@@ -38,6 +38,7 @@ const dataSend = (url, data) => (
     return res.json()
   }).catch((err) => {
     console.log(`Data Send failed for ${url}. Error: ${err.message || err}`)
+    throw new Error(err)
   })
 )
 
