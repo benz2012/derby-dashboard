@@ -1,26 +1,19 @@
 const express = require('express')
 
-const { get, update } = require('../database')
-const params = require('../database/params')
-const { errorEnd } = require('./data/utility')
+const { get, update } = require('../../database')
+const params = require('../../database/params')
+const { errorEnd } = require('./utility')
 
 const router = express.Router()
-// Non-secure Request Validation
-router.use((req, res, next) => {
-  if (!req.header('sent-from-client-javascript')) {
-    return next('router')
-  }
-  return next()
-})
 
 router.get('/', (req, res) => {
   const { uid } = req.query
-  get({
+  return get({
     TableName: 'Derby_App',
     Key: { DataName: 'Authorized' },
   }).then((data) => {
     const authorized = data.AdminPanel.indexOf(uid) !== -1
-    res.json({ authorized })
+    return res.json({ authorized })
   }).catch(err => errorEnd(err, res))
 })
 

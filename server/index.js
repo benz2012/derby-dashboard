@@ -11,7 +11,6 @@ const bodyParser = require('body-parser')
 const http = require('http')
 const socketIO = require('socket.io')
 const data = require('./routes/data')
-const auth = require('./routes/auth')
 const live = require('./routes/live')
 const subscribe = require('./routes/subscribe')
 const socketHandler = require('./socketHandler')
@@ -39,7 +38,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use('/data', data)
-app.use('/auth', auth)
 if (process.env.NODE_ENV !== 'production') {
   app.use(require('./routes/hot')) // eslint-disable-line global-require
 }

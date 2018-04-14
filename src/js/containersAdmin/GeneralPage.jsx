@@ -36,7 +36,8 @@ export default class GeneralPage extends Component {
   }
   submitValues = (url) => {
     const { general, input } = this.state
-    dataSend(url, newValues(general, input)).then((d) => {
+    const { uid, token } = this.props.authValues()
+    dataSend(url, uid, token, newValues(general, input)).then((d) => {
       if (d) {
         this.setState({ result: 'SUCCESS' })
         this.fetchGeneralData()

@@ -18,12 +18,14 @@ const dataFetch = url => (
   })
 )
 
-const dataSend = (url, data) => (
+const dataSend = (url, uid, token, data) => (
   fetch(url, {
     body: JSON.stringify(data),
     headers: new Headers({
       'sent-from-client-javascript': true,
       'Content-Type': 'application/json',
+      'auth-uid': uid,
+      'auth-token': token,
     }),
     method: 'POST',
   }).then((res) => {
