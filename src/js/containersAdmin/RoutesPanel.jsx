@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import GeneralPage from './GeneralPage'
 import TeamsPage from './TeamsPage'
@@ -49,7 +49,7 @@ export default class RoutesPanel extends Component {
           <div className="row">
             <SideNav
               linkData={[
-                { to: match.url, display: 'General', exact: true },
+                { to: `${match.url}/general`, display: 'General' },
                 { to: `${match.url}/teams`, display: 'Teams' },
                 { to: `${match.url}/funds`, display: 'Funds' },
                 { to: `${match.url}/events`, display: 'Events' },
@@ -59,7 +59,8 @@ export default class RoutesPanel extends Component {
             />
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-5">
               <Switch>
-                <Route exact path={match.url} component={GeneralPage} />
+                <Redirect exact from={match.url} to={`${match.url}/general`} />
+                <Route path={`${match.url}/general`} component={GeneralPage} />
                 <Route path={`${match.url}/teams`} component={TeamsPage} />
                 <Route path={`${match.url}/funds`} component={FundsPage} />
                 <Route path={`${match.url}/events`} component={EventsPage} />

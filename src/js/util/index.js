@@ -18,6 +18,29 @@ const dataFetch = url => (
   })
 )
 
+const dataSend = (url, data) => (
+  fetch(url, {
+    body: JSON.stringify(data),
+    headers: new Headers({
+      'sent-from-client-javascript': true,
+      'Content-Type': 'application/json',
+    }),
+    method: 'POST',
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error(`Response Status ${res.status}. Expected 200-299.`)
+    }
+    const contentType = res.headers.get('Content-Type')
+    if (!(contentType && contentType.includes('application/json'))) {
+      res.text().then((t) => { console.log(t) })
+      throw new Error(`Content Type ${contentType}. Expected application/json.`)
+    }
+    return res.json()
+  }).catch((err) => {
+    console.log(`Data Send failed for ${url}. Error: ${err.message || err}`)
+  })
+)
+
 const embedURL = (src) => {
   const id = src.match(/v=(.+)/)[1]
   if (!id) { return null }
@@ -58,6 +81,7 @@ const storageGet = (key) => {
 
 export {
   dataFetch,
+  dataSend,
   embedURL,
   objectSort,
   storageEnabled,

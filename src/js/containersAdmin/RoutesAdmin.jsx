@@ -7,7 +7,7 @@ import UnauthorizedPage from './UnauthorizedPage'
 
 import NoMatch from '../components/NoMatch'
 import Loading from '../components/Loading'
-import { dataFetch } from '../util'
+import { dataFetch, dataSend } from '../util'
 
 export default class RoutesAdmin extends Component {
   state = {
@@ -41,10 +41,10 @@ export default class RoutesAdmin extends Component {
     if (response.status === 'connected') {
       const uid = response.authResponse.userID
       this.setState({ uid })
-      dataFetch(`/auth?uid=${uid}`).then((authData) => {
-        const authorized = authData.AdminPanel.indexOf(uid) !== -1
+      dataFetch(`/auth?uid=${uid}`).then(({ authorized }) => {
         if (authorized) {
           this.setState({ stage: 'AUTHORIZED' })
+          dataSend('/auth/access', { uid, token: response.authResponse.accessToken })
         } else {
           // user is not an authorized administrator
           this.setState({ stage: 'LOGGED_IN' })

@@ -70,6 +70,32 @@ const scan = params => new Promise((resolve, reject) => {
   })
 })
 
+// Update Promises
+const update = params => new Promise((resolve, reject) => {
+  const trace = opbeat.buildTrace()
+  if (trace) { trace.start(params.TableName, 'db.dynamodb.update') }
+
+  db.update(params, (err, data) => {
+    if (trace) { trace.end() }
+    if (err) { return reject(err) }
+    return resolve(
+      Object.keys(data).length ? data : { result: 'Item Updated Successfully!' }
+    )
+  })
+})
+
+// Delete Promises
+const remove = params => new Promise((resolve, reject) => {
+  const trace = opbeat.buildTrace()
+  if (trace) { trace.start(params.TableName, 'db.dynamodb.delete') }
+
+  db.delete(params, (err, data) => {
+    if (trace) { trace.end() }
+    if (err) { return reject(err) }
+    return resolve({ result: 'Item Deleted Successfully!' })
+  })
+})
+
 
 // Utility Functions
 const getSchool = () => (
@@ -87,4 +113,6 @@ module.exports = {
   query,
   scan,
   getSchool,
+  update,
+  remove,
 }

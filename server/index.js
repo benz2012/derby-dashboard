@@ -35,6 +35,9 @@ app.use((req, res, next) => {
 
 
 // Routes & Middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.use('/data', data)
 app.use('/auth', auth)
 if (process.env.NODE_ENV !== 'production') {
@@ -46,8 +49,6 @@ app.get('*', (req, res) => {
   res.sendFile(`${process.cwd()}/public/index.html`)
 })
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
 app.use('/sms', subscribe)
 live(app, io) // handle POST requests to `/live`
 socketHandler(io)

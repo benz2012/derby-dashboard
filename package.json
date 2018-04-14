@@ -8,7 +8,7 @@
   "repository": "https://github.com/benz2012/derby-dashboard",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server",
+    "dev": "nodemon --watch server server",
     "build": "webpack --config ./internals/webpack.prod.config.js",
     "lint": "eslint --ext .jsx,.js src/**; exit 0"
   },

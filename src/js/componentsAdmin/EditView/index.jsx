@@ -1,29 +1,39 @@
 import React from 'react'
 
-const EditView = ({ ...rest }) => (
-  <div>null</div>
-)
+import Modal from '../../containers/Modal'
+import { EditContainer, EditPane, ViewContent, ViewActions } from './style'
+
+const EditView = ({ history, match, children, submit, ...rest }) => {
+  const back = (e) => {
+    e.stopPropagation()
+    const targetClasses = e.target.className.split(' ')
+    if (targetClasses.includes('close-modal')) {
+      if (rest.close) rest.close()
+      const base = match.path.replace(`/${rest.path || 'edit'}`, '')
+      history.replace(base)
+    }
+  }
+  return (
+    <div role="button" onClick={back} tabIndex={0}>
+      <Modal radius={3}>
+        <EditContainer className="close-modal">
+          <EditPane>
+            <ViewContent>
+              {children}
+            </ViewContent>
+            <ViewActions>
+              <button className="close-modal btn btn-outline-dark mr-2" onClick={back}>
+                Cancel
+              </button>
+              <button className="btn btn-outline-primary mr-2" onClick={submit}>
+                Submit
+              </button>
+            </ViewActions>
+          </EditPane>
+        </EditContainer>
+      </Modal>
+    </div>
+  )
+}
 
 export default EditView
-
-
-// const EditPane = ({ items, match }) => {
-//   if (!items) return null
-//   console.log(match)
-//   const obj = items.find(i => parseInt(i.id) === parseInt(match.params.id))
-//   console.log(obj)
-//   return (<Modal>
-//     <div
-//       className="card"
-//       style={{ zIndex: '150', position: 'fixed', width: '60%', height: '80%', marginTop: '5%', marginLeft: '20%' }}
-//     >
-//       <div className="card-body">
-//         {
-//           Object.keys(obj).map(k => (
-//             <p key={k} className="card-text">{k}: {obj[k]}</p>
-//           ))
-//         }
-//       </div>
-//     </div>
-//   </Modal>)
-// }
