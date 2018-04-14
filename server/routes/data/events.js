@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { query, batchGet, get, update } = require('../../database')
+const { query, batchGet, get, update, put } = require('../../database')
 const config = require('../../database/config')
 const params = require('../../database/params')
 const { errorEnd, groupBy } = require('./utility')
@@ -151,5 +151,20 @@ router.post('/:id', (req, res) => {
   }
   return errorEnd('Missing a request body', res)
 })
+
+// router.put('/', (req, res) => {
+//   if (req.body) {
+//     const item = req.body.reduce((accum, curr) => {
+//       const k = Object.keys(curr)[0]
+//       accum[keymap[k]] = curr[k]
+//       return accum
+//     }, {})
+//     put({
+//       TableName: 'Derby_Events',
+//       Item: item,
+//     })
+//   }
+//   return errorEnd('Missing a request body', res)
+// })
 
 module.exports = router

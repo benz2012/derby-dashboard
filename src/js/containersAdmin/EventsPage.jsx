@@ -71,6 +71,9 @@ export default class EventsPage extends Component {
       this.setState({ result: 'FAILURE' })
     })
   }
+  addItem = () => {
+    return null
+  }
   itemClick = id => console.log(id)
   openModal = (id) => {
     const event = this.state.eventsFlat.find(e => parseInt(e.id) === parseInt(id))
@@ -86,6 +89,9 @@ export default class EventsPage extends Component {
       challengeId: event.challengeId || '',
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
+  }
+  openAdd = () => {
+    this.props.history.replace(`${this.props.match.url}/add`)
   }
   closeModal = () => {
     this.resetValues()
@@ -112,7 +118,7 @@ export default class EventsPage extends Component {
     if (!events) return <Loading />
     return (
       <div>
-        <button className="btn btn-success mb-4">+ Add Event</button>
+        {/* <button className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Event</button> */}
         {
           events.map(dateObj => (
             <div key={dateObj.date}>
@@ -130,7 +136,12 @@ export default class EventsPage extends Component {
           ))
         }
 
-        <EditRoute {...this.props} close={this.closeModal} submit={this.submitValues} result={result}>
+        <EditRoute
+          {...this.props}
+          close={this.closeModal}
+          submit={this.submitValues}
+          result={result}
+        >
           <Form>
             <TextInput id="input.id" label="Event ID" value={input.id} readOnly />
             <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
@@ -144,6 +155,24 @@ export default class EventsPage extends Component {
             <TextAreaInput id="input.challenge" label="Linked Challenge" value={input.challenge} rows={3} readOnly />
           </Form>
         </EditRoute>
+
+        {/* <EditRoute
+          {...this.props}
+          path={'add'}
+          close={this.closeModal}
+          submit={this.addItem}
+          result={result}
+        >
+          <Form>
+            <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
+            <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
+            <TextInput id="input.location" label="Location" value={input.location} onChange={this.setValue} />
+            <TextInput id="input.date" label="Date" value={input.date} onChange={this.setValue} help="YYYY-MM-DD" />
+            <TextInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} help="HH:MM (24hr)" />
+            <TextInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} help="HH:MM (24hr)" />
+            <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
+          </Form>
+        </EditRoute> */}
       </div>
     )
   }

@@ -70,6 +70,20 @@ const scan = params => new Promise((resolve, reject) => {
   })
 })
 
+// Create Promises
+const put = params => new Promise((resolve, reject) => {
+  const trace = opbeat.buildTrace()
+  if (trace) { trace.start(params.TableName, 'db.dynamodb.put') }
+
+  db.put(params, (err, data) => {
+    if (trace) { trace.end() }
+    if (err) { return reject(err) }
+    return resolve(
+      Object.keys(data).length ? data.Item : { result: 'Item Updated Successfully!' }
+    )
+  })
+})
+
 // Update Promises
 const update = params => new Promise((resolve, reject) => {
   const trace = opbeat.buildTrace()
@@ -109,6 +123,7 @@ const getSchool = () => (
 // Exports
 module.exports = {
   get,
+  put,
   batchGet,
   query,
   scan,
