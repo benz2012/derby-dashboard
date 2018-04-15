@@ -59,6 +59,7 @@ export default class EventsPage extends Component {
     })
   }
   submitValues = () => {
+    this.setState({ result: null })
     const { eventsFlat, input } = this.state
     const { uid, token } = this.props.authValues()
     const event = eventsFlat.find(e => parseInt(e.id) === parseInt(input.id))
