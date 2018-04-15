@@ -18,7 +18,7 @@ const dataFetch = url => (
   })
 )
 
-const dataSend = (url, uid, token, data) => (
+const dataSend = (url, method, uid, token, data) => (
   fetch(url, {
     body: JSON.stringify(data),
     headers: new Headers({
@@ -27,7 +27,7 @@ const dataSend = (url, uid, token, data) => (
       'auth-uid': uid,
       'auth-token': token,
     }),
-    method: 'POST',
+    method,
   }).then((res) => {
     if (!res.ok) {
       throw new Error(`Response Status ${res.status}. Expected 200-299.`)

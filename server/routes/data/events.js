@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { query, batchGet, get, update, put } = require('../../database')
+const { query, batchGet, get, update, put, remove } = require('../../database')
 const config = require('../../database/config')
 const params = require('../../database/params')
 const { errorEnd, groupBy } = require('./utility')
@@ -155,19 +155,45 @@ router.post('/:id', (req, res) => {
   return errorEnd('Missing a request body', res)
 })
 
-// router.put('/', (req, res) => {
-//   if (req.body) {
-//     const item = req.body.reduce((accum, curr) => {
-//       const k = Object.keys(curr)[0]
-//       accum[keymap[k]] = curr[k]
-//       return accum
-//     }, {})
-//     put({
-//       TableName: 'Derby_Events',
-//       Item: item,
-//     })
-//   }
-//   return errorEnd('Missing a request body', res)
-// })
+router.put('/', (req, res) => {
+  if (req.body) {
+    const item = Object.keys(req.body).reduce((accum, key) => {
+      if (key === 'time') {
+        accum[keyMap[key]] = {
+          Start: req.body.time.start,
+          End: req.body.time.end,
+        }
+      } else {
+        accum[keyMap[key]] = req.body[key]
+      }
+      return accum
+    }, {})
+    return query(params.eventsQuery(config.SCHOOL_ID_HARD))
+      .then((events) => {
+        const ids = events.map(e => parseInt(e.EventId))
+        return Math.max(...ids) + 1
+      })
+      .then(eid => (
+        put({
+          TableName: 'Derby_Events',
+          Item: Object.assign(item, {
+            SchoolId: config.SCHOOL_ID_HARD,
+            EventId: eid,
+          }),
+        })
+      ))
+      .then(data => res.json(data))
+      .catch(err => errorEnd(err, res))
+  }
+  return errorEnd('Missing a request body', res)
+})
+
+router.delete('/:id', (req, res) => {
+  const eventId = parseInt(req.params.id)
+  return remove({
+    TableName: 'Derby_Events',
+    Key: { SchoolId: config.SCHOOL_ID_HARD, EventId: eventId },
+  }).then(data => res.json(data)).catch(err => errorEnd(err, res))
+})
 
 module.exports = router

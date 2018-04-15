@@ -46,7 +46,7 @@ export default class RoutesAdmin extends Component {
       dataFetch(`/data/auth?uid=${uid}`).then(({ authorized }) => {
         if (authorized) {
           this.setState({ stage: 'AUTHORIZED' })
-          dataSend('/data/auth/access', uid, token, { uid, token })
+          dataSend('/data/auth/access', 'POST', uid, token, { uid, token })
         } else {
           // user is not an authorized administrator
           this.setState({ stage: 'LOGGED_IN' })

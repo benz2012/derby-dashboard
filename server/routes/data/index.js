@@ -18,13 +18,12 @@ const { errorEnd } = require('./utility')
 const router = express.Router()
 // Non-secure & Secure Request Validation
 router.use((req, res, next) => {
-
   if (req.method === 'GET') {
     if (!req.header('sent-from-client-javascript')) {
       return next('router')
     }
     return next()
-  } else if (req.method === 'POST') {
+  } else if (['POST', 'PUT', 'DELETE'].indexOf(req.method) !== -1) {
     if (req.url === '/auth/access') {
       if (!req.header('sent-from-client-javascript')) {
         return next('router')

@@ -16,7 +16,8 @@ const EditView = ({ history, match, children, submit, ...rest }) => {
   }
   const show = rest.result !== null
   const success = rest.result && rest.result === 'SUCCESS'
-  const message = rest.result === 'SUCCESS' ? 'Attributes Updated!' : 'Update Failure!'
+  const task = rest.task || 'Updated'
+  const message = rest.result === 'SUCCESS' ? `Item ${task} Successfully!` : `Item Failed to be ${task}!`
   return (
     <div role="button" onClick={back} tabIndex={0}>
       <Modal radius={3}>
