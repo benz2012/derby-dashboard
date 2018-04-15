@@ -103,6 +103,16 @@ export default class TeamPage extends Component {
           { history && <LargeLine values={history} /> }
         </Block>
 
+        {
+          team.snap &&
+          <Block>
+            <HeadingText2>Snapchat Lens</HeadingText2>
+            <Body>
+              <a href={team.snap} target="_blank">{team.snap}</a>
+            </Body>
+          </Block>
+        }
+
         {challengeBlocks}
 
         {unsave}
