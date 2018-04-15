@@ -47,12 +47,15 @@ router.get('/', (req, res) => {
     const challenges = response.Derby_Challenges
     const eventsHydrated = events.map((e) => {
       const event = mapEvent(e)
-      const linkedChallenge = challenges.find(c => c.ChallengeId === e.ChallengeId)
-      if (linkedChallenge && linkedChallenge.Description) {
-        return Object.assign(event, {
-          challenge: linkedChallenge.Description,
-          challengeId: linkedChallenge.ChallengeId,
-        })
+      if (challenges) {
+        const linkedChallenge = challenges.find(c => c.ChallengeId === e.ChallengeId)
+        if (linkedChallenge && linkedChallenge.Description) {
+          return Object.assign(event, {
+            challenge: linkedChallenge.Description,
+            challengeId: linkedChallenge.ChallengeId,
+          })
+        }
+        return event
       }
       return event
     })
