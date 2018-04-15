@@ -62,7 +62,7 @@ export default class EventsPage extends Component {
     const { eventsFlat, input } = this.state
     const { uid, token } = this.props.authValues()
     const event = eventsFlat.find(e => parseInt(e.id) === parseInt(input.id))
-    dataSend(`/data/events/${input.id}`, uid, token, newValues(event, input)).then((d) => {
+    dataSend(`/data/events/${input.id}`, 'POST', uid, token, newValues(event, input)).then((d) => {
       if (d) {
         this.setState({ result: 'SUCCESS' })
         this.fetchEventData()
@@ -72,9 +72,35 @@ export default class EventsPage extends Component {
     })
   }
   addItem = () => {
-    return null
+    const { input } = this.state
+    const { uid, token } = this.props.authValues()
+    const event = Object.keys(input)
+      .filter(key => input[key] !== '')
+      .reduce((prev, key) => {
+        prev[key] = input[key]
+        return prev
+      }, {})
+    dataSend('/data/events', 'PUT', uid, token, event)
+      .then((d) => {
+        if (d) {
+          this.setState({ result: 'SUCCESS' })
+          this.fetchEventData()
+        }
+      }).catch(() => {
+        this.setState({ result: 'FAILURE' })
+      })
   }
-  itemClick = id => console.log(id)
+  removeItem = () => {
+    const { input } = this.state
+    const { uid, token } = this.props.authValues()
+    dataSend(`/data/events/${input.id}`, 'DELETE', uid, token, {})
+      .then(() => {
+        this.setState({ result: 'SUCCESS' })
+        this.fetchEventData()
+      }).catch(() => {
+        this.setState({ result: 'FAILURE' })
+      })
+  }
   openModal = (id) => {
     const event = this.state.eventsFlat.find(e => parseInt(e.id) === parseInt(id))
     setInput({
@@ -92,6 +118,11 @@ export default class EventsPage extends Component {
   }
   openAdd = () => {
     this.props.history.replace(`${this.props.match.url}/add`)
+  }
+  openRemove = (id) => {
+    const event = this.state.eventsFlat.find(e => parseInt(e.id) === parseInt(id))
+    setInput({ id: event.id, name: event.name }, this.setState.bind(this))
+    this.props.history.replace(`${this.props.match.url}/remove`)
   }
   closeModal = () => {
     this.resetValues()
@@ -118,7 +149,7 @@ export default class EventsPage extends Component {
     if (!events) return <Loading />
     return (
       <div>
-        {/* <button className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Event</button> */}
+        <button className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Event</button>
         {
           events.map(dateObj => (
             <div key={dateObj.date}>
@@ -129,7 +160,7 @@ export default class EventsPage extends Component {
                 head={e => e.name}
                 body={e => (<span>{e.date} {e.time.start}<br />{e.location}</span>)}
                 onEdit={this.openModal}
-                onDelete={this.itemClick}
+                onDelete={this.openRemove}
               />
               <div className="mb-5" />
             </div>
@@ -156,12 +187,13 @@ export default class EventsPage extends Component {
           </Form>
         </EditRoute>
 
-        {/* <EditRoute
+        <EditRoute
           {...this.props}
           path={'add'}
           close={this.closeModal}
           submit={this.addItem}
           result={result}
+          task={'Added'}
         >
           <Form>
             <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
@@ -172,7 +204,18 @@ export default class EventsPage extends Component {
             <TextInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} help="HH:MM (24hr)" />
             <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
           </Form>
-        </EditRoute> */}
+        </EditRoute>
+
+        <EditRoute
+          {...this.props}
+          path={'remove'}
+          close={this.closeModal}
+          submit={this.removeItem}
+          result={result}
+          task={'Removed'}
+        >
+          Are you sure you want to delete the <strong>{input.name}</strong> event?
+        </EditRoute>
       </div>
     )
   }
