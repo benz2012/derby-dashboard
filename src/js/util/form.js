@@ -31,7 +31,17 @@ const newValues = (state, input) => (
     .map(k => ({ [k]: input[k] }))
 )
 
+const substance = obj => (
+  Object.keys(obj)
+    .filter(key => obj[key] !== '')
+    .reduce((prev, key) => {
+      prev[key] = obj[key]
+      return prev
+    }, {})
+)
+
 export {
   setInput,
   newValues,
+  substance,
 }

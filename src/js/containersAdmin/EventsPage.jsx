@@ -7,7 +7,7 @@ import EditRoute from './EditRoute'
 import Form, { TextInput, TextAreaInput, SelectInput } from '../componentsAdmin/Form'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort, timeSort } from '../util/date'
-import { setInput, newValues } from '../util/form'
+import { setInput, newValues, substance } from '../util/form'
 
 export default class EventsPage extends Component {
   state = {
@@ -74,12 +74,7 @@ export default class EventsPage extends Component {
   addItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
-    const event = Object.keys(input)
-      .filter(key => input[key] !== '')
-      .reduce((prev, key) => {
-        prev[key] = input[key]
-        return prev
-      }, {})
+    const event = substance(input)
     dataSend('/data/events', 'PUT', uid, token, event)
       .then((d) => {
         if (d) {
@@ -101,7 +96,7 @@ export default class EventsPage extends Component {
         this.setState({ result: 'FAILURE' })
       })
   }
-  openModal = (id) => {
+  openEdit = (id) => {
     const event = this.state.eventsFlat.find(e => parseInt(e.id) === parseInt(id))
     setInput({
       id: event.id,
@@ -159,7 +154,7 @@ export default class EventsPage extends Component {
                 items={dateObj.events}
                 head={e => e.name}
                 body={e => (<span>{e.date} {e.time.start}<br />{e.location}</span>)}
-                onEdit={this.openModal}
+                onEdit={this.openEdit}
                 onDelete={this.openRemove}
               />
               <div className="mb-5" />
@@ -189,11 +184,11 @@ export default class EventsPage extends Component {
 
         <EditRoute
           {...this.props}
-          path={'add'}
+          path="add"
           close={this.closeModal}
           submit={this.addItem}
           result={result}
-          task={'Added'}
+          task="Added"
         >
           <Form>
             <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
@@ -208,11 +203,11 @@ export default class EventsPage extends Component {
 
         <EditRoute
           {...this.props}
-          path={'remove'}
+          path="remove"
           close={this.closeModal}
           submit={this.removeItem}
           result={result}
-          task={'Removed'}
+          task="Removed"
         >
           Are you sure you want to delete the <strong>{input.name}</strong> event?
         </EditRoute>

@@ -1,11 +1,17 @@
 const express = require('express')
 
-const { query, batchGet, get } = require('../../database')
+const { query, batchGet, get, put, update, remove } = require('../../database')
 const config = require('../../database/config')
 const params = require('../../database/params')
 const { errorEnd } = require('./utility')
 
 const router = express.Router()
+
+const keyMap = {
+  name: 'Name',
+  description: 'Description',
+  scores: 'Scores',
+}
 
 router.get('/', (req, res) => {
   let challenges
@@ -73,6 +79,64 @@ router.get('/:id', (req, res) => {
     }
     res.json(challengeData)
   }).catch(err => errorEnd(err, res))
+})
+
+router.put('/', (req, res) => {
+  if (req.body) {
+    const item = Object.keys(req.body).reduce((accum, key) => {
+      accum[keyMap[key]] = req.body[key]
+      return accum
+    }, {})
+    return query(params.challengesQuery(config.SCHOOL_ID_HARD))
+      .then((challenges) => {
+        const ids = challenges.map(c => parseInt(c.ChallengeId))
+        return Math.max(...ids) + 1
+      })
+      .then(cid => (
+        put({
+          TableName: 'Derby_Challenges',
+          Item: Object.assign(item, {
+            SchoolId: config.SCHOOL_ID_HARD,
+            ChallengeId: cid,
+          }),
+        })
+      ))
+      .then(data => res.json(data))
+      .catch(err => errorEnd(err, res))
+  }
+  return errorEnd('Missing a request body', res)
+})
+
+router.post('/:id', (req, res) => {
+  const cid = parseInt(req.params.id)
+  if (req.body) {
+    return Promise.all(
+      req.body.map((u) => {
+        const k = Object.keys(u)[0]
+        const v = u[k]
+
+        if (k === 'scores') {
+          return true
+        }
+
+        return update(params.attrUpdate(
+          'Derby_Challenges',
+          { SchoolId: config.SCHOOL_ID_HARD, ChallengeId: cid },
+          keyMap[k],
+          v
+        ))
+      })
+    ).then(data => res.json(data)).catch(err => errorEnd(err, res))
+  }
+  return errorEnd('Missing a request body', res)
+})
+
+router.delete('/:id', (req, res) => {
+  const cid = parseInt(req.params.id)
+  return remove({
+    TableName: 'Derby_Challenges',
+    Key: { SchoolId: config.SCHOOL_ID_HARD, ChallengeId: cid },
+  }).then(data => res.json(data)).catch(err => errorEnd(err, res))
 })
 
 
