@@ -35,6 +35,7 @@ export default class GeneralPage extends Component {
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
   submitValues = (url) => {
+    this.setState({ result: null })
     const { general, input } = this.state
     const { uid, token } = this.props.authValues()
     dataSend(url, 'POST', uid, token, newValues(general, input)).then((d) => {

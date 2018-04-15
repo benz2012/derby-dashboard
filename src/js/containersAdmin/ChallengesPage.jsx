@@ -38,6 +38,7 @@ export default class ChallengesPage extends Component {
     })
   }
   submitValues = () => {
+    this.setState({ result: null })
     const { challenges, input } = this.state
     const { uid, token } = this.props.authValues()
     const challenge = challenges.find(c => parseInt(c.id) === parseInt(input.id))

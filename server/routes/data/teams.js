@@ -1,11 +1,17 @@
 const express = require('express')
 
-const { getSchool, batchGet, get } = require('../../database')
+const { getSchool, batchGet, get, update } = require('../../database')
+const params = require('../../database/params')
 const { errorEnd } = require('./utility')
 
 const router = express.Router()
 
 // Shared Functions
+const keyMap = {
+  org: 'Organization',
+  orgId: 'OrganizationId',
+  snap: 'SnapURL',
+}
 const mapTeam = team => ({
   id: team.TeamId,
   name: team.Name,
@@ -15,6 +21,7 @@ const mapTeam = team => ({
   cover: team.CoverURL,
   url: team.URL,
   members: team.Members,
+  snap: team.SnapURL,
 })
 
 
@@ -44,6 +51,23 @@ router.get('/:id', (req, res) => {
     res.json(teamData)
   }).catch(err => errorEnd(err, res))
   return null
+})
+
+router.post('/:id', (req, res) => {
+  const teamId = parseInt(req.params.id)
+  if (req.body) {
+    return Promise.all(
+      req.body.map((u) => {
+        const k = Object.keys(u)[0]
+        const v = u[k]
+
+        return update(params.attrUpdate(
+          'Derby_Teams', { TeamId: teamId }, keyMap[k], v
+        ))
+      })
+    ).then(data => res.json(data)).catch(err => errorEnd(err, res))
+  }
+  return errorEnd('Missing a request body', res)
 })
 
 
