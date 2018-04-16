@@ -113,12 +113,16 @@ router.post('/:id', (req, res) => {
     return Promise.all(
       req.body.map((u) => {
         const k = Object.keys(u)[0]
-        const v = u[k]
+        let v = u[k]
 
         if (k === 'scores') {
-          // parseInt on the values
-          // nested data update
-          return true
+          const scoreList = Object.keys(v).map(tid => ({
+            [tid]: {
+              include: Boolean(v[tid].include),
+              score: parseInt(v[tid].score),
+            },
+          }))
+          v = Object.assign({}, ...scoreList)
         }
 
         return update(params.attrUpdate(
