@@ -12,7 +12,7 @@ const http = require('http')
 const socketIO = require('socket.io')
 const data = require('./routes/data')
 const live = require('./routes/live')
-const subscribe = require('./routes/subscribe')
+const alerts = require('./routes/alerts')
 const socketHandler = require('./socketHandler')
 
 
@@ -38,18 +38,18 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use('/data', data)
+app.use('/sms', alerts)
 if (process.env.NODE_ENV !== 'production') {
   app.use(require('./routes/hot')) // eslint-disable-line global-require
 }
 app.use(express.static(`${process.cwd()}/public`)) // main code & assets
+live(app, io)
+socketHandler(io)
+
+// catch-all route for everything not defined
 app.get('*', (req, res) => {
-  // catch-all route for everything not defined
   res.sendFile(`${process.cwd()}/public/index.html`)
 })
-
-app.use('/sms', subscribe)
-live(app, io) // handle POST requests to `/live`
-socketHandler(io)
 // Log anything from above routes/middleware to Opbeat
 app.use(opbeat.middleware.express())
 

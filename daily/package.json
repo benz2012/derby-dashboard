@@ -1,0 +1,15 @@
+{
+  "name": "subscriber",
+  "version": "1.0.0",
+  "description": "A Lambda function that subscribes a phone number to the Derby Days SNS topic",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "compress": "zip -r -q ./build/build -@ < ./compress.txt && echo \"successfully zipped\" || echo \"failure\""
+  },
+  "author": "benz2012",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.85.0"
+  }
+}
