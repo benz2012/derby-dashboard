@@ -2,17 +2,34 @@ const setInput = (update, setState) => {
   Object.keys(update).forEach((k) => {
     const v = update[k]
     if (k.indexOf('.') !== -1) {
+      // object of objects, updating
       const k1 = k.split('.')[0]
       const k2 = k.split('.')[1]
-      setState(prevState => ({
-        input: {
-          ...prevState.input,
-          [k1]: {
-            ...prevState.input[k1],
-            [k2]: v,
+      const k3 = k.split('.')[2]
+      if (k3) {
+        setState(prevState => ({
+          input: {
+            ...prevState.input,
+            [k1]: {
+              ...prevState.input[k1],
+              [k2]: {
+                ...prevState.input[k1][k2],
+                [k3]: v,
+              },
+            },
           },
-        },
-      }))
+        }))
+      } else {
+        setState(prevState => ({
+          input: {
+            ...prevState.input,
+            [k1]: {
+              ...prevState.input[k1],
+              [k2]: v,
+            },
+          },
+        }))
+      }
     } else {
       setState(prevState => ({
         input: {

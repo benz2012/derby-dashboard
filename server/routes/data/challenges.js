@@ -116,6 +116,8 @@ router.post('/:id', (req, res) => {
         const v = u[k]
 
         if (k === 'scores') {
+          // parseInt on the values
+          // nested data update
           return true
         }
 
