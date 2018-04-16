@@ -8,7 +8,7 @@ import EventsPage from './EventsPage'
 import ChallengesPage from './ChallengesPage'
 import ReportsPage from './ReportsPage'
 
-import TopNav, { NavBrand, NavDropDown } from '../componentsAdmin/TopNav'
+import TopNav, { NavBrand, NavDropDown, NavButton } from '../componentsAdmin/TopNav'
 import SideNav from '../componentsAdmin/SideNav'
 import Avatar from '../components/TeamBlock/Avatar'
 import { loadBootstrapCSS } from '../styles/app'
@@ -39,6 +39,7 @@ export default class RoutesPanel extends Component {
     return (
       <div>
         <TopNav brand={<NavBrand to={match.url}>Derby Dashboard Admin</NavBrand>}>
+          <NavButton to="/">Public Site</NavButton>
           <NavDropDown>
             <Avatar src={picture} size={25} style={{ marginRight: '7px' }} />
             {name}

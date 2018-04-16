@@ -4,6 +4,7 @@ import DataBin from '../componentsAdmin/DataBin'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
 import Form, { TextInput, TextAreaInput } from '../componentsAdmin/Form'
+import ScoreGroup from '../componentsAdmin/ScoreGroup'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
 import { setInput, newValues, substance } from '../util/form'
@@ -12,12 +13,13 @@ export default class ChallengesPage extends Component {
   state = {
     unmounting: false,
     challenges: null,
+    teams: null,
     result: null,
     input: {
       id: '',
       name: '',
       description: '',
-      scores: [],
+      scores: {},
     },
   }
   componentDidMount() {
@@ -27,14 +29,19 @@ export default class ChallengesPage extends Component {
     this.setState({ unmounting: true })
   }
   setValue = (e) => {
-    e.preventDefault()
+    if (e.target.type !== 'checkbox') e.preventDefault()
     const key = e.target.id.replace('input.', '')
-    setInput({ [key]: e.target.value }, this.setState.bind(this))
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    setInput({ [key]: value }, this.setState.bind(this))
   }
   fetchChallengeData = () => {
     dataFetch('/data/challenges').then((data) => {
       if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
       if (!this.state.unmounting) this.setState({ challenges: data })
+    })
+    dataFetch('/data/teams').then((data) => {
+      if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
+      if (!this.state.unmounting) this.setState({ teams: data })
     })
   }
   submitValues = () => {
@@ -82,12 +89,22 @@ export default class ChallengesPage extends Component {
       })
   }
   openEdit = (id) => {
-    const challenge = this.state.challenges.find(c => parseInt(c.id) === parseInt(id))
+    const { challenges, teams } = this.state
+    const challenge = challenges.find(c => parseInt(c.id) === parseInt(id))
+    const scores = {}
+    teams.forEach((t) => {
+      const teamScore = challenge.scores[t.id]
+      if (!teamScore) {
+        scores[t.id] = { score: 0, include: false }
+      } else {
+        scores[t.id] = teamScore
+      }
+    })
     setInput({
       id: challenge.id,
       name: challenge.name,
       description: challenge.description,
-      scores: challenge.scores.map(c => JSON.stringify(c)).toString(),
+      scores,
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
@@ -103,17 +120,35 @@ export default class ChallengesPage extends Component {
     this.resetValues()
     this.setState({ result: null })
   }
+  includeAll = (e) => {
+    e.preventDefault()
+    const yes = Boolean(e.target.getAttribute('data-yes'))
+    const { scores } = this.state.input
+    Object.keys(scores).forEach((k) => {
+      setInput({ [`scores.${k}.include`]: yes }, this.setState.bind(this))
+    })
+  }
   resetValues = () => {
     setInput({
       id: '',
       name: '',
       description: '',
-      scores: [],
+      scores: {},
     }, this.setState.bind(this))
   }
+  scoreValues = (teams, scores) => (
+    Object.keys(scores).length > 0 &&
+    teams.map(t => ({
+      id: t.id,
+      name: t.org,
+      score: scores[t.id].score,
+      include: scores[t.id].include,
+    }))
+  )
   render() {
-    const { challenges, input, result } = this.state
-    if (!challenges) return <Loading />
+    const { challenges, teams, input, result } = this.state
+    if (!(challenges && teams)) return <Loading />
+    const scoreValues = this.scoreValues(teams, input.scores)
     return (
       <div>
         <button className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Challenge</button>
@@ -139,8 +174,26 @@ export default class ChallengesPage extends Component {
           <Form>
             <TextInput id="input.id" label="Challenge ID" value={input.id} readOnly />
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
-            <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
-            <TextInput id="input.scores" label="Scores" value={input.scores} readOnly />
+            <TextAreaInput
+              id="input.description"
+              label="Description"
+              value={input.description}
+              onChange={this.setValue}
+              rows={3}
+            />
+            <h4>Scores</h4>
+            <small>
+              All teams must have a score value,&nbsp;
+              unless their <em>include</em> box is unchecked.
+            </small>
+            {
+              Object.keys(input.scores).length > 0 &&
+              <ScoreGroup
+                teams={scoreValues}
+                onChange={this.setValue}
+                includeAll={this.includeAll}
+              />
+            }
           </Form>
         </EditRoute>
 
@@ -153,7 +206,13 @@ export default class ChallengesPage extends Component {
           task="Added"
         >
           <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
-          <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
+          <TextAreaInput
+            id="input.description"
+            label="Description"
+            value={input.description}
+            onChange={this.setValue}
+            rows={3}
+          />
         </EditRoute>
 
         <EditRoute

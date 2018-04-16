@@ -2,11 +2,12 @@ import React from 'react'
 
 import NavBrand from './NavBrand'
 import NavDropDown from './NavDropDown'
+import NavButton from './NavButton'
 
 const TopNav = ({ brand, children }) => (
   <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0">
     {brand}
-    <ul className="navbar-nav px-3">
+    <ul className="navbar-nav navbar-expand-sm px-3">
       {children}
     </ul>
   </nav>
@@ -15,5 +16,6 @@ const TopNav = ({ brand, children }) => (
 export default TopNav
 export {
   NavBrand,
-  NavDropDown
+  NavDropDown,
+  NavButton,
 }

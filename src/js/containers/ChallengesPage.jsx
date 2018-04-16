@@ -24,7 +24,7 @@ export default class ChallengesPage extends Component {
   buildBlocks(challenges, teams) {
     const { match } = this.props
     return challenges.map((ch) => {
-      const scores = ch.scores && this.buildScores(ch.scores, teams)
+      const scores = Object.keys(ch.scores).length > 0 && this.buildScores(ch.scores, teams)
       return (
         <Block key={ch.id}>
           <CleanLink to={`${match.url}/${ch.id}`}><HeadingText>
@@ -40,12 +40,13 @@ export default class ChallengesPage extends Component {
   }
   buildScores = (scores, teams) => {
     scores.sort((a, b) => (b.score - a.score))
-    return scores.map((sc) => {
-      const thisTeam = teams.find(t => parseInt(t.id) === parseInt(sc.teamId))
+    return Object.keys(scores).map((teamId) => {
+      const thisTeam = teams.find(t => parseInt(t.id) === parseInt(teamId))
       if (!thisTeam) { return null }
+      if (Object.keys(scores[teamId]).length === 0) return null
       const teamName = thisTeam.org
       return (
-        <li key={sc.teamId}>{sc.score} | {teamName}</li>
+        <li key={thisTeam.teamId}>{scores[teamId].score} | {teamName}</li>
       )
     })
   }
