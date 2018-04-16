@@ -8,6 +8,7 @@ import Loading from '../components/Loading'
 import HeadingText from '../components/HeadingText'
 import FullWidthButton from '../components/Button/FullWidthButton'
 import { dataFetch } from '../util'
+import { hydrateScores } from '../util/manageIncomingData'
 
 export default class ChallengePage extends Component {
   state = {
@@ -24,22 +25,17 @@ export default class ChallengePage extends Component {
     })
   }
   buildScores = (scores, teams) => {
-    scores.sort((a, b) => (b.score - a.score))
-    return Object.keys(scores).map((teamId) => {
-      const thisTeam = teams.find(t => parseInt(t.id) === parseInt(teamId))
-      if (!thisTeam) { return null }
-      if (Object.keys(scores[teamId]).length === 0) return null
-      const teamName = thisTeam.org
-      return (
-        <li key={thisTeam.teamId}>{scores[teamId].score} | {teamName}</li>
-      )
-    })
+    const hydrated = hydrateScores(scores, teams)
+    if (!hydrated) return null
+    return hydrated.map(s => (
+      <li key={s.id}>{s.score} | {s.name}</li>
+    ))
   }
   render() {
     const { match } = this.props
     const { challenge, teams } = this.state
     if (!(challenge && teams)) { return <Loading /> }
-
+    const scores = this.buildScores(challenge.scores, teams)
     return (
       <Page>
         <Block>
@@ -48,11 +44,7 @@ export default class ChallengePage extends Component {
         </Block>
 
         <Block>
-          {
-            (challenge.scores && Object.keys(challenge.scores).length > 0) ?
-              <ul>{this.buildScores(challenge.scores, teams)}</ul> :
-              <p>No scores have been added yet!</p>
-          }
+          {scores ? <ul>{scores}</ul> : <p>No scores have been added yet!</p>}
         </Block>
 
         {

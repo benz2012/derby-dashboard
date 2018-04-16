@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 import Page from '../components/Page'
 import Block from '../components/Block'
@@ -7,6 +6,7 @@ import Loading from '../components/Loading'
 import HeadingText from '../components/HeadingText'
 import { CleanLink, RightArrow } from '../components/Content'
 import { dataFetch } from '../util'
+import { hydrateScores } from '../util/manageIncomingData'
 
 export default class ChallengesPage extends Component {
   state = {
@@ -24,7 +24,7 @@ export default class ChallengesPage extends Component {
   buildBlocks(challenges, teams) {
     const { match } = this.props
     return challenges.map((ch) => {
-      const scores = Object.keys(ch.scores).length > 0 && this.buildScores(ch.scores, teams)
+      const scores = this.buildScores(ch.scores, teams)
       return (
         <Block key={ch.id}>
           <CleanLink to={`${match.url}/${ch.id}`}><HeadingText>
@@ -33,22 +33,17 @@ export default class ChallengesPage extends Component {
             </div>
           </HeadingText></CleanLink>
           <p>{ch.description}</p>
-          <ul>{scores}</ul>
+          {scores && <ul>{scores}</ul>}
         </Block>
       )
     })
   }
   buildScores = (scores, teams) => {
-    scores.sort((a, b) => (b.score - a.score))
-    return Object.keys(scores).map((teamId) => {
-      const thisTeam = teams.find(t => parseInt(t.id) === parseInt(teamId))
-      if (!thisTeam) { return null }
-      if (Object.keys(scores[teamId]).length === 0) return null
-      const teamName = thisTeam.org
-      return (
-        <li key={thisTeam.teamId}>{scores[teamId].score} | {teamName}</li>
-      )
-    })
+    const hydrated = hydrateScores(scores, teams)
+    if (!hydrated) return null
+    return hydrated.map(s => (
+      <li key={s.id}>{s.score} | {s.name}</li>
+    ))
   }
   render() {
     const { challenges, teams } = this.state
