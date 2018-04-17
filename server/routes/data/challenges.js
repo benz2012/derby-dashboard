@@ -11,6 +11,7 @@ const keyMap = {
   name: 'Name',
   description: 'Description',
   scores: 'Scores',
+  public: 'ScoresPublic',
 }
 
 router.get('/', (req, res) => {
@@ -38,6 +39,7 @@ router.get('/', (req, res) => {
         name,
         description: c.Description,
         scores: c.Scores,
+        public: c.ScoresPublic,
       })
     })
     res.json(challengesHydrated)
@@ -64,6 +66,7 @@ router.get('/:id', (req, res) => {
       description: c.Description,
       name: c.Name,
       scores: c.Scores,
+      public: c.ScoresPublic,
     }
     if (Object.keys(event).length !== 0) {
       challengeData.name = event.Name

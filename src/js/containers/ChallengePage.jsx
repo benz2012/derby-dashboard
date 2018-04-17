@@ -44,7 +44,11 @@ export default class ChallengePage extends Component {
         </Block>
 
         <Block>
-          {scores ? <ul>{scores}</ul> : <p>No scores have been added yet!</p>}
+          {
+            (challenge.public && scores) ?
+              <ul>{scores}</ul> :
+              <p>No scores have been added yet!</p>
+          }
         </Block>
 
         {

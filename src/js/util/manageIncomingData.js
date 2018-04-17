@@ -1,27 +1,29 @@
 const filterChallenges = (challenges, teamId) => {
-  const scoredChallenges = challenges.filter(c => c.scores)
-    .filter(c => c.scores.findIndex(s => s.teamId === teamId) !== -1)
-
-  const filteredChallenges = []
-  scoredChallenges.forEach((c) => {
-    const ourScore = c.scores.find(s => s.teamId === teamId)
-    const rank = c.scores.reduce((accum, theirScore) => {
-      if (theirScore.score > ourScore.score) {
-        // increments the accumulator if any score is bigger than our own
-        return accum + 1
-      }
-      return accum
-    }, 1)
-
-    filteredChallenges.push({
+  const filteredChallenges = challenges.filter(c => (
+    (Object.keys(c.scores).length > 0) &&
+    (c.public === true) &&
+    (Object.keys(c.scores[teamId]).length > 0) &&
+    (c.scores[teamId].include === true)
+  )).map((c) => {
+    const ourScore = c.scores[teamId].score
+    const rank = Object.keys(c.scores)
+      .filter(tid => (
+        (parseInt(tid) !== parseInt(teamId)) &&
+        (c.scores[tid].include === true)
+      ))
+      .map(tid => c.scores[tid].score)
+      .reduce((acc, they) => {
+        if (they > ourScore) return acc + 1
+        return acc
+      }, 1)
+    return ({
       id: c.id,
       name: c.name,
       description: c.description,
-      score: ourScore.score,
+      score: ourScore,
       rank,
     })
   })
-
   return filteredChallenges
 }
 

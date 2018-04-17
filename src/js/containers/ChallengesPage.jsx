@@ -5,7 +5,8 @@ import Block from '../components/Block'
 import Loading from '../components/Loading'
 import HeadingText from '../components/HeadingText'
 import { CleanLink, RightArrow } from '../components/Content'
-import { dataFetch } from '../util'
+import { dataFetch, objectSort } from '../util'
+import { stringSort } from '../util/string'
 import { hydrateScores } from '../util/manageIncomingData'
 
 export default class ChallengesPage extends Component {
@@ -15,6 +16,7 @@ export default class ChallengesPage extends Component {
   }
   componentDidMount() {
     dataFetch('/data/challenges').then((data) => {
+      objectSort(data, 'name', stringSort)
       this.setState({ challenges: data })
     })
     dataFetch('/data/teams').then((data) => {
@@ -33,7 +35,7 @@ export default class ChallengesPage extends Component {
             </div>
           </HeadingText></CleanLink>
           <p>{ch.description}</p>
-          {scores && <ul>{scores}</ul>}
+          {(ch.public && scores) && <ul>{scores}</ul>}
         </Block>
       )
     })
@@ -45,13 +47,52 @@ export default class ChallengesPage extends Component {
       <li key={s.id}>{s.score} | {s.name}</li>
     ))
   }
+  totalScores = (challenges, teams) => {
+    const teamsData = teams.filter(t => !t.homeTeam)
+    const initial = Object.assign({}, ...teamsData.map(t => ({ [t.id]: 0 })))
+    const totals = challenges
+      .filter(c => (
+        (Object.keys(c.scores).length > 0) &&
+        (c.public === true)
+      ))
+      .reduce((accum, current) => {
+        Object.keys(current.scores).forEach((tid) => {
+          if (current.scores[tid].include === true) {
+            accum[tid] += current.scores[tid].score
+          }
+        })
+        return accum
+      }, initial)
+    return Object.keys(totals)
+      .map((tid) => {
+        const thisTeam = teamsData.find(t => parseInt(t.id) === parseInt(tid))
+        return ({
+          id: tid,
+          score: totals[tid],
+          name: thisTeam.org,
+        })
+      })
+  }
   render() {
     const { challenges, teams } = this.state
-    if (!(challenges && teams)) { return <Loading /> }
+    if (!(challenges && teams)) return <Loading />
 
     const challengeBlocks = this.buildBlocks(challenges, teams)
+    const totals = this.totalScores(challenges, teams)
+    totals.sort((a, b) => (b.score - a.score))
     return (
       <Page>
+        <Block>
+          <HeadingText>Total Scores</HeadingText>
+          <p>All points from all challenges</p>
+          <ul>{
+            totals &&
+            totals.map(s => (
+              <li key={s.id}>{s.score} | {s.name}</li>
+            ))
+          }</ul>
+        </Block>
+
         {challengeBlocks}
       </Page>
     )
