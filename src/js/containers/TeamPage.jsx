@@ -11,7 +11,8 @@ import { Body, Centered, Currency } from '../components/Content'
 import { HeadingText2 } from '../components/HeadingText'
 import { LargeLine } from '../components/Chart'
 
-import { storageEnabled, storageGet, storageSet, dataFetch } from '../util'
+import { storageEnabled, storageGet, storageSet, dataFetch, objectSort } from '../util'
+import { stringSort } from '../util/string'
 import { sumTeamFunds, joinFundsHistory } from '../util/currency'
 import { filterChallenges } from '../util/manageIncomingData'
 
@@ -39,6 +40,7 @@ export default class TeamPage extends Component {
     })
     dataFetch('/data/challenges').then((data) => {
       const challenges = filterChallenges(data, parseInt(teamId))
+      objectSort(challenges, 'name', stringSort)
       this.setState({ challenges })
     })
   }

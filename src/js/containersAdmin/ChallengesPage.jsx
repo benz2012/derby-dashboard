@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import DataBin from '../componentsAdmin/DataBin'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput, CheckboxInput } from '../componentsAdmin/Form'
 import ScoreGroup from '../componentsAdmin/ScoreGroup'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
@@ -20,6 +20,7 @@ export default class ChallengesPage extends Component {
       name: '',
       description: '',
       scores: {},
+      public: false,
     },
   }
   componentDidMount() {
@@ -105,6 +106,7 @@ export default class ChallengesPage extends Component {
       name: challenge.name,
       description: challenge.description,
       scores,
+      public: challenge.public,
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
@@ -134,6 +136,7 @@ export default class ChallengesPage extends Component {
       name: '',
       description: '',
       scores: {},
+      public: false,
     }, this.setState.bind(this))
   }
   scoreValues = (teams, scores) => (
@@ -182,10 +185,7 @@ export default class ChallengesPage extends Component {
               rows={3}
             />
             <h4>Scores</h4>
-            <small>
-              All teams must have a score value,&nbsp;
-              unless their <em>include</em> box is unchecked.
-            </small>
+            <CheckboxInput id="input.public" label="Display Publicly" value={input.public} onChange={this.setValue} />
             {
               Object.keys(input.scores).length > 0 &&
               <ScoreGroup
