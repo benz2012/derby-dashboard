@@ -38,6 +38,7 @@ const loadCSS = (location, id) => {
 const loadBootstrapCSS = () => {
   loadCSS('/bootstrap.min.css', 'bootstrap-css')
   loadCSS('/dashboard.css', 'bootstrap-dashboard-css')
+  loadCSS('/react-select.css', 'react-select-css')
 }
 
 export {

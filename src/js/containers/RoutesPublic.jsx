@@ -6,6 +6,7 @@ import ChallengesPage from './ChallengesPage'
 import HomePage from './HomePage'
 import LivePage from './LivePage'
 import MorePage from './MorePage'
+import ReportsPage from './ReportsPage'
 import SchedulePage from './SchedulePage'
 import TeamPage from './TeamPage'
 import TeamSelectionPage from './TeamSelectionPage'
@@ -34,6 +35,7 @@ export default class RoutesPublic extends Component {
         <Route path="/teams/:teamId" component={TeamPage} />
         <Route exact path="/challenges" component={ChallengesPage} />
         <Route path="/challenges/:challengeId" component={ChallengePage} />
+        <Route path="/reports/:date" component={ReportsPage} />
         <Route exact path="/live" component={LivePage} />
         <Route exact path="/more" component={MorePage} />
         <Route component={NoMatch} />
