@@ -37,8 +37,13 @@ const hydrateScores = (scores, teams) => {
     .map((teamId) => {
       const thisTeam = teams.find(t => parseInt(t.id) === parseInt(teamId))
       if (!thisTeam) return null
-      const teamName = thisTeam.org
-      return ({ id: teamId, score: scores[teamId].score, name: teamName })
+      return ({
+        id: teamId,
+        score: scores[teamId].score,
+        name: thisTeam.org,
+        orgId: thisTeam.orgId,
+        avatar: thisTeam.avatar,
+      })
     })
     .sort((a, b) => (b.score - a.score))
 }

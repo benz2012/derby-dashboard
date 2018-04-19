@@ -5,6 +5,7 @@ export default {
   contentBG: 'white',
   textAccent: '#3ea543',
   textDampen: '#acb7c4',
+  textDampenLess: '#42464b',
   buttonFG: 'white',
   buttonBG: '#179e83',
   fontHeading: "'Cabin', sans-serif",
