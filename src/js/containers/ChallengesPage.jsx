@@ -3,8 +3,9 @@ import React, { Component } from 'react'
 import Page from '../components/Page'
 import Block from '../components/Block'
 import Loading from '../components/Loading'
-import HeadingText from '../components/HeadingText'
-import { CleanLink, RightArrow } from '../components/Content'
+import HeadingText, { Prefix } from '../components/HeadingText'
+import Leaderboard from '../components/Leaderboard'
+import { CleanLink, RightArrow, Ellipsis } from '../components/Content'
 import { dataFetch, objectSort } from '../util'
 import { stringSort } from '../util/string'
 import { hydrateScores } from '../util/manageIncomingData'
@@ -26,7 +27,8 @@ export default class ChallengesPage extends Component {
   buildBlocks(challenges, teams) {
     const { match } = this.props
     return challenges.map((ch) => {
-      const scores = this.buildScores(ch.scores, teams)
+      const hydrated = hydrateScores(ch.scores, teams)
+      const leaderboard = hydrated && <Leaderboard scores={hydrated} simple />
       return (
         <Block key={ch.id}>
           <CleanLink to={`${match.url}/${ch.id}`}><HeadingText>
@@ -34,18 +36,17 @@ export default class ChallengesPage extends Component {
               {ch.name}<RightArrow />
             </div>
           </HeadingText></CleanLink>
-          <p>{ch.description}</p>
-          {(ch.public && scores) && <ul>{scores}</ul>}
+          {(ch.public && hydrated) ?
+            <div>
+              <Ellipsis>{ch.description}</Ellipsis>
+              <div style={{ margin: '5px 12px' }}>{leaderboard}</div>
+            </div>
+            :
+            <p>{ch.description}</p>
+          }
         </Block>
       )
     })
-  }
-  buildScores = (scores, teams) => {
-    const hydrated = hydrateScores(scores, teams)
-    if (!hydrated) return null
-    return hydrated.map(s => (
-      <li key={s.id}>{s.score} | {s.name}</li>
-    ))
   }
   totalScores = (challenges, teams) => {
     const teamsData = teams.filter(t => !t.homeTeam)
@@ -70,6 +71,8 @@ export default class ChallengesPage extends Component {
           id: tid,
           score: totals[tid],
           name: thisTeam.org,
+          orgId: thisTeam.orgId,
+          avatar: thisTeam.avatar,
         })
       })
   }
@@ -82,16 +85,11 @@ export default class ChallengesPage extends Component {
     totals.sort((a, b) => (b.score - a.score))
     return (
       <Page>
-        <Block>
-          <HeadingText>Total Scores</HeadingText>
-          <p>All points from all challenges</p>
-          <ul>{
-            totals &&
-            totals.map(s => (
-              <li key={s.id}>{s.score} | {s.name}</li>
-            ))
-          }</ul>
+        <Block style={{ marginBottom: '0px' }}>
+          <HeadingText style={{ marginBottom: '0px' }}>Total Scores</HeadingText>
+          <Prefix>All points from all challenges</Prefix>
         </Block>
+        { totals && <Leaderboard scores={totals} /> }
 
         {challengeBlocks}
       </Page>

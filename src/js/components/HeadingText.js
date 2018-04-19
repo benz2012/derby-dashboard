@@ -22,7 +22,13 @@ const HeadingText2 = styled.h2`
   letter-spacing: 1px;
 `
 
+const Prefix = styled.small`
+  font-style: italic;
+  color: ${props => props.theme.textDampen};
+`
+
 export default HeadingText
 export {
   HeadingText2,
+  Prefix,
 }

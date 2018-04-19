@@ -5,7 +5,7 @@ const TeamBlockContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
 
-  padding: 10px 0px;
+  padding: ${props => props.tight ? '2px 0px' : '10px 0px'};
   text-decoration: none;
 `
 
@@ -28,10 +28,11 @@ const TeamBlockRight = styled.div`
 
 const TeamName = styled.div`
   font-size: 16px;
-  font-weight: 700;
+  font-weight: ${props => props.tight ? 300 : 700};
 `
 const TeamSubName = styled.div`
   color: ${props => props.theme.textDampen}
+  color: ${props => props.darker ? props.theme.textDampenLess : props.theme.textDampen}
 `
 
 

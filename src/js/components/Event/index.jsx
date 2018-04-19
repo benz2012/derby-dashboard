@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 
 import Modal from '../../containers/Modal'
 import { durationString } from '../../util/date'
@@ -32,6 +33,10 @@ export default class Event extends Component {
                 <HeadingText>{event.name}</HeadingText>
                 <p>{event.description}</p>
 
+                <EventDetail>
+                  <IconWhite fontSize={24}>event</IconWhite>
+                  <EventDetailText>{moment(event.date).format('dddd, MMM Do')}</EventDetailText>
+                </EventDetail>
                 <EventDetail>
                   <IconWhite fontSize={24}>watch_later</IconWhite>
                   <EventDetailText>{duration}</EventDetailText>

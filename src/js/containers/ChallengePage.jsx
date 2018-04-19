@@ -5,8 +5,9 @@ import Page from '../components/Page'
 import Block from '../components/Block'
 import Event from '../components/Event'
 import Loading from '../components/Loading'
-import HeadingText from '../components/HeadingText'
+import HeadingText, { Prefix } from '../components/HeadingText'
 import FullWidthButton from '../components/Button/FullWidthButton'
+import Leaderboard from '../components/Leaderboard'
 import { dataFetch } from '../util'
 import { hydrateScores } from '../util/manageIncomingData'
 
@@ -24,32 +25,24 @@ export default class ChallengePage extends Component {
       this.setState({ teams: data })
     })
   }
-  buildScores = (scores, teams) => {
-    const hydrated = hydrateScores(scores, teams)
-    if (!hydrated) return null
-    return hydrated.map(s => (
-      <li key={s.id}>{s.score} | {s.name}</li>
-    ))
-  }
   render() {
     const { match } = this.props
     const { challenge, teams } = this.state
     if (!(challenge && teams)) { return <Loading /> }
-    const scores = this.buildScores(challenge.scores, teams)
+    const hydrated = hydrateScores(challenge.scores, teams)
+    const leaderboard = (challenge.public && hydrated) ?
+      <Leaderboard scores={hydrated} /> :
+      <Block><p>No scores have been added yet!</p></Block>
+
     return (
       <Page>
         <Block>
-          <HeadingText>{challenge.name}</HeadingText>
+          <Prefix>Challenge</Prefix>
+          <HeadingText style={{ marginTop: '0px' }}>{challenge.name}</HeadingText>
           <p>{challenge.description}</p>
         </Block>
 
-        <Block>
-          {
-            (challenge.public && scores) ?
-              <ul>{scores}</ul> :
-              <p>No scores have been added yet!</p>
-          }
-        </Block>
+        {leaderboard}
 
         {
           challenge.linkedEvent &&
@@ -59,6 +52,7 @@ export default class ChallengePage extends Component {
             </Link>
           </Block>
         }
+
         <Route
           path={`${match.url}/:eventId`}
           render={props => <Event {...props} events={[challenge.linkedEvent]} />}

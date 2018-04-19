@@ -25,10 +25,17 @@ const BodyFromMarkdown = styled(Body)`
 `
 const Ranking = styled.div`
   font-size: 12px;
-  color: ${props => props.theme.textDampen}
+  color: ${props => props.darker ? props.theme.textDampenLess : props.theme.textDampen}
+`
+const Score = styled.div`
+  font-size: 24px;
+  color: ${props => props.theme.buttonBG}
 `
 const LeftPad = styled.div`
   padding-left: ${props => props.length ? `${props.length}px` : '8px'};
+`
+const RightPad = styled.div`
+  padding-right: ${props => props.length ? `${props.length}px` : '8px'};
 `
 const Centered = styled.div`
   text-align: center;
@@ -47,7 +54,9 @@ export {
   Body,
   BodyFromMarkdown,
   Ranking,
+  Score,
   LeftPad,
+  RightPad,
   Centered,
   Currency,
   ExternalLink,
