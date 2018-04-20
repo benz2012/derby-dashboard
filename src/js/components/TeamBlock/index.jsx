@@ -6,7 +6,7 @@ import { TeamBlockContainer, TeamBlockLeft, TeamBlockImage,
 
 const TeamBlock = ({ left, avatar, name, subName, right, darker, tight }) => (
   <TeamBlockContainer tight={tight}>
-    { left && <TeamBlockLeft>{left}</TeamBlockLeft> }
+    { left !== null && <TeamBlockLeft>{left}</TeamBlockLeft> }
     { avatar &&
       <TeamBlockImage>
         <Avatar src={avatar} />
@@ -16,7 +16,7 @@ const TeamBlock = ({ left, avatar, name, subName, right, darker, tight }) => (
       <TeamName tight={tight}>{name}</TeamName>
       <TeamSubName darker={darker}>{subName}</TeamSubName>
     </TeamBlockText>
-    { right && <TeamBlockRight>{right}</TeamBlockRight> }
+    { right !== null && <TeamBlockRight>{right}</TeamBlockRight> }
   </TeamBlockContainer>
 )
 
