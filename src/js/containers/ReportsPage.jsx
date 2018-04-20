@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
 
 import Page from '../components/Page'
 import Block from '../components/Block'
 import Loading from '../components/Loading'
-import HeadingText, { HeadingText2 } from '../components/HeadingText'
-import { Body, SidePad, FullPad, CleanLink, RightArrow, ExternalLink } from '../components/Content'
+import HeadingText from '../components/HeadingText'
+import Leaderboard from '../components/Leaderboard'
+import FullWidthButton from '../components/Button/FullWidthButton'
+import { Body, SidePad, FullPad, CleanLink, RightArrow, Ellipsis } from '../components/Content'
 import { dataFetch, objectSort } from '../util'
 import { stringSort } from '../util/string'
 import { hydrateScores } from '../util/manageIncomingData'
@@ -30,27 +33,28 @@ export default class MorePage extends Component {
     })
   }
   buildBlocks(challenges, teams) {
+    const { match } = this.props
     return challenges.map((ch) => {
-      const scores = this.buildScores(ch.scores, teams)
+      const hydrated = hydrateScores(ch.scores, teams)
+      const leaderboard = hydrated && <Leaderboard scores={hydrated} simple />
       return (
         <Block key={ch.id}>
-          <CleanLink to={`/challenges/${ch.id}`}><HeadingText>
+          <CleanLink to={`${match.url}/${ch.id}`}><HeadingText>
             <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
               {ch.name}<RightArrow />
             </div>
           </HeadingText></CleanLink>
-          <p>{ch.description}</p>
-          {(ch.public && scores) && <ul>{scores}</ul>}
+          {(ch.public && hydrated) ?
+            <div>
+              <Ellipsis>{ch.description}</Ellipsis>
+              <div style={{ margin: '5px 12px' }}>{leaderboard}</div>
+            </div>
+            :
+            <p>{ch.description}</p>
+          }
         </Block>
       )
     })
-  }
-  buildScores = (scores, teams) => {
-    const hydrated = hydrateScores(scores, teams)
-    if (!hydrated) return null
-    return hydrated.map(s => (
-      <li key={s.id}>{s.score} | {s.name}</li>
-    ))
   }
   render() {
     const { report, challenges, teams } = this.state
@@ -72,15 +76,21 @@ export default class MorePage extends Component {
             <Body>
               <p>Report for {moment(report.date).format('dddd, MMMM Do YYYY')}</p>
               <p>{report.body}</p>
-              {/* <button>Share This Report!</button> */}
             </Body>
           </SidePad>
         </Block>
 
         <Block>
+          <Link to="/challenges">
+            <FullWidthButton>View Total Scores</FullWidthButton>
+          </Link>
+        </Block>
+
+        <Block>
           <FullPad>
-            <HeadingText>Today's scores below</HeadingText>
-            <a href="/challenges">View Total Scores</a>
+            <HeadingText style={{ margin: '0px' }}>
+              Related Challenges & Scores from {moment(report.date).format('MMM Do')}
+            </HeadingText>
           </FullPad>
         </Block>
 
