@@ -39,7 +39,7 @@ export default class MorePage extends Component {
       const leaderboard = hydrated && <Leaderboard scores={hydrated} simple />
       return (
         <Block key={ch.id}>
-          <CleanLink to={`${match.url}/${ch.id}`}><HeadingText>
+          <CleanLink to={`/challenges/${ch.id}`}><HeadingText>
             <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
               {ch.name}<RightArrow />
             </div>
