@@ -16,7 +16,7 @@ const TeamChallengeRank = ({ id, name, description, rank, score }) => {
           to={`/challenges/${id}`}
           fontSize={24}
           color={theme.buttonBG}
-          style={{ marginRight: '5px' }}
+          style={{ marginRight: '5px', transform: 'rotate(90deg)' }}
         >
           open_in_browser
         </IconLink>
