@@ -2,10 +2,7 @@
 if (process.env.NODE_ENV !== 'production') {
   require('../env') // eslint-disable-line
 }
-// Initialize first for logging/tracing
-const opbeat = require('opbeat').start({
-  active: process.env.NODE_ENV === 'production',
-})
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const http = require('http')
@@ -50,8 +47,6 @@ socketHandler(io)
 app.get('*', (req, res) => {
   res.sendFile(`${process.cwd()}/public/index.html`)
 })
-// Log anything from above routes/middleware to Opbeat
-app.use(opbeat.middleware.express())
 
 
 // Start Server
