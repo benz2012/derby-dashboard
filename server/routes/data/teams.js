@@ -46,8 +46,13 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const teamId = parseInt(req.params.id)
-  get({ TableName: 'Derby_Teams', Key: { TeamId: teamId } }).then((team) => {
+  let homeTeamId
+  getSchool().then((school) => {
+    homeTeamId = school.HomeTeamId
+    return get({ TableName: 'Derby_Teams', Key: { TeamId: teamId } })
+  }).then((team) => {
     const teamData = mapTeam(team)
+    teamData.homeTeam = teamId === homeTeamId
     res.json(teamData)
   }).catch(err => errorEnd(err, res))
   return null
