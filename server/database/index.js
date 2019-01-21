@@ -1,5 +1,4 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb')
-const opbeat = require('opbeat')
 
 const config = require('./config')
 
@@ -15,11 +14,7 @@ const db = new DynamoDB.DocumentClient({
 
 // Read Promises
 const get = params => new Promise((resolve, reject) => {
-  const trace = opbeat.buildTrace()
-  if (trace) { trace.start(params.TableName, 'db.dynamodb.get') }
-
   db.get(params, (err, data) => {
-    if (trace) { trace.end() }
     if (err) { return reject(err) }
     if (!data || !data.Item) {
       return reject(`database response was invalid for: ${params}`)
@@ -29,11 +24,7 @@ const get = params => new Promise((resolve, reject) => {
 })
 
 const batchGet = params => new Promise((resolve, reject) => {
-  const trace = opbeat.buildTrace()
-  if (trace) { trace.start('Batch Get', 'db.dynamodb.batchGet') }
-
   db.batchGet(params, (err, data) => {
-    if (trace) { trace.end() }
     if (err) { return reject(err) }
     if (!data || !data.Responses) {
       return reject(`database response was invalid for: ${params}`)
@@ -43,11 +34,7 @@ const batchGet = params => new Promise((resolve, reject) => {
 })
 
 const query = params => new Promise((resolve, reject) => {
-  const trace = opbeat.buildTrace()
-  if (trace) { trace.start(params.TableName, 'db.dynamodb.query') }
-
   db.query(params, (err, data) => {
-    if (trace) { trace.end() }
     if (err) { return reject(err) }
     if (!data || !data.Items) {
       return reject(`database response was invalid for: ${params}`)
@@ -57,11 +44,7 @@ const query = params => new Promise((resolve, reject) => {
 })
 
 const scan = params => new Promise((resolve, reject) => {
-  const trace = opbeat.buildTrace()
-  if (trace) { trace.start(params.TableName, 'db.dynamodb.scan') }
-
   db.scan(params, (err, data) => {
-    if (trace) { trace.end() }
     if (err) { return reject(err) }
     if (!data || !data.Items) {
       return reject(`database response was invalid for: ${params}`)
@@ -72,11 +55,7 @@ const scan = params => new Promise((resolve, reject) => {
 
 // Create Promises
 const put = params => new Promise((resolve, reject) => {
-  const trace = opbeat.buildTrace()
-  if (trace) { trace.start(params.TableName, 'db.dynamodb.put') }
-
   db.put(params, (err, data) => {
-    if (trace) { trace.end() }
     if (err) { return reject(err) }
     return resolve(
       Object.keys(data).length ? data.Item : { result: 'Item Updated Successfully!' }
@@ -86,11 +65,7 @@ const put = params => new Promise((resolve, reject) => {
 
 // Update Promises
 const update = params => new Promise((resolve, reject) => {
-  const trace = opbeat.buildTrace()
-  if (trace) { trace.start(params.TableName, 'db.dynamodb.update') }
-
   db.update(params, (err, data) => {
-    if (trace) { trace.end() }
     if (err) { return reject(err) }
     return resolve(
       Object.keys(data).length ? data : { result: 'Item Updated Successfully!' }
@@ -100,11 +75,7 @@ const update = params => new Promise((resolve, reject) => {
 
 // Delete Promises
 const remove = params => new Promise((resolve, reject) => {
-  const trace = opbeat.buildTrace()
-  if (trace) { trace.start(params.TableName, 'db.dynamodb.delete') }
-
   db.delete(params, (err, data) => {
-    if (trace) { trace.end() }
     if (err) { return reject(err) }
     return resolve({ result: 'Item Deleted Successfully!' })
   })
