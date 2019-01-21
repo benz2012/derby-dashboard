@@ -8,3 +8,8 @@ build
 *.log
 .DS_Store
 env.js
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
