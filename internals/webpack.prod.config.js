@@ -3,7 +3,6 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const baseConfig = require('./webpack.base.config')
 
@@ -32,6 +31,5 @@ module.exports = merge(baseConfig, {
       minChunks: ({ resource }) => /node_modules/.test(resource),
     }),
     new webpack.optimize.CommonsChunkPlugin({ name: 'runtime' }),
-    new CopyWebpackPlugin([{ from: 'ssl/acme-challenge', to: '.well-known/acme-challenge/' }]),
   ],
 })
