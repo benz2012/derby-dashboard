@@ -24,14 +24,15 @@ app.use(morgan('short'))
 
 // Redirects
 app.enable('trust proxy')
-// redirect any http requests to https
-app.use((req, res, next) => {
-  if (!req.secure && process.env.NODE_ENV === 'production') {
-    return res.redirect(`https://${req.headers.host}${req.url}`)
-  }
-  return next()
-})
-
+if (process.env.SSL_ENABLED === 'true') {
+  // redirect any http requests to https
+  app.use((req, res, next) => {
+    if (!req.secure && process.env.NODE_ENV === 'production') {
+      return res.redirect(`https://${req.headers.host}${req.url}`)
+    }
+    return next()
+  })
+}
 
 // Routes & Middleware
 app.use(bodyParser.urlencoded({ extended: false }))
