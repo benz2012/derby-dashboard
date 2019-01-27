@@ -25,6 +25,8 @@ app.use(morgan('short'))
 // Redirects
 app.enable('trust proxy')
 if (process.env.SSL_ENABLED === 'true') {
+  // expose http route for ssl verification
+  app.use('/.well-known', express.static(`${process.cwd()}/.well-known`))
   // redirect any http requests to https
   app.use((req, res, next) => {
     if (!req.secure && process.env.NODE_ENV === 'production') {
