@@ -40,3 +40,6 @@ const RightMessage = styled.div`
 `
 
 export default ColoredOverview
+export {
+  OverviewContainer,
+}

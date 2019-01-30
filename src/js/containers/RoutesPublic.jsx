@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import AlumniChallengesPage from './AlumniChallengesPage'
-// import AlumniChallengePage from './AlumniChallengePage'
+import AlumniChallengePage from './AlumniChallengePage'
 import ChallengePage from './ChallengePage'
 import ChallengesPage from './ChallengesPage'
 import HomePage from './HomePage'
@@ -38,7 +38,7 @@ export default class RoutesPublic extends Component {
         <Route exact path="/challenges" component={ChallengesPage} />
         <Route path="/challenges/:challengeId" component={ChallengePage} />
         <Route exact path="/alumni" component={AlumniChallengesPage} />
-        {/* <Route path="/alumni/:challengeId" component={AlumniChallengePage} /> */}
+        <Route path="/alumni/challenges/:challengeId" component={AlumniChallengePage} />
         <Route path="/reports/:date" component={ReportsPage} />
         <Route exact path="/live" component={LivePage} />
         <Route exact path="/more" component={MorePage} />
