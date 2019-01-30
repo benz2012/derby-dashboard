@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const Container = styled.div`
-  margin: 5px 0 5px 5px;
+  margin: 8px 0 0px 0px;
 `
 
 const Row = styled.div`
@@ -16,7 +16,6 @@ const RowApart = styled(Row)`
 
 const Feature = styled.div`
   flex-grow: 1;
-
   display: flex;
   align-items: center;
 `

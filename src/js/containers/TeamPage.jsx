@@ -5,7 +5,7 @@ import Block from '../components/Block'
 import Loading from '../components/Loading'
 import TeamBlock from '../components/TeamBlock'
 import TeamHeader from '../components/TeamHeader'
-import TeamChallengeRank from '../components/TeamChallengeRank'
+import { TeamChallengeBlock } from '../components/ChallengeBlock'
 import FullWidthButton from '../components/Button/FullWidthButton'
 
 import { Body, Centered, CleanLink, Currency, RightArrow } from '../components/Content'
@@ -68,7 +68,7 @@ export default class TeamPage extends Component {
   )
   buildChallengeBlocks = challenges => (
     challenges.map(c => (
-      <TeamChallengeRank
+      <TeamChallengeBlock
         key={c.id}
         id={c.id}
         name={c.name}
