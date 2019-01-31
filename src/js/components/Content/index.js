@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import Currency from './Currency'
+import DateString from './DateString'
 import ExternalLink from './ExternalLink'
 import CleanLink from './CleanLink'
 import FontIcon, { IconWhite } from './FontIcon'
@@ -59,6 +60,7 @@ export {
   RightPad,
   Centered,
   Currency,
+  DateString,
   ExternalLink,
   FontIcon,
   IconWhite,

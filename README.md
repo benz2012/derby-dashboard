@@ -1,4 +1,4 @@
-# Derby Dashboard &middot; [![Build Status](https://travis-ci.com/benz2012/derby-dashboard.svg?branch=master)](https://travis-ci.com/benz2012/derby-dashboard)
+# Derby Dashboard
 
 A web app that displays fundraising data, along with schedules and challenges.
 [Live Website](https://www.derbydashboard.io)

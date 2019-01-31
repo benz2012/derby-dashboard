@@ -3,11 +3,12 @@ import React, { Component } from 'react'
 import Page from '../components/Page'
 import Block from '../components/Block'
 import Loading from '../components/Loading'
+import TeamBlock from '../components/TeamBlock'
 import TeamHeader from '../components/TeamHeader'
-import TeamChallengeRank from '../components/TeamChallengeRank'
+import { TeamChallengeBlock } from '../components/ChallengeBlock'
 import FullWidthButton from '../components/Button/FullWidthButton'
 
-import { Body, Centered, Currency } from '../components/Content'
+import { Body, Centered, CleanLink, Currency, RightArrow } from '../components/Content'
 import { HeadingText2 } from '../components/HeadingText'
 import { LargeLine } from '../components/Chart'
 
@@ -67,7 +68,7 @@ export default class TeamPage extends Component {
   )
   buildChallengeBlocks = challenges => (
     challenges.map(c => (
-      <TeamChallengeRank
+      <TeamChallengeBlock
         key={c.id}
         id={c.id}
         name={c.name}
@@ -105,17 +106,24 @@ export default class TeamPage extends Component {
           { history && <LargeLine values={history} /> }
         </Block>
 
-        {
-          team.snap &&
+        { team.snap &&
           <Block>
             <HeadingText2>Snapchat Lens</HeadingText2>
             <Body>
-              <a href={team.snap} target="_blank">{team.snap}</a>
+              <a href={team.snap} target="_blank" rel="noopener noreferrer">Lens Unlock Link</a>
             </Body>
           </Block>
         }
 
         {challengeBlocks}
+
+        { team.homeTeam &&
+          <Block>
+            <CleanLink key={team.id} id={team.id} to="/alumni">
+              <TeamBlock name="Alumni Challenges" subName="Lambda Kappa" avatar="/apple-touch-icon.png" right={<RightArrow />} />
+            </CleanLink>
+          </Block>
+        }
 
         {unsave}
       </Page>

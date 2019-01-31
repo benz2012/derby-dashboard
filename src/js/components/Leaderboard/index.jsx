@@ -15,7 +15,7 @@ const Leaderboard = ({ scores, simple }) => {
     const block = simple ? (
       <TeamBlock
         name={team.name}
-        left={<Ranking darker={!simple}>{index + 1}</Ranking>}
+        left={<Ranking>{index + 1}</Ranking>}
         right={score(team.score)}
         tight
       />
@@ -24,7 +24,7 @@ const Leaderboard = ({ scores, simple }) => {
         avatar={team.avatar}
         name={team.name}
         subName={team.orgId}
-        left={<Ranking darker={!simple}>{index + 1}</Ranking>}
+        left={<Ranking darker>{index + 1}</Ranking>}
         right={score(team.score)}
         darker
       />
