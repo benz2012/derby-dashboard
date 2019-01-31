@@ -7,7 +7,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const http = require('http')
 const socketIO = require('socket.io')
-const morgan = require('morgan')
 
 const data = require('./routes/data')
 const live = require('./routes/live')
@@ -19,9 +18,6 @@ const socketHandler = require('./socketHandler')
 const app = express()
 const server = http.Server(app)
 const io = socketIO(server)
-
-// Logging
-app.use(morgan('short'))
 
 // Redirects
 app.enable('trust proxy')
