@@ -10,21 +10,21 @@ import { dataFetch } from '../util'
 
 export default class AlumniChallengePage extends Component {
   state = {
-    challenge: {
-      name: 'Community Service',
-      description: 'For every brother that performs 5 or more hours of community service, Alumni will donate pledged amount.',
-      endDate: '2018-05-01',
-      countData: ['Farid Barquet', 'Jacob Nelson', 'Russell Perlow', 'Nick Kowalczuk', 'Alex Tabatabai', 'Nicholas Commisso', 'Aidan Sullivan', 'Wystan Wang', 'Cody Johnson', 'Tristin Del Vecchio', 'Ryan Kent', 'Jacob Schnaufer', 'Josh Noble', 'Sam Beach', 'Trevor Hrubecky', 'Michael Lutfring', 'Michael Yaeger', 'Anthony Giallella', 'Andrew Ward', 'Shane Peechatka', 'Tiger Chapman', 'Jon Meacham', 'Eric Kolb'],
-      countName: 'Brothers',
-      pledges: [21, 5, 5],
-    },
+    challenge: null,
+    pledges: null,
   }
   componentDidMount() {
     const { challengeId } = this.props.match.params
-    // dataFetch(`/data/challenges/${challengeId}`).then((data) => {
-    //   this.setState({ challenge: data })
-    // })
+    dataFetch(`/data/alumni/challenges/${challengeId}`).then((data) => {
+      this.setState({ challenge: data })
+    })
+    dataFetch('/data/alumni/pledges').then((data) => {
+      this.setState({ pledges: data })
+    })
   }
+  totalPledged = (cid, pledges) => (
+    pledges.reduce((acc, cur) => (acc + cur[cid]), 0)
+  )
   htmlString = html => (
     <div dangerouslySetInnerHTML={{ __html: html }} /> // eslint-disable-line
   )
@@ -36,9 +36,10 @@ export default class AlumniChallengePage extends Component {
     ))
   )
   render() {
-    const { challenge } = this.state
-    if (!challenge) { return <Loading /> }
-    const { name, description, endDate, countData, countName, pledges } = challenge
+    const { challenge, pledges } = this.state
+    if (!(challenge && pledges)) return <Loading />
+    const { id, name, description, endDate, countData, countName } = challenge
+    const totalPledged = this.totalPledged(id, pledges)
 
     return (
       <Page>
@@ -52,7 +53,7 @@ export default class AlumniChallengePage extends Component {
         </Block>
 
         <PledgeBlock
-          pledge={pledges.reduce((a, b) => (a + b), 0)}
+          pledge={totalPledged}
           count={countData.length}
           countName={countName}
         />

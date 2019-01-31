@@ -3,17 +3,58 @@ import React, { Component } from 'react'
 import Page from '../components/Page'
 import Block from '../components/Block'
 import ColoredOverview from '../components/ColoredOverview'
+import Loading from '../components/Loading'
 import { AlumniChallengeBlock } from '../components/ChallengeBlock'
-
 import { Body, Centered, Currency } from '../components/Content'
+import { dataFetch } from '../util'
 
 export default class AlumniChallengesPage extends Component {
+  state = {
+    challenges: null,
+    pledges: null,
+  }
+  componentDidMount() {
+    dataFetch('/data/alumni/challenges').then((data) => {
+      this.setState({ challenges: data })
+    })
+    dataFetch('/data/alumni/pledges').then((data) => {
+      this.setState({ pledges: data })
+    })
+  }
+  totalRaised = (cid, count, pledges) => {
+    const pledged = pledges.reduce((acc, cur) => (acc + cur[cid]), 0)
+    return count * pledged
+  }
+  buildBlocks = (challenges, pledges) => (
+    challenges.map(c => (
+      <AlumniChallengeBlock
+        key={c.id}
+        id={c.id}
+        name={c.name}
+        description={c.description}
+        count={c.count}
+        countName={c.countName}
+        raised={this.totalRaised(c.id, c.count, pledges)}
+      />
+    ))
+  )
   render() {
+    const { challenges, pledges } = this.state
+    if (!(challenges && pledges)) return <Loading />
+
+    const challengeBlocks = this.buildBlocks(challenges, pledges)
+    const pledgeCount = pledges.reduce((acc, cur) => (
+      acc + Object.keys(cur).length
+    ), 0)
+    const totalRaised = challenges.reduce((acc, cur) => (
+      acc + this.totalRaised(cur.id, cur.count, pledges)
+    ), 0)
+
     return (
       <Page>
         <Block>
           <Centered>
-            <Currency fontSize={48} muted>{2346.50}</Currency>
+            <Currency fontSize={48} muted>{totalRaised}</Currency>
             <Body>Total Raised thru Alumni Challenges</Body>
           </Centered>
         </Block>
@@ -21,30 +62,14 @@ export default class AlumniChallengesPage extends Component {
         <Block>
           <ColoredOverview
             messages={[
-              [8, 'challenges'],
-              [7, 'alumni invovled'],
-              [42, 'pledges made'],
+              [challenges.length, 'challenges'],
+              [pledges.length, 'alumni invovled'],
+              [pledgeCount, 'pledges made'],
             ]}
           />
         </Block>
 
-        <AlumniChallengeBlock
-          id={1}
-          name="Community Service"
-          description="For every brother that performs 5 or more hours of community service, Alumni will donate pledged amount."
-          count="12"
-          countName="Brothers"
-          raised="240"
-        />
-
-        <AlumniChallengeBlock
-          id={2}
-          name="Greek Community"
-          description="For every dry greek event that the chapter attends, being hosted by another organization and proving that 5 or more brothers were in attendance, Alumni will donate pledged amount."
-          count="2"
-          countName="Events"
-          raised="0"
-        />
+        {challengeBlocks}
       </Page>
     )
   }

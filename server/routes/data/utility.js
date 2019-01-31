@@ -36,7 +36,15 @@ const twoWeekTimeString = () => {
 const markdownToHTML = input => (
   sanitizeHTML(marked(input), {
     allowedTags: sanitizeHTML.defaults.allowedTags.concat(['img', 'h1', 'h2']),
+    allowedAttributes: {
+      ...sanitizeHTML.defaults.allowedAttributes,
+      img: sanitizeHTML.defaults.allowedAttributes.img.concat(['alt']),
+    },
   })
+)
+
+const toCamelCase = str => (
+  `${str.charAt(0).toLowerCase()}${str.slice(1)}`
 )
 
 module.exports = {
@@ -45,4 +53,5 @@ module.exports = {
   lastDateTimeString,
   twoWeekTimeString,
   markdownToHTML,
+  toCamelCase,
 }

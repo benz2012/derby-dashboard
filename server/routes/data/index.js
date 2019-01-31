@@ -1,5 +1,6 @@
 const express = require('express')
 
+const alumni = require('./alumni')
 const application = require('./application')
 const auth = require('./auth')
 const challenges = require('./challenges')
@@ -50,6 +51,7 @@ router.use((req, res, next) => {
 
 
 // Routes
+router.use('/alumni', alumni)
 router.use('/application', application)
 router.use('/auth', auth)
 router.use('/challenges', challenges)
