@@ -23,9 +23,9 @@ export default class Live extends Component {
     teamChoice: null,
     teams: null,
     raised: null,
-    schoolTotal: null,
     initial: true,
   }
+
   componentDidMount() {
     dataFetch('/data/raised').then((data) => {
       this.setState({ raised: data })
@@ -36,55 +36,33 @@ export default class Live extends Component {
     socket.open()
     this.enableSocketListeners()
   }
+
   componentWillUnmount() {
     this.disableSocketListeners([
       'liveUpdate', 'address', 'watching', 'cheering',
     ])
     socket.close()
   }
-  enableSocketListeners() {
-    socket.on('liveUpdate', (update) => {
-      this.setState({ initial: false }) // will prevent resorting of the list after initial render
-      console.log('liveUpdate: ', update)
-      const { teamId, mergable } = update
-      this.mergeLiveUpdate(teamId, mergable)
-    })
-    socket.on('address', (data) => {
-      this.setState({ address: data })
-    })
-    socket.on('watching', (data) => {
-      this.setState({ watching: data })
-    })
-    socket.on('cheering', (data) => {
-      this.setState({ cheering: data })
-      const { address } = this.state
-      const teamChoice = (data && address) && data[address]
-      this.setState({ teamChoice })
-    })
-  }
-  disableSocketListeners(events) {
+
+  disableSocketListeners = (events) => {
     // Iterate over a list of socket events (strings), and disable event listener
     events.forEach((eventName) => {
       socket.off(eventName)
     })
   }
-  mergeLiveUpdate(teamId, mergable) {
-    this.setState((prevState) => {
-      const prevRaised = prevState.raised.find(t => parseInt(t.id) === parseInt(teamId))
-      return {
-        raised: [
-          ...prevState.raised.filter(t => parseInt(t.id) !== parseInt(teamId)),
-          Object.assign({}, prevRaised, mergable),
-        ],
-      }
-    })
-  }
+
   sumCheersForTeam = (cheering, teamId) => {
     if (!cheering || !teamId) { return 0 }
     return Object.keys(cheering).reduce((accum, key) => (
       parseInt(cheering[key]) === parseInt(teamId) ? accum + 1 : accum
     ), 0)
   }
+
+  handleTeamClick = (e) => {
+    // send the server the teamId that the user clicked on
+    socket.emit('cheering', { cheeringFor: e.currentTarget.id })
+  }
+
   buildTeams(teams, raised, initial, teamChoice, cheering) {
     if (!teams || !raised) { return null }
     const teamsData = teams
@@ -111,10 +89,39 @@ export default class Live extends Component {
       />
     ))
   }
-  handleTeamClick = (e) => {
-    // send the server the teamId that the user clicked on
-    socket.emit('cheering', { cheeringFor: e.currentTarget.id })
+
+  mergeLiveUpdate(teamId, mergable) {
+    this.setState((prevState) => {
+      const prevRaised = prevState.raised.find(t => parseInt(t.id) === parseInt(teamId))
+      return {
+        raised: [
+          ...prevState.raised.filter(t => parseInt(t.id) !== parseInt(teamId)),
+          Object.assign({}, prevRaised, mergable),
+        ],
+      }
+    })
   }
+
+  enableSocketListeners() {
+    socket.on('liveUpdate', (update) => {
+      this.setState({ initial: false }) // will prevent resorting of the list after initial render
+      const { teamId, mergable } = update
+      this.mergeLiveUpdate(teamId, mergable)
+    })
+    socket.on('address', (data) => {
+      this.setState({ address: data })
+    })
+    socket.on('watching', (data) => {
+      this.setState({ watching: data })
+    })
+    socket.on('cheering', (data) => {
+      this.setState({ cheering: data })
+      const { address } = this.state
+      const teamChoice = (data && address) && data[address]
+      this.setState({ teamChoice })
+    })
+  }
+
   render() {
     const { watching, teamChoice, teams, raised, initial, cheering } = this.state
     if (!(teams && raised)) { return <Loading /> }
@@ -123,9 +130,11 @@ export default class Live extends Component {
     const schoolTotal = sumSchoolFunds(raised)
     return (
       <Page>
-        <Block><Centered>
-          <Currency fontSize={50}>{schoolTotal}</Currency>
-        </Centered></Block>
+        <Block>
+          <Centered>
+            <Currency fontSize={50}>{schoolTotal}</Currency>
+          </Centered>
+        </Block>
 
         <CardFlexContainer>
           {teamCards}
@@ -133,7 +142,9 @@ export default class Live extends Component {
 
         <StickyFooter>
           <IconWhite fontSize={36} style={{ paddingLeft: '10px' }}>remove_red_eye</IconWhite>
-          <HeadingText2 style={{ margin: '0', paddingLeft: '10px' }}>{watching} Watching Live</HeadingText2>
+          <HeadingText2 style={{ margin: '0', paddingLeft: '10px' }}>
+            {watching} Watching Live
+          </HeadingText2>
         </StickyFooter>
 
       </Page>
