@@ -25,9 +25,10 @@ export default class TeamPage extends Component {
     history: null,
     challenges: null,
   }
+
   componentDidMount() {
     this.isThisTheSavedTeam()
-    const teamId = this.props.match.params.teamId
+    const { teamId } = this.props.match.params
     dataFetch(`/data/teams/${teamId}`).then((data) => {
       this.setState({ team: data })
     })
@@ -45,27 +46,24 @@ export default class TeamPage extends Component {
       this.setState({ challenges })
     })
   }
-  isThisTheSavedTeam() {
-    if (storageEnabled() === false) { return }
-    const team = storageGet('teamSelection')
-    const { match } = this.props
-    if (team && team.value === match.params.teamId) {
-      this.setState({ thisTeamIsSaved: true })
-    }
-  }
+
   handleUnsave = () => {
     storageSet('teamSelection', { value: 0 })
     const { match } = this.props
     const parentURL = match.url.replace(`/${match.params.teamId}`, '')
     this.props.history.push(parentURL)
   }
+
   unsaveButton = () => (
-    <Block><Body>
-      <FullWidthButton onClick={this.handleUnsave}>
-        Unsave my team selection
-      </FullWidthButton>
-    </Body></Block>
+    <Block>
+      <Body>
+        <FullWidthButton onClick={this.handleUnsave}>
+          Unsave my team selection
+        </FullWidthButton>
+      </Body>
+    </Block>
   )
+
   buildChallengeBlocks = challenges => (
     challenges.map(c => (
       <TeamChallengeBlock
@@ -78,6 +76,16 @@ export default class TeamPage extends Component {
       />
     ))
   )
+
+  isThisTheSavedTeam() {
+    if (storageEnabled() === false) { return }
+    const team = storageGet('teamSelection')
+    const { match } = this.props
+    if (team && team.value === match.params.teamId) {
+      this.setState({ thisTeamIsSaved: true })
+    }
+  }
+
   render() {
     const { thisTeamIsSaved, team, raised, history, challenges } = this.state
     if (team === null || raised === null) { return <Loading /> }
