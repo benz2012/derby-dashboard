@@ -43,7 +43,6 @@ export default class FundsPage extends Component {
   render() {
     const { raised, external, teams } = this.state
     if (!(raised && external && teams)) return <Loading />
-    console.log(raised)
     return (
       <div>
         <h4>External Funds</h4>

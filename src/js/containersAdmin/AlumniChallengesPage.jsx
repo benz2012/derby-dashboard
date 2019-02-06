@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import DataBin from '../componentsAdmin/DataBin'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput } from '../componentsAdmin/Form'
 import ListData from '../componentsAdmin/ListData'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
@@ -187,7 +187,7 @@ export default class AlumniChallengesPage extends Component {
         >
           <Form>
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
-            <TextInput id="input.description" label="Description" value={input.description} onChange={this.setValue} />
+            <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} onChange={this.setValue} />
             <TextInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} help="YYYY-MM-DD" />
             <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
             <hr />
@@ -220,7 +220,7 @@ export default class AlumniChallengesPage extends Component {
         >
           <Form>
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
-            <TextInput id="input.description" label="Description" value={input.description} onChange={this.setValue} />
+            <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} onChange={this.setValue} />
             <TextInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} help="YYYY-MM-DD" />
             <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
           </Form>

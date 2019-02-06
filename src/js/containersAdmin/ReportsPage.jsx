@@ -32,7 +32,6 @@ export default class ReportsPage extends Component {
   }
 
   setValue = (e) => {
-    // console.log(e)
     if (e.target.type !== 'checkbox') e.preventDefault()
     const key = e.target.id.replace('input.', '')
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
