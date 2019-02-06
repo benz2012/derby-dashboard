@@ -30,17 +30,21 @@ export default class EventsPage extends Component {
       challenge: '',
     },
   }
+
   componentDidMount() {
     this.fetchEventData()
   }
+
   componentWillUnmount() {
     this.setState({ unmounting: true })
   }
+
   setValue = (e) => {
     e.preventDefault()
     const key = e.target.id.replace('input.', '')
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
+
   fetchEventData = () => {
     dataFetch('/data/events').then((data) => {
       if (Object.keys(data).length > 0 && data[Object.keys(data)[0]][0].name) {
@@ -58,6 +62,7 @@ export default class EventsPage extends Component {
       }
     })
   }
+
   submitValues = () => {
     this.setState({ result: null })
     const { eventsFlat, input } = this.state
@@ -72,6 +77,7 @@ export default class EventsPage extends Component {
       this.setState({ result: 'FAILURE' })
     })
   }
+
   addItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -86,6 +92,7 @@ export default class EventsPage extends Component {
         this.setState({ result: 'FAILURE' })
       })
   }
+
   removeItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -97,6 +104,7 @@ export default class EventsPage extends Component {
         this.setState({ result: 'FAILURE' })
       })
   }
+
   openEdit = (id) => {
     const event = this.state.eventsFlat.find(e => parseInt(e.id) === parseInt(id))
     setInput({
@@ -112,18 +120,22 @@ export default class EventsPage extends Component {
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
+
   openAdd = () => {
     this.props.history.replace(`${this.props.match.url}/add`)
   }
+
   openRemove = (id) => {
     const event = this.state.eventsFlat.find(e => parseInt(e.id) === parseInt(id))
     setInput({ id: event.id, name: event.name }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/remove`)
   }
+
   closeModal = () => {
     this.resetValues()
     this.setState({ result: null })
   }
+
   resetValues = () => {
     setInput({
       id: '',
@@ -140,12 +152,13 @@ export default class EventsPage extends Component {
       challengeId: '',
     }, this.setState.bind(this))
   }
+
   render() {
     const { events, input, result } = this.state
     if (!events) return <Loading />
     return (
       <div>
-        <button className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Event</button>
+        <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Event</button>
         {
           events.map(dateObj => (
             <div key={dateObj.date}>

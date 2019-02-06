@@ -37,12 +37,18 @@ const EditView = ({ history, match, children, submit, ...rest }) => {
               {children}
             </ViewContent>
             <ViewActions>
-              <button className="close-modal btn btn-outline-dark mr-2" onClick={back}>
+              <button type="button" className="close-modal btn btn-outline-dark mr-2" onClick={back}>
                 Cancel
               </button>
-              <button className="btn btn-outline-primary mr-2" onClick={submit}>
-                Submit
-              </button>
+              {task !== 'Removed' ? (
+                <button type="button" className="btn btn-outline-primary mr-2" onClick={submit}>
+                  Submit
+                </button>
+              ) : (
+                <button type="button" className="btn btn-outline-danger mr-2" onClick={submit}>
+                  Delete
+                </button>
+              )}
             </ViewActions>
           </EditPane>
         </EditContainer>
