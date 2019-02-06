@@ -5,7 +5,7 @@ import theme from '../../styles/theme'
 import IconButton from './IconButton'
 import PlainButton from './PlainButton'
 
-const buttonColor = selected => selected ? theme.textAccent : theme.textDampen
+const buttonColor = selected => (selected ? theme.textAccent : theme.textDampen)
 
 const SaveSelection = ({ selected, onClick, ...rest }) => (
   <Container>

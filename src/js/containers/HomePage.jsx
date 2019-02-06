@@ -18,6 +18,7 @@ export default class HomePage extends Component {
     teams: null,
     schoolTotal: null,
   }
+
   componentDidMount() {
     dataFetch('/data/home').then((data) => {
       this.setState({ home: data })
@@ -34,7 +35,7 @@ export default class HomePage extends Component {
     })
   }
 
-  buildHomeTeam(teams, raised) {
+  buildHomeTeam = (teams, raised) => {
     if (!teams || !raised) { return null }
     const homeTeam = teams.find(t => t.homeTeam)
     const homeTeamRaised = raised.find(t => t.id === homeTeam.id)
@@ -49,7 +50,8 @@ export default class HomePage extends Component {
       />
     )
   }
-  buildTeamsRaised(teams, raised) {
+
+  buildTeamsRaised = (teams, raised) => {
     if (!teams || !raised) { return null }
     const teamsData = teams.filter(t => !t.homeTeam)
     teamsData.forEach((team) => {
@@ -69,6 +71,7 @@ export default class HomePage extends Component {
       />
     ))
   }
+
   render() {
     const { home, raised, teams, schoolTotal } = this.state
     const homeTeam = this.buildHomeTeam(teams, raised)

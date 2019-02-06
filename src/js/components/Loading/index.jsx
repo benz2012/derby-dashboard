@@ -6,20 +6,23 @@ export default class Loading extends Component {
   state = {
     longWait: false,
   }
+
   componentDidMount() {
     this.timer = setTimeout(() => {
       this.setState({ longWait: true })
     }, 15000) // 15 seconds
   }
+
   componentWillUnmount() {
     clearTimeout(this.timer)
   }
+
   render() {
     return (
       <div>
         <Container>
-          <Dot delay={'-0.32s'} />
-          <Dot delay={'-0.16s'} />
+          <Dot delay="-0.32s" />
+          <Dot delay="-0.16s" />
           <Dot />
         </Container>
         {

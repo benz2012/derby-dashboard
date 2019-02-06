@@ -7,8 +7,8 @@ const MediumButton = styled(PlainButton)`
   height: 36px;
   margin: 0 8px;
 
-  color: ${props => props.primary ? props.theme.buttonFG : props.theme.buttonBG};
-  background-color: ${props => props.primary ? props.theme.buttonBG : props.theme.buttonFG};
+  color: ${props => (props.primary ? props.theme.buttonFG : props.theme.buttonBG)};
+  background-color: ${props => (props.primary ? props.theme.buttonBG : props.theme.buttonFG)};
   border: 1px solid ${props => props.theme.buttonBG};
   border-radius: 3px;
 

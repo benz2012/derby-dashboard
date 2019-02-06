@@ -13,13 +13,15 @@ export default class SchedulePage extends Component {
   state = {
     events: null,
   }
+
   componentDidMount() {
     dataFetch('/data/events').then((data) => {
       this.setState({ events: data })
       this.selectFirstDate(data)
     })
   }
-  buildDateLinks(events, baseURL, selected) {
+
+  buildDateLinks = (events, baseURL, selected) => {
     if (!events || !baseURL) { return null }
     return Object.keys(events).sort(dateSort).map((date) => {
       const weekday = moment(date).format('ddd').toUpperCase()
@@ -36,12 +38,14 @@ export default class SchedulePage extends Component {
       )
     })
   }
-  selectFirstDate(events) {
+
+  selectFirstDate = (events) => {
     if (!events) { return null }
     const dates = Object.keys(events).sort(dateSort)
     const today = dates.find(d => moment(d).isSame(moment(), 'day'))
     return today || dates[0]
   }
+
   render() {
     const { match, location } = this.props
     const { events } = this.state

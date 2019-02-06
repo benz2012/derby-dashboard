@@ -3,7 +3,6 @@ import currency from 'currency.js'
 
 import Loading from '../components/Loading'
 import DataBin from '../componentsAdmin/DataBin'
-import Currency from '../components/Content/Currency'
 import { dataFetch, objectSort } from '../util'
 import { stringSort } from '../util/string'
 

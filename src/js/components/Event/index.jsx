@@ -18,6 +18,7 @@ export default class Event extends Component {
       history.replace(base)
     }
   }
+
   render() {
     const { match, events } = this.props
     if (!events) { return null }

@@ -22,12 +22,15 @@ export default class ReportsPage extends Component {
       publish: false,
     },
   }
+
   componentDidMount() {
     this.fetchReportData()
   }
+
   componentWillUnmount() {
     this.setState({ unmounting: true })
   }
+
   setValue = (e) => {
     // console.log(e)
     if (e.target.type !== 'checkbox') e.preventDefault()
@@ -35,6 +38,7 @@ export default class ReportsPage extends Component {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     setInput({ [key]: value }, this.setState.bind(this))
   }
+
   fetchReportData = () => {
     dataFetch('/data/reports').then((data) => {
       if (data[0] && data[0].date) objectSort(data, 'date', dateSort)
@@ -44,16 +48,19 @@ export default class ReportsPage extends Component {
       if (!this.state.unmounting) this.setState({ challenges: data })
     })
   }
+
   success = (d) => {
     if (d) {
       this.setState({ result: 'SUCCESS' })
       this.fetchReportData()
     }
   }
+
   failure = (e) => {
     console.log(e)
     this.setState({ result: 'FAILURE' })
   }
+
   submitValues = () => {
     this.setState({ result: null })
     const { reports, input } = this.state
@@ -63,6 +70,7 @@ export default class ReportsPage extends Component {
       .then(this.success)
       .catch(this.failure)
   }
+
   addItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -71,6 +79,7 @@ export default class ReportsPage extends Component {
       .then(this.success)
       .catch(this.failure)
   }
+
   removeItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -78,6 +87,7 @@ export default class ReportsPage extends Component {
       .then(this.success)
       .catch(this.failure)
   }
+
   openEdit = (id) => {
     const { reports } = this.state
     const report = reports.find(r => r.date === id)
@@ -90,18 +100,22 @@ export default class ReportsPage extends Component {
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
+
   openAdd = () => {
     this.props.history.replace(`${this.props.match.url}/add`)
   }
+
   openRemove = (id) => {
     const report = this.state.reports.find(r => r.date === id)
     setInput({ date: report.date, header: report.header }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/remove`)
   }
+
   closeModal = () => {
     this.resetValues()
     this.setState({ result: null })
   }
+
   resetValues = () => {
     setInput({
       header: '',
@@ -111,14 +125,16 @@ export default class ReportsPage extends Component {
       publish: false,
     }, this.setState.bind(this))
   }
+
   reportURL = date => (date && `https://www.derbydashboard.io/reports/${date}`)
+
   render() {
     const { reports, challenges, input, result } = this.state
     if (!(reports && challenges)) return <Loading />
     // const challengeOptions = challenges.map(c => ({ value: c.id, label: c.name }))
     return (
       <div>
-        <button className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Report</button>
+        <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Report</button>
         <DataBin
           items={reports}
           id={r => r.date}
@@ -127,7 +143,7 @@ export default class ReportsPage extends Component {
             <span>
               {r.body.substr(0, 100)}{r.body.length > 100 && '...'}<br />
               {r.date}<br />
-              <a href={this.reportURL(r.date)} target="_blank">{this.reportURL(r.date)}</a>
+              <a href={this.reportURL(r.date)} target="_blank" rel="noopener noreferrer">{this.reportURL(r.date)}</a>
             </span>
           )}
           onEdit={this.openEdit}

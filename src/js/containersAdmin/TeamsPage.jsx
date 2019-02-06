@@ -25,23 +25,28 @@ export default class TeamsPage extends Component {
       snap: '',
     },
   }
+
   componentDidMount() {
     this.fetchTeamData()
   }
+
   componentWillUnmount() {
     this.setState({ unmounting: true })
   }
+
   setValue = (e) => {
     e.preventDefault()
     const key = e.target.id.replace('input.', '')
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
+
   fetchTeamData = () => {
     dataFetch('/data/teams').then((data) => {
       if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
       if (!this.state.unmounting) this.setState({ teams: data })
     })
   }
+
   submitValues = () => {
     this.setState({ result: null })
     const { teams, input } = this.state
@@ -57,6 +62,7 @@ export default class TeamsPage extends Component {
         this.setState({ result: 'FAILURE' })
       })
   }
+
   openEdit = (id) => {
     const team = this.state.teams.find(t => parseInt(t.id) === parseInt(id))
     setInput({
@@ -72,10 +78,12 @@ export default class TeamsPage extends Component {
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
+
   closeModal = () => {
     this.resetValues()
     this.setState({ result: null })
   }
+
   resetValues = () => {
     setInput({
       id: '',
@@ -89,6 +97,7 @@ export default class TeamsPage extends Component {
       snap: '',
     }, this.setState.bind(this))
   }
+
   render() {
     const { teams, input, result } = this.state
     if (!teams) return <Loading />
@@ -100,7 +109,7 @@ export default class TeamsPage extends Component {
           body={t => (
             <span>
               {t.name}<br />
-              <a href={t.url} className="card-link" target="_blank">{t.url}</a>
+              <a href={t.url} className="card-link" target="_blank" rel="noopener noreferrer">{t.url}</a>
             </span>
           )}
           onEdit={this.openEdit}

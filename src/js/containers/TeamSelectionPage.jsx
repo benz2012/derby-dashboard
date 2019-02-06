@@ -19,6 +19,7 @@ export default class TeamSelectionPage extends Component {
     selection: 0,
     storageIsEnabled: true,
   }
+
   componentDidMount() {
     // test if browser can perform HTML localStorage
     const storage = storageEnabled()
@@ -34,22 +35,12 @@ export default class TeamSelectionPage extends Component {
       this.setState({ teams: data })
     })
   }
-  checkForSelection() {
-    // load the selected teamId
-    const teamSelection = storageGet('teamSelection')
-    if (teamSelection) {
-      this.setState({ selection: teamSelection.value })
-      if (teamSelection.value > 0) {
-        return true
-      }
-      this.setState({ save: false })
-    }
-    return false
-  }
+
   handleSaveClick = () => {
     if (this.state.storageIsEnabled === false) { return }
     this.setState(prevState => ({ save: !prevState.save }))
   }
+
   handleTeamClick = (e) => {
     const { save, storageIsEnabled } = this.state
     if (storageIsEnabled) {
@@ -60,6 +51,7 @@ export default class TeamSelectionPage extends Component {
       }
     }
   }
+
   teamLink = (t) => {
     const { match } = this.props
     return (
@@ -73,17 +65,33 @@ export default class TeamSelectionPage extends Component {
       </CleanLink>
     )
   }
+
+  checkForSelection() {
+    // load the selected teamId
+    const teamSelection = storageGet('teamSelection')
+    if (teamSelection) {
+      this.setState({ selection: teamSelection.value })
+      if (teamSelection.value > 0) {
+        return true
+      }
+      this.setState({ save: false })
+    }
+    return false
+  }
+
   buildTeamLinks(teams) {
     if (!teams) { return null }
     const teamsData = teams.filter(t => !t.homeTeam)
     const sortedTeamsData = objectSort(teamsData, 'org', stringSort)
     return sortedTeamsData.map(this.teamLink)
   }
+
   buildHomeTeamLink(teams) {
     if (!teams) { return null }
     const homeTeam = teams.find(t => t.homeTeam)
     return this.teamLink(homeTeam)
   }
+
   render() {
     const { match } = this.props
     const { teams, save, selection, storageIsEnabled } = this.state

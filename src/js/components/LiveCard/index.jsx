@@ -8,14 +8,18 @@ import theme from '../../styles/theme'
 
 const LiveCard = ({ id, raised, org, orgId, selected, onClick, cheering, showGraphs }) => (
   <HalfCard id={id} selected={selected} onClick={onClick}>
-    <RaisedContainer><Centered>
-      <Currency fontSize={showGraphs ? 16 : 26}>{raised}</Currency>
-    </Centered></RaisedContainer>
+    <RaisedContainer>
+      <Centered>
+        <Currency fontSize={showGraphs ? 16 : 26}>{raised}</Currency>
+      </Centered>
+    </RaisedContainer>
 
-    <NameContainer><Centered>
-      <TeamName>{org}</TeamName>
-      <TeamSubName>{orgId}</TeamSubName>
-    </Centered></NameContainer>
+    <NameContainer>
+      <Centered>
+        <TeamName>{org}</TeamName>
+        <TeamSubName>{orgId}</TeamSubName>
+      </Centered>
+    </NameContainer>
 
     {
       cheering > 0 &&

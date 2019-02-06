@@ -5,7 +5,7 @@ import theme from '../../styles/theme'
 
 const FontIcon = styled.i`
   color: ${props => props.color || props.theme.contentFG};
-  font-size: ${props => props.fontSize ? `${props.fontSize}px` : '18px'};
+  font-size: ${props => (props.fontSize ? `${props.fontSize}px` : '18px')};
 `
 
 const IconWhite = ({ children, ...rest }) => (
@@ -23,5 +23,5 @@ const IconDamp = ({ children, ...rest }) => (
 export default FontIcon
 export {
   IconWhite,
-  IconDamp
+  IconDamp,
 }

@@ -11,14 +11,16 @@ const Menu = ({ linkData, toggleMenu }) => {
   }
 
   const links = linkData.map(link => (
-    <li key={link.to}><NavLinkStyled
-      onClick={toggleMenu}
-      activeStyle={activeStyle}
-      to={link.to}
-      exact={link.exact}
-    >
-      {link.display}
-    </NavLinkStyled></li>
+    <li key={link.to}>
+      <NavLinkStyled
+        onClick={toggleMenu}
+        activeStyle={activeStyle}
+        to={link.to}
+        exact={link.exact}
+      >
+        {link.display}
+      </NavLinkStyled>
+    </li>
   ))
 
   return (
