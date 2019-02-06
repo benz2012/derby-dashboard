@@ -8,22 +8,23 @@ import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
 import { setInput } from '../util/form'
 
-export default class AlumniPage extends Component {
+export default class AlumniChallengesPage extends Component {
   state = {
     unmounting: false,
     result: null,
-    alumni: null,
     challenges: null,
     input: {
       id: '',
       name: '',
-      email: '',
-      pledges: {},
+      description: '',
+      endDate: '',
+      countData: [],
+      countName: '',
     },
   }
 
   componentDidMount() {
-    this.fetchAlumniData()
+    this.fetchChallengeData()
   }
 
   componentWillUnmount() {
@@ -36,11 +37,7 @@ export default class AlumniPage extends Component {
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
 
-  fetchAlumniData = () => {
-    dataFetch('/data/alumni').then((data) => {
-      if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
-      if (!this.state.unmounting) this.setState({ alumni: data })
-    })
+  fetchChallengeData = () => {
     dataFetch('/data/alumni/challenges').then((data) => {
       if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
       if (!this.state.unmounting) this.setState({ challenges: data })
@@ -51,19 +48,13 @@ export default class AlumniPage extends Component {
     this.setState({ result: null })
     const { input } = this.state
     const { uid, token } = this.props.authValues()
-
     const toSend = { ...input }
     delete toSend.id
-    toSend.pledges = Object.keys(toSend.pledges).reduce((acc, key) => {
-      acc[key] = parseInt(toSend.pledges[key], 10)
-      return acc
-    }, {})
-
-    dataSend(`/data/alumni/${input.id}`, 'POST', uid, token, toSend)
+    dataSend(`/data/alumni/challenges/${input.id}`, 'POST', uid, token, toSend)
       .then((d) => {
         if (d) {
           this.setState({ result: 'SUCCESS' })
-          this.fetchAlumniData()
+          this.fetchChallengeData()
         }
       }).catch((e) => {
         console.log(e)
@@ -76,11 +67,11 @@ export default class AlumniPage extends Component {
     const { uid, token } = this.props.authValues()
     const toSend = { ...input }
     delete toSend.id
-    dataSend('/data/alumni', 'PUT', uid, token, toSend)
+    dataSend('/data/alumni/challenges', 'PUT', uid, token, toSend)
       .then((d) => {
         if (d) {
           this.setState({ result: 'SUCCESS' })
-          this.fetchAlumniData()
+          this.fetchChallengeData()
         }
       }).catch((e) => {
         console.log(e)
@@ -91,10 +82,10 @@ export default class AlumniPage extends Component {
   removeItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
-    dataSend(`/data/alumni/${input.id}`, 'DELETE', uid, token, {})
+    dataSend(`/data/alumni/challenges/${input.id}`, 'DELETE', uid, token, {})
       .then(() => {
         this.setState({ result: 'SUCCESS' })
-        this.fetchAlumniData()
+        this.fetchChallengeData()
       }).catch((e) => {
         console.log(e)
         this.setState({ result: 'FAILURE' })
@@ -102,21 +93,16 @@ export default class AlumniPage extends Component {
   }
 
   openEdit = (id) => {
-    const { alumni, challenges } = this.state
-    const alum = alumni.find(a => a.id === id)
-    let { pledges } = alum
-    if (challenges.length > 0) {
-      pledges = challenges.reduce((acc, cur) => {
-        acc[cur.id] = pledges[cur.id] || 0
-        return acc
-      }, {})
-    }
+    const { challenges } = this.state
+    const chal = challenges.find(c => c.id === id)
 
     setInput({
       id,
-      name: alum.name,
-      email: alum.email,
-      pledges,
+      name: chal.name,
+      description: chal.description,
+      endDate: chal.endDate,
+      countData: chal.countData,
+      countName: chal.countName,
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
@@ -126,8 +112,8 @@ export default class AlumniPage extends Component {
   }
 
   openRemove = (id) => {
-    const alum = this.state.alumni.find(a => a.id === id)
-    setInput({ id: alum.id, name: alum.name }, this.setState.bind(this))
+    const chal = this.state.challenges.find(c => c.id === id)
+    setInput({ id: chal.id, name: chal.name }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/remove`)
   }
 
@@ -140,34 +126,26 @@ export default class AlumniPage extends Component {
     setInput({
       id: '',
       name: '',
-      email: '',
-      pledges: {},
+      description: '',
+      endDate: '',
+      countData: [],
+      countName: '',
     }, this.setState.bind(this))
   }
 
-  pledgeDescription = (pledges) => {
-    if (!pledges) return '0 Pledges'
-    const num = Object.keys(pledges)
-      .filter((key) => {
-        const pledge = pledges[key]
-        return pledge > 0
-      }).length
-    return `${num} Pledge${num > 1 ? 's' : ''}`
-  }
-
   render() {
-    const { alumni, challenges, input, result } = this.state
-    if (!(alumni && challenges)) return <Loading />
+    const { challenges, input, result } = this.state
+    if (!challenges) return <Loading />
     return (
       <div>
-        <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Alumni</button>
+        <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Alumni Challenge</button>
         <DataBin
-          items={alumni}
-          head={a => a.name}
-          body={a => (
+          items={challenges}
+          head={c => c.name}
+          body={c => (
             <span>
-              {a.email}<br />
-              {this.pledgeDescription(a.pledges)}
+              {c.description.substr(0, 100)}{c.description.length > 100 && '...'}<br />
+              {c.countName} Added: {c.countData.length}
             </span>
           )}
           onEdit={this.openEdit}
@@ -181,21 +159,12 @@ export default class AlumniPage extends Component {
           result={result}
         >
           <Form>
-            <TextInput id="input.name" label="Full Name" value={input.name} onChange={this.setValue} />
-            <TextInput id="input.email" label="Email Address" value={input.email} onChange={this.setValue} />
+            <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
+            <TextInput id="input.description" label="Description" value={input.description} onChange={this.setValue} />
+            <TextInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} help="YYYY-MM-DD" />
             <hr />
-            <h4>Pledges</h4>
-            {
-              challenges.map(c => (
-                <TextInput
-                  key={c.id}
-                  id={`input.pledges.${c.id}`}
-                  label={c.name}
-                  value={input.pledges[c.id]}
-                  onChange={this.setValue}
-                />
-              ))
-            }
+            <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
+            <div>Count Data Here</div>
           </Form>
         </EditRoute>
 
@@ -208,8 +177,10 @@ export default class AlumniPage extends Component {
           task="Added"
         >
           <Form>
-            <TextInput id="input.name" label="Full Name" value={input.name} onChange={this.setValue} />
-            <TextInput id="input.email" label="Email Address" value={input.email} onChange={this.setValue} />
+            <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
+            <TextInput id="input.description" label="Description" value={input.description} onChange={this.setValue} />
+            <TextInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} help="YYYY-MM-DD" />
+            <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
           </Form>
         </EditRoute>
 
@@ -221,7 +192,7 @@ export default class AlumniPage extends Component {
           result={result}
           task="Removed"
         >
-          Are you sure you want to delete Alumni Data for <strong>{input.name}</strong>?
+          Are you sure you want to delete the <strong>{input.name}</strong> alumni challenge?
         </EditRoute>
       </div>
     )

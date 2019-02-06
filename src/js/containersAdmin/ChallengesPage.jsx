@@ -199,6 +199,7 @@ export default class ChallengesPage extends Component {
               onChange={this.setValue}
               rows={3}
             />
+            <hr />
             <h4>Scores</h4>
             <CheckboxInput id="input.public" label="Display Publicly" value={input.public} onChange={this.setValue} />
             {

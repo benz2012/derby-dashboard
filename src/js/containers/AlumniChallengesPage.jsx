@@ -13,6 +13,7 @@ export default class AlumniChallengesPage extends Component {
     challenges: null,
     pledges: null,
   }
+
   componentDidMount() {
     dataFetch('/data/alumni/challenges').then((data) => {
       this.setState({ challenges: data })
@@ -21,10 +22,12 @@ export default class AlumniChallengesPage extends Component {
       this.setState({ pledges: data })
     })
   }
+
   totalRaised = (cid, count, pledges) => {
-    const pledged = pledges.reduce((acc, cur) => (acc + cur[cid]), 0)
+    const pledged = pledges.reduce((acc, cur) => (acc + (cur[cid] || 0)), 0)
     return count * pledged
   }
+
   buildBlocks = (challenges, pledges) => (
     challenges.map(c => (
       <AlumniChallengeBlock
@@ -32,22 +35,23 @@ export default class AlumniChallengesPage extends Component {
         id={c.id}
         name={c.name}
         description={c.description}
-        count={c.count}
+        count={c.countData.length}
         countName={c.countName}
-        raised={this.totalRaised(c.id, c.count, pledges)}
+        raised={this.totalRaised(c.id, c.countData.length, pledges)}
       />
     ))
   )
+
   render() {
     const { challenges, pledges } = this.state
     if (!(challenges && pledges)) return <Loading />
 
     const challengeBlocks = this.buildBlocks(challenges, pledges)
     const pledgeCount = pledges.reduce((acc, cur) => (
-      acc + Object.keys(cur).length
+      acc + Object.keys(cur).filter(k => cur[k] > 0).length
     ), 0)
     const totalRaised = challenges.reduce((acc, cur) => (
-      acc + this.totalRaised(cur.id, cur.count, pledges)
+      acc + this.totalRaised(cur.id, cur.countData.length, pledges)
     ), 0)
 
     return (

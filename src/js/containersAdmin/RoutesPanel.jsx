@@ -8,6 +8,7 @@ import EventsPage from './EventsPage'
 import ChallengesPage from './ChallengesPage'
 import ReportsPage from './ReportsPage'
 import AlumniPage from './AlumniPage'
+import AlumniChallengesPage from './AlumniChallengesPage'
 
 import TopNav, { NavBrand, NavDropDown, NavButton } from '../componentsAdmin/TopNav'
 import SideNav from '../componentsAdmin/SideNav'
@@ -61,6 +62,7 @@ export default class RoutesPanel extends Component {
                 { to: `${match.url}/challenges`, display: 'Challenges' },
                 { to: `${match.url}/reports`, display: 'Reports' },
                 { to: `${match.url}/alumni`, display: 'Alumni' },
+                { to: `${match.url}/alumni-challenges`, display: 'AlumniChallenges' },
               ]}
             />
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-5">
@@ -106,6 +108,12 @@ export default class RoutesPanel extends Component {
                   path={`${match.url}/alumni`}
                   render={props => (
                     <AlumniPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
+                <Route
+                  path={`${match.url}/alumni-challenges`}
+                  render={props => (
+                    <AlumniChallengesPage {...props} authValues={this.props.authValues} />
                   )}
                 />
               </Switch>
