@@ -62,7 +62,7 @@ export default class RoutesPanel extends Component {
                 { to: `${match.url}/challenges`, display: 'Challenges' },
                 { to: `${match.url}/reports`, display: 'Reports' },
                 { to: `${match.url}/alumni`, display: 'Alumni' },
-                { to: `${match.url}/alumni-challenges`, display: 'AlumniChallenges' },
+                { to: `${match.url}/alumni-challenges`, display: 'Alumni Challenges' },
               ]}
             />
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-5">

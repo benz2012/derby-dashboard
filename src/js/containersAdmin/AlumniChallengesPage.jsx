@@ -4,6 +4,7 @@ import DataBin from '../componentsAdmin/DataBin'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
 import Form, { TextInput } from '../componentsAdmin/Form'
+import ListData from '../componentsAdmin/ListData'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
 import { setInput } from '../util/form'
@@ -18,7 +19,7 @@ export default class AlumniChallengesPage extends Component {
       name: '',
       description: '',
       endDate: '',
-      countData: [],
+      countData: {},
       countName: '',
     },
   }
@@ -48,8 +49,12 @@ export default class AlumniChallengesPage extends Component {
     this.setState({ result: null })
     const { input } = this.state
     const { uid, token } = this.props.authValues()
-    const toSend = { ...input }
+    const toSend = {
+      ...input,
+      countData: Object.values(input.countData),
+    }
     delete toSend.id
+
     dataSend(`/data/alumni/challenges/${input.id}`, 'POST', uid, token, toSend)
       .then((d) => {
         if (d) {
@@ -65,7 +70,10 @@ export default class AlumniChallengesPage extends Component {
   addItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
-    const toSend = { ...input }
+    const toSend = {
+      ...input,
+      countData: [],
+    }
     delete toSend.id
     dataSend('/data/alumni/challenges', 'PUT', uid, token, toSend)
       .then((d) => {
@@ -92,16 +100,35 @@ export default class AlumniChallengesPage extends Component {
       })
   }
 
+  addCountDataItem = () => {
+    const nextId = Object.keys(this.state.input.countData)
+      .map(k => parseInt(k, 10))
+      .sort((a, b) => (b - a))[0] + 1
+    setInput({ [`countData.${nextId}`]: '' }, this.setState.bind(this))
+  }
+
+  removeCountDataItem = (id) => {
+    const { countData } = this.state.input
+    const updatedData = Object.keys(countData)
+      .filter(k => k !== id)
+      .reduce((acc, k) => { acc[k] = countData[k]; return acc }, {})
+    setInput({ countData: updatedData }, this.setState.bind(this))
+  }
+
   openEdit = (id) => {
     const { challenges } = this.state
     const chal = challenges.find(c => c.id === id)
+    const countData = chal.countData.reduce((acc, curr, idx) => {
+      acc[idx] = curr
+      return acc
+    }, {})
 
     setInput({
       id,
       name: chal.name,
       description: chal.description,
       endDate: chal.endDate,
-      countData: chal.countData,
+      countData,
       countName: chal.countName,
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
@@ -128,7 +155,7 @@ export default class AlumniChallengesPage extends Component {
       name: '',
       description: '',
       endDate: '',
-      countData: [],
+      countData: {},
       countName: '',
     }, this.setState.bind(this))
   }
@@ -162,9 +189,24 @@ export default class AlumniChallengesPage extends Component {
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
             <TextInput id="input.description" label="Description" value={input.description} onChange={this.setValue} />
             <TextInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} help="YYYY-MM-DD" />
-            <hr />
             <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
-            <div>Count Data Here</div>
+            <hr />
+            <h4>Count Data: {input.countName}</h4>
+            <div style={{ marginBottom: '16px' }}>
+              <small>
+                You can add images, videos and styles to this data using&nbsp;
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown</a>
+              </small>
+            </div>
+            <button type="button" className="btn btn-success btn-sm mb-4" onClick={this.addCountDataItem}>
+              + Add {input.countName.substring(0, input.countName.length - 1)}
+            </button>
+            <ListData
+              data={Object.entries(input.countData).map(([id, value]) => ({ id, value }))}
+              dataKey="countData"
+              onChange={this.setValue}
+              onDelete={this.removeCountDataItem}
+            />
           </Form>
         </EditRoute>
 
