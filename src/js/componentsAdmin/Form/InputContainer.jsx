@@ -1,8 +1,11 @@
 import React from 'react'
 
 const InputContainer = ({ id, label, help, children }) => (
-  <div className="form-group">
-    <label htmlFor={id}>{label}</label>
+  <div className={label ? 'form-group' : ''}>
+    {
+      label &&
+      <label htmlFor={id}>{label}</label>
+    }
     {children}
     {
       help &&

@@ -16,7 +16,6 @@ const Feature = styled.div`
 
 const Total = styled(Feature)`
   font-size: 26px;
-  ${'' /* font-weight: 300; */}
 `
 
 const Label = styled.span`

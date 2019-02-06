@@ -13,7 +13,7 @@ const SidePad = styled.div`
   padding-right: 15px;
 `
 const FullPad = styled.div`
-  padding: ${props => props.length ? `${props.length}px` : '15px'};
+  padding: ${props => (props.length ? `${props.length}px` : '15px')};
 `
 const Body = styled.div`
   font-weight: 300;
@@ -26,17 +26,17 @@ const BodyFromMarkdown = styled(Body)`
 `
 const Ranking = styled.div`
   font-size: 12px;
-  color: ${props => props.darker ? props.theme.textDampenLess : props.theme.textDampen}
+  color: ${props => (props.darker ? props.theme.textDampenLess : props.theme.textDampen)};
 `
 const Score = styled.div`
   font-size: 24px;
   color: ${props => props.theme.buttonBG}
 `
 const LeftPad = styled.div`
-  padding-left: ${props => props.length ? `${props.length}px` : '8px'};
+  padding-left: ${props => (props.length ? `${props.length}px` : '8px')};
 `
 const RightPad = styled.div`
-  padding-right: ${props => props.length ? `${props.length}px` : '8px'};
+  padding-right: ${props => (props.length ? `${props.length}px` : '8px')};
 `
 const Centered = styled.div`
   text-align: center;

@@ -18,6 +18,10 @@ const EditView = ({ history, match, children, submit, ...rest }) => {
   const success = rest.result && rest.result === 'SUCCESS'
   const task = rest.task || 'Updated'
   const message = rest.result === 'SUCCESS' ? `Item ${task} Successfully!` : `Item Failed to be ${task}!`
+  const actionName = task === 'Removed' ? 'Delete' : 'Submit'
+  const actionColor = task === 'Removed' ? 'danger' : 'primary'
+  const actionDisabled = task !== 'Updated' && success
+
   return (
     <div role="button" onClick={back} tabIndex={0}>
       <Modal radius={3}>
@@ -37,11 +41,16 @@ const EditView = ({ history, match, children, submit, ...rest }) => {
               {children}
             </ViewContent>
             <ViewActions>
-              <button className="close-modal btn btn-outline-dark mr-2" onClick={back}>
-                Cancel
+              <button type="button" className="close-modal btn btn-outline-dark mr-2" onClick={back}>
+                {actionDisabled ? 'Close' : 'Cancel'}
               </button>
-              <button className="btn btn-outline-primary mr-2" onClick={submit}>
-                Submit
+              <button
+                type="button"
+                className={`btn btn-outline-${actionColor} mr-2`}
+                onClick={submit}
+                disabled={actionDisabled}
+              >
+                {actionName}
               </button>
             </ViewActions>
           </EditPane>

@@ -8,6 +8,7 @@ import SVGBlur from './SVGBlur'
 
 export default class Modal extends Component {
   modalRoot = document.getElementById('modal')
+
   el = document.createElement('div')
 
   componentDidMount() {
@@ -16,11 +17,13 @@ export default class Modal extends Component {
     const radius = this.props.radius || 5
     app.setAttribute('style', Blur(radius))
   }
+
   componentWillUnmount() {
     this.modalRoot.removeChild(this.el)
     const app = document.getElementById('app')
     app.setAttribute('style', '')
   }
+
   render() {
     const radius = this.props.radius || 5
     const modal = (

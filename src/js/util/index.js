@@ -53,7 +53,7 @@ const embedURL = (src) => {
 const resolvePath = (path, obj) => (
   path.split('.').reduce((prev, curr) => (
     prev ? prev[curr] : undefined
-  ), obj || self)
+  ), obj || self) // eslint-disable-line no-restricted-globals
 )
 
 const objectSort = (objectsList, attribute, compareFunction) => (

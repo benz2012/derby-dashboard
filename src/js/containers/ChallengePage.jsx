@@ -16,6 +16,7 @@ export default class ChallengePage extends Component {
     challenge: null,
     teams: null,
   }
+
   componentDidMount() {
     const { challengeId } = this.props.match.params
     dataFetch(`/data/challenges/${challengeId}`).then((data) => {
@@ -25,6 +26,7 @@ export default class ChallengePage extends Component {
       this.setState({ teams: data })
     })
   }
+
   render() {
     const { match } = this.props
     const { challenge, teams } = this.state

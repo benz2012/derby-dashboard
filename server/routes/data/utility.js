@@ -47,6 +47,14 @@ const toCamelCase = str => (
   `${str.charAt(0).toLowerCase()}${str.slice(1)}`
 )
 
+const applyKeyMapToObj = (obj, keyMap) => (
+  Object.keys(obj).reduce((accum, key) => {
+    // eslint-disable-next-line no-param-reassign
+    accum[keyMap[key]] = obj[key]
+    return accum
+  }, {})
+)
+
 module.exports = {
   errorEnd,
   groupBy,
@@ -54,4 +62,5 @@ module.exports = {
   twoWeekTimeString,
   markdownToHTML,
   toCamelCase,
+  applyKeyMapToObj,
 }

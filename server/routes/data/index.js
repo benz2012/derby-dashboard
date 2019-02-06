@@ -24,7 +24,8 @@ router.use((req, res, next) => {
       return next('router')
     }
     return next()
-  } else if (['POST', 'PUT', 'DELETE'].indexOf(req.method) !== -1) {
+  }
+  if (['POST', 'PUT', 'DELETE'].indexOf(req.method) !== -1) {
     if (req.url === '/auth/access') {
       if (!req.header('sent-from-client-javascript')) {
         return next('router')

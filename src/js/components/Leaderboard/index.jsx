@@ -8,9 +8,9 @@ const Leaderboard = ({ scores, simple }) => {
   const Container = ({ children }) => (
     simple ? <div>{children}</div> : <BlockNoPad>{children}</BlockNoPad>
   )
-  const colorLight = rank => simple ? 'inherit' : `hsl(167, 74%, ${rank > 5 ? 100 : 84 + (4 * rank)}%)`
-  const blockStyle = rank => simple ? {} : { backgroundColor: colorLight(rank), padding: '0px 10px' }
-  const score = num => simple ? num : <RightPad><Score>{num}</Score></RightPad>
+  const colorLight = rank => (simple ? 'inherit' : `hsl(167, 74%, ${rank > 5 ? 100 : 84 + (4 * rank)}%)`)
+  const blockStyle = rank => (simple ? {} : { backgroundColor: colorLight(rank), padding: '0px 10px' })
+  const score = num => (simple ? num : <RightPad><Score>{num}</Score></RightPad>)
   const scoreBlocks = scores.map((team, index) => {
     const block = simple ? (
       <TeamBlock

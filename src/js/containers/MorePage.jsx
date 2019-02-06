@@ -21,17 +21,21 @@ export default class MorePage extends Component {
     subscribed: null,
     statusText: null,
   }
+
   componentDidMount() {
     dataFetch('/data/application/more').then((data) => {
       this.setState({ more: data })
     })
   }
+
   htmlString = html => (
     <div dangerouslySetInnerHTML={{ __html: html }} /> // eslint-disable-line
   )
+
   handleNumberChange = (e) => {
     this.setState({ telephone: e.target.value })
   }
+
   handleSubscribe = () => {
     this.setState({ subInProgress: true })
     fetch('/sms', {
@@ -55,6 +59,7 @@ export default class MorePage extends Component {
       console.log(err)
     })
   }
+
   render() {
     const { more, telephone, subInProgress, subscribed, statusText } = this.state
     if (!more) { return <Loading /> }

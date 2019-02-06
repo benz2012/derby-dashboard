@@ -13,6 +13,7 @@ export default class AlumniChallengePage extends Component {
     challenge: null,
     pledges: null,
   }
+
   componentDidMount() {
     const { challengeId } = this.props.match.params
     dataFetch(`/data/alumni/challenges/${challengeId}`).then((data) => {
@@ -22,12 +23,15 @@ export default class AlumniChallengePage extends Component {
       this.setState({ pledges: data })
     })
   }
+
   totalPledged = (cid, pledges) => (
-    pledges.reduce((acc, cur) => (acc + cur[cid]), 0)
+    pledges.reduce((acc, cur) => (acc + (cur[cid] || 0)), 0)
   )
+
   htmlString = html => (
     <div dangerouslySetInnerHTML={{ __html: html }} /> // eslint-disable-line
   )
+
   renderCountData = countData => (
     countData.map((data, idx) => (
       <BodyFromMarkdown key={idx}> {/* eslint-disable-line */}
@@ -35,6 +39,7 @@ export default class AlumniChallengePage extends Component {
       </BodyFromMarkdown>
     ))
   )
+
   render() {
     const { challenge, pledges } = this.state
     if (!(challenge && pledges)) return <Loading />
@@ -61,6 +66,9 @@ export default class AlumniChallengePage extends Component {
         <Block>
           <HeadingText2>{countName}</HeadingText2>
           {this.renderCountData(countData)}
+          {countData.length === 0 && (
+            <Prefix>No data has been added.</Prefix>
+          )}
         </Block>
       </Page>
     )

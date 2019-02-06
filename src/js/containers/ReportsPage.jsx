@@ -19,6 +19,7 @@ export default class MorePage extends Component {
     challenges: null,
     teams: null,
   }
+
   componentDidMount() {
     const { date } = this.props.match.params
     dataFetch(`/data/reports/${date}`).then((data) => {
@@ -32,30 +33,33 @@ export default class MorePage extends Component {
       this.setState({ teams: data })
     })
   }
-  buildBlocks(challenges, teams) {
-    const { match } = this.props
-    return challenges.map((ch) => {
+
+  buildBlocks = (challenges, teams) => (
+    challenges.map((ch) => {
       const hydrated = hydrateScores(ch.scores, teams)
       const leaderboard = hydrated && <Leaderboard scores={hydrated} simple />
       return (
         <Block key={ch.id}>
-          <CleanLink to={`/challenges/${ch.id}`}><HeadingText>
-            <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-              {ch.name}<RightArrow />
-            </div>
-          </HeadingText></CleanLink>
-          {(ch.public && hydrated) ?
+          <CleanLink to={`/challenges/${ch.id}`}>
+            <HeadingText>
+              <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
+                {ch.name}<RightArrow />
+              </div>
+            </HeadingText>
+          </CleanLink>
+          {(ch.public && hydrated) ? (
             <div>
               <Ellipsis>{ch.description}</Ellipsis>
               <div style={{ margin: '5px 12px' }}>{leaderboard}</div>
             </div>
-            :
+          ) : (
             <p>{ch.description}</p>
-          }
+          )}
         </Block>
       )
     })
-  }
+  )
+
   render() {
     const { report, challenges, teams } = this.state
     if (!(report && challenges && teams)) { return <Loading /> }

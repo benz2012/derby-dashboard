@@ -8,7 +8,8 @@ const chartScale = (values) => {
   const max = parseInt(Math.max(...values))
   if (max >= 0 && max < 500) {
     return Math.ceil(((max + 1) * 1.2) / 100) * 100
-  } else if (max >= 500 && max < 3000) {
+  }
+  if (max >= 500 && max < 3000) {
     return Math.ceil((max * 1.2) / 500) * 500
   }
   return Math.ceil((max * 1.2) / 1000) * 1000

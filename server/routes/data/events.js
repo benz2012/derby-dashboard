@@ -159,11 +159,13 @@ router.put('/', (req, res) => {
   if (req.body) {
     const item = Object.keys(req.body).reduce((accum, key) => {
       if (key === 'time') {
+        // eslint-disable-next-line no-param-reassign
         accum[keyMap[key]] = {
           Start: req.body.time.start,
           End: req.body.time.end,
         }
       } else {
+        // eslint-disable-next-line no-param-reassign
         accum[keyMap[key]] = req.body[key]
       }
       return accum

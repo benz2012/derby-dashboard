@@ -15,6 +15,7 @@ export default class RoutesAdmin extends Component {
     uid: null,
     token: null,
   }
+
   componentDidMount() {
     if (document.getElementById('facebook-jssdk') && window.FB) {
       // the api was loaded on a previous mounting
@@ -30,6 +31,7 @@ export default class RoutesAdmin extends Component {
       window.FB.getLoginStatus(this.authStatusHandler)
     }
   }
+
   loadFacebookAPI = (d, s, id) => {
     const fjs = d.getElementsByTagName(s)[0]
     if (d.getElementById(id)) return
@@ -37,8 +39,8 @@ export default class RoutesAdmin extends Component {
     js.src = 'https://connect.facebook.net/en_US/sdk.js'
     fjs.parentNode.insertBefore(js, fjs)
   }
+
   authStatusHandler = (response) => {
-    console.log(response)
     if (response.status === 'connected') {
       const uid = response.authResponse.userID
       const token = response.authResponse.accessToken
@@ -56,16 +58,21 @@ export default class RoutesAdmin extends Component {
       this.setState({ stage: 'LOGGED_OUT' })
     }
   }
+
   authValues = () => ({ uid: this.state.uid, token: this.state.token })
+
   contents = (stage) => {
     const { uid } = this.state
     if (stage === 'CHECKING') {
       return <Loading />
-    } else if (stage === 'LOGGED_IN') {
+    }
+    if (stage === 'LOGGED_IN') {
       return <UnauthorizedPage uid={uid} />
-    } else if (stage === 'LOGGED_OUT') {
+    }
+    if (stage === 'LOGGED_OUT') {
       return <LoginPage statusChangeCallback={this.authStatusHandler} />
-    } else if (stage === 'AUTHORIZED') {
+    }
+    if (stage === 'AUTHORIZED') {
       return (
         <RoutesPanel
           authValues={this.authValues}
@@ -76,6 +83,7 @@ export default class RoutesAdmin extends Component {
     }
     return <UnauthorizedPage uid={uid} />
   }
+
   render() {
     const { match } = this.props
     const { stage } = this.state

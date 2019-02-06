@@ -31,7 +31,7 @@ const timeSort = (eventA, eventB) => {
   return 0
 }
 
-router.get('/daily', (req, res, next) => {
+router.get('/daily', (req, res) => {
   const options = {
     url: 'https://www.derbydashboard.io/data/events',
     headers: {
@@ -51,25 +51,24 @@ router.get('/daily', (req, res, next) => {
 
     const todaysURL = `https://www.derbydashboard.io/schedule/${today}`
     const urlEncoded = encodeURIComponent(todaysURL)
-    return request(`https://api-ssl.bitly.com/v3/shorten?access_token=${process.env.BITLY_API_KEY}&longUrl=${urlEncoded}`,
-      (bitlyErr, bitlyRes, bitlyBody) => {
-        const bitData = JSON.parse(bitlyBody)
-        if (!bitData) { return res.json({ error: 'bitly didnt work' }) }
-        const bitHash = bitData.data.hash
-        if (!bitHash) { return res.json({ error: 'bitly didnt have link' }) }
+    const bitlyReqURI = `https://api-ssl.bitly.com/v3/shorten?access_token=${process.env.BITLY_API_KEY}&longUrl=${urlEncoded}`
+    return request(bitlyReqURI, (bitlyErr, bitlyRes, bitlyBody) => {
+      const bitData = JSON.parse(bitlyBody)
+      if (!bitData) { return res.json({ error: 'bitly didnt work' }) }
+      const bitHash = bitData.data.hash
+      if (!bitHash) { return res.json({ error: 'bitly didnt have link' }) }
 
-        todaysEvents.sort(timeSort)
-        const microEvents = todaysEvents.map((event) => {
-          const n = event.name.replace(/[^A-Za-z0-9]/g, '').substr(0, 12)
-          const t = moment(event.time.start, 'HH:mm').format('ha')
-          return `${n} @${t}`
-        })
-        const eventsString = microEvents.join('\n')
+      todaysEvents.sort(timeSort)
+      const microEvents = todaysEvents.map((event) => {
+        const n = event.name.replace(/[^A-Za-z0-9]/g, '').substr(0, 12)
+        const t = moment(event.time.start, 'HH:mm').format('ha')
+        return `${n} @${t}`
+      })
+      const eventsString = microEvents.join('\n')
 
-        const message = `Todays Events:\n${eventsString}\nDetails: bit.ly/${bitHash}`
-        return res.json(message)
-      }
-    )
+      const message = `Todays Events:\n${eventsString}\nDetails: bit.ly/${bitHash}`
+      return res.json(message)
+    })
   })
 })
 

@@ -87,6 +87,7 @@ router.get('/:id', (req, res) => {
 router.put('/', (req, res) => {
   if (req.body) {
     const item = Object.keys(req.body).reduce((accum, key) => {
+      // eslint-disable-next-line no-param-reassign
       accum[keyMap[key]] = req.body[key]
       return accum
     }, {})

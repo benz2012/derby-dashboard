@@ -3,7 +3,6 @@ import currency from 'currency.js'
 
 import Loading from '../components/Loading'
 import DataBin from '../componentsAdmin/DataBin'
-import Currency from '../components/Content/Currency'
 import { dataFetch, objectSort } from '../util'
 import { stringSort } from '../util/string'
 
@@ -14,6 +13,7 @@ export default class FundsPage extends Component {
     teams: null,
     external: null,
   }
+
   componentDidMount() {
     dataFetch('/data/raised').then((data) => {
       if (!this.state.unmounting) this.setState({ raised: data })
@@ -31,20 +31,23 @@ export default class FundsPage extends Component {
       if (!this.state.unmounting) this.setState({ teams: data })
     })
   }
+
   componentWillUnmount() {
     this.setState({ unmounting: true })
   }
+
   itemClick = () => null
+
   formatFund = amount => currency(amount, { formatWithSymbol: true }).format()
+
   render() {
     const { raised, external, teams } = this.state
     if (!(raised && external && teams)) return <Loading />
-    console.log(raised)
     return (
       <div>
         <h4>External Funds</h4>
         <hr />
-        <button className="btn btn-success mb-4">+ Add External Fund</button>
+        <button type="button" className="btn btn-success mb-4">+ Add External Fund</button>
         <DataBin
           items={external}
           id={e => `team-${e.teamId}-id-${e.id}`}

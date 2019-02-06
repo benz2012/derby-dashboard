@@ -42,7 +42,7 @@ const DateOption = styled(CleanLink)`
 `
 const Weekday = styled.div`
   padding-bottom: 4px;
-  color: ${props => props.selected ? props.theme.headerFG : 'inherit'}
+  color: ${props => (props.selected ? props.theme.headerFG : 'inherit')};
 `
 const DateCircle = styled.div`
   display: flex;
@@ -50,11 +50,11 @@ const DateCircle = styled.div`
   justify-content: center;
   height: 40px;
   border-radius: 50%;
-  background-color: ${props => props.selected ? props.theme.headerFG : 'none'}
+  background-color: ${props => (props.selected ? props.theme.headerFG : 'none')};
 `
 const DateNumber = styled.div`
   font-size: 18px;
-  color: ${props => props.selected ? props.theme.headerBG : 'inherit'}
+  color: ${props => (props.selected ? props.theme.headerBG : 'inherit')};
 `
 
 export {

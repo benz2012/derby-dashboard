@@ -23,17 +23,21 @@ export default class GeneralPage extends Component {
       alertTime: '',
     },
   }
+
   componentDidMount() {
     this.fetchGeneralData()
   }
+
   componentWillUnmount() {
     this.setState({ unmounting: true })
   }
+
   setValue = (e) => {
     e.preventDefault()
     const key = e.target.id.replace('input.', '')
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
+
   submitValues = (url) => {
     this.setState({ result: null })
     const { general, input } = this.state
@@ -47,6 +51,7 @@ export default class GeneralPage extends Component {
       this.setState({ result: 'FAILURE' })
     })
   }
+
   fetchGeneralData = () => {
     dataFetch('/data/home').then((data) => {
       if (!this.state.unmounting) {
@@ -54,10 +59,12 @@ export default class GeneralPage extends Component {
       }
     })
   }
+
   closeModal = () => {
     this.resetValues()
     this.setState({ result: null })
   }
+
   resetValues = () => {
     setInput({
       name: this.state.general.name,
@@ -70,6 +77,7 @@ export default class GeneralPage extends Component {
       alertTime: this.state.general.alertTime,
     }, this.setState.bind(this))
   }
+
   render() {
     const { general, input, result } = this.state
     const { history, match } = this.props
@@ -82,7 +90,7 @@ export default class GeneralPage extends Component {
           body={
             <span>
               {general.name}<br />
-              <a className="card-link" target="_blank" href={general.schoolURL}>{general.schoolURL}</a>
+              <a className="card-link" target="_blank" rel="noopener noreferrer" href={general.schoolURL}>{general.schoolURL}</a>
             </span>
           }
           onEdit={() => history.replace(`${match.url}/school`)}
@@ -103,13 +111,13 @@ export default class GeneralPage extends Component {
             <span>
               {general.header}<br />
               {general.body.substr(0, 100)}{general.body.length > 100 && '...'}<br />
-              <a className="card-link" target="_blank" href={general.videoURL}>{general.videoURL}</a>
+              <a className="card-link" target="_blank" rel="noopener noreferrer" href={general.videoURL}>{general.videoURL}</a>
             </span>
           }
           onEdit={() => history.replace(`${match.url}/homepage`)}
         />
 
-        <EditRoute {...this.props} path={'school'} close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
+        <EditRoute {...this.props} path="school" close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
           <Form>
             <TextInput id="input.name" label="School Name" value={input.name} onChange={this.setValue} />
             <TextInput id="input.abbrv" label="School Abbreviation" value={input.abbrv} onChange={this.setValue} />
@@ -118,7 +126,7 @@ export default class GeneralPage extends Component {
           </Form>
         </EditRoute>
 
-        <EditRoute {...this.props} path={'event'} close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
+        <EditRoute {...this.props} path="event" close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
           <Form>
             <TextInput id="input.year" label="Event Year" value={input.year} onChange={this.setValue} help="YYYY" />
             <TextInput
@@ -131,7 +139,7 @@ export default class GeneralPage extends Component {
           </Form>
         </EditRoute>
 
-        <EditRoute {...this.props} path={'homepage'} close={this.closeModal} submit={() => this.submitValues('/data/home/page')} result={result}>
+        <EditRoute {...this.props} path="homepage" close={this.closeModal} submit={() => this.submitValues('/data/home/page')} result={result}>
           <Form>
             <TextInput id="input.header" label="Header Line" value={input.header} onChange={this.setValue} />
             <TextAreaInput id="input.body" label="Body Text" value={input.body} onChange={this.setValue} rows={3} />

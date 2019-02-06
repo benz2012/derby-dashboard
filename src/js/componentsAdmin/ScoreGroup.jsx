@@ -5,8 +5,8 @@ import { TextInput, CheckboxInput } from './Form'
 const ScoreGroup = ({ teams, onChange, includeAll }) => (
   <div className="mt-3">
     <div className="btn-group mb-2" role="group">
-      <button className="btn btn-info btn-sm" onClick={includeAll} data-yes>Include All</button>
-      <button className="btn btn-secondary btn-sm" onClick={includeAll}>Include None</button>
+      <button type="button" className="btn btn-info btn-sm" onClick={includeAll} data-yes>Include All</button>
+      <button type="button" className="btn btn-secondary btn-sm" onClick={includeAll}>Include None</button>
     </div>
     {teams.map(t => (
       <div className="form-row align-items-center" key={`${t.id}-score-key`}>

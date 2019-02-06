@@ -10,6 +10,7 @@ export default class NavBar extends Component {
     menuOpen: false,
     year: null,
   }
+
   componentDidMount() {
     dataFetch('/data/year').then((data) => {
       if (data) {
@@ -17,11 +18,13 @@ export default class NavBar extends Component {
       }
     })
   }
+
   toggleMenu = () => {
     this.setState(prevState => ({
       menuOpen: !prevState.menuOpen,
     }))
   }
+
   render() {
     const { linkData } = this.props
     const { menuOpen, year } = this.state

@@ -15,6 +15,7 @@ export default class ChallengesPage extends Component {
     challenges: null,
     teams: null,
   }
+
   componentDidMount() {
     dataFetch('/data/challenges').then((data) => {
       objectSort(data, 'name', stringSort)
@@ -24,30 +25,7 @@ export default class ChallengesPage extends Component {
       this.setState({ teams: data })
     })
   }
-  buildBlocks(challenges, teams) {
-    const { match } = this.props
-    return challenges.map((ch) => {
-      const hydrated = hydrateScores(ch.scores, teams)
-      const leaderboard = hydrated && <Leaderboard scores={hydrated} simple />
-      return (
-        <Block key={ch.id}>
-          <CleanLink to={`${match.url}/${ch.id}`}><HeadingText>
-            <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-              {ch.name}<RightArrow />
-            </div>
-          </HeadingText></CleanLink>
-          {(ch.public && hydrated) ?
-            <div>
-              <Ellipsis>{ch.description}</Ellipsis>
-              <div style={{ margin: '5px 12px' }}>{leaderboard}</div>
-            </div>
-            :
-            <p>{ch.description}</p>
-          }
-        </Block>
-      )
-    })
-  }
+
   totalScores = (challenges, teams) => {
     const teamsData = teams.filter(t => !t.homeTeam)
     const initial = Object.assign({}, ...teamsData.map(t => ({ [t.id]: 0 })))
@@ -59,6 +37,7 @@ export default class ChallengesPage extends Component {
       .reduce((accum, current) => {
         Object.keys(current.scores).forEach((tid) => {
           if (current.scores[tid].include === true) {
+            // eslint-disable-next-line no-param-reassign
             accum[tid] += current.scores[tid].score
           }
         })
@@ -76,6 +55,34 @@ export default class ChallengesPage extends Component {
         })
       })
   }
+
+  buildBlocks(challenges, teams) {
+    const { match } = this.props
+    return challenges.map((ch) => {
+      const hydrated = hydrateScores(ch.scores, teams)
+      const leaderboard = hydrated && <Leaderboard scores={hydrated} simple />
+      return (
+        <Block key={ch.id}>
+          <CleanLink to={`${match.url}/${ch.id}`}>
+            <HeadingText>
+              <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
+                {ch.name}<RightArrow />
+              </div>
+            </HeadingText>
+          </CleanLink>
+          {(ch.public && hydrated) ? (
+            <div>
+              <Ellipsis>{ch.description}</Ellipsis>
+              <div style={{ margin: '5px 12px' }}>{leaderboard}</div>
+            </div>
+          ) : (
+            <p>{ch.description}</p>
+          )}
+        </Block>
+      )
+    })
+  }
+
   render() {
     const { challenges, teams } = this.state
     if (!(challenges && teams)) return <Loading />
