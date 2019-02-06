@@ -17,6 +17,7 @@ const keyMap = {
   countName: 'CountName',
 }
 
+//
 // Alumni Routes
 router.get('/', (req, res) => {
   get({
@@ -44,7 +45,6 @@ router.put('/', (req, res) => {
       TableName: 'Derby_App',
       Key: { DataName: 'AlumniPledges' },
     }).then((data) => {
-      console.log(Object.keys(data))
       const largestKey = Object.keys(data)
         .filter(k => k !== 'DataName')
         .map(k => parseInt(k, 10))
@@ -88,6 +88,7 @@ router.delete('/:id', (req, res) => {
     .catch(err => errorEnd(err, res))
 })
 
+//
 // Pledges Route
 router.get('/pledges', (req, res) => {
   get({
@@ -100,6 +101,7 @@ router.get('/pledges', (req, res) => {
   }).catch(err => errorEnd(err, res))
 })
 
+//
 // Challenges Routes
 router.get('/challenges', (req, res) => {
   get({

@@ -13,11 +13,12 @@ export default class AlumniPage extends Component {
     unmounting: false,
     result: null,
     alumni: null,
+    challenges: null,
     input: {
       id: '',
       name: '',
       email: '',
-      pledges: [],
+      pledges: {},
     },
   }
 
@@ -40,14 +41,24 @@ export default class AlumniPage extends Component {
       if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
       if (!this.state.unmounting) this.setState({ alumni: data })
     })
+    dataFetch('/data/alumni/challenges').then((data) => {
+      if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
+      if (!this.state.unmounting) this.setState({ challenges: data })
+    })
   }
 
   submitValues = () => {
     this.setState({ result: null })
     const { input } = this.state
     const { uid, token } = this.props.authValues()
+
     const toSend = { ...input }
     delete toSend.id
+    toSend.pledges = Object.keys(toSend.pledges).reduce((acc, key) => {
+      acc[key] = parseInt(toSend.pledges[key], 10)
+      return acc
+    }, {})
+
     dataSend(`/data/alumni/${input.id}`, 'POST', uid, token, toSend)
       .then((d) => {
         if (d) {
@@ -64,8 +75,6 @@ export default class AlumniPage extends Component {
     const { uid, token } = this.props.authValues()
     const toSend = { ...input }
     delete toSend.id
-    delete toSend.pledges
-
     dataSend('/data/alumni', 'PUT', uid, token, toSend)
       .then((d) => {
         if (d) {
@@ -90,12 +99,21 @@ export default class AlumniPage extends Component {
   }
 
   openEdit = (id) => {
-    const alum = this.state.alumni.find(a => a.id === id)
+    const { alumni, challenges } = this.state
+    const alum = alumni.find(a => a.id === id)
+    let { pledges } = alum
+    if ((Object.keys(alum.pledges).length === 0) && (challenges.length > 0)) {
+      pledges = challenges.reduce((acc, cur) => {
+        acc[cur.id] = 0
+        return acc
+      }, {})
+    }
+
     setInput({
       id,
       name: alum.name,
       email: alum.email,
-      pledges: alum.pledges,
+      pledges,
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
@@ -120,7 +138,7 @@ export default class AlumniPage extends Component {
       id: '',
       name: '',
       email: '',
-      pledges: [],
+      pledges: {},
     }, this.setState.bind(this))
   }
 
@@ -135,8 +153,8 @@ export default class AlumniPage extends Component {
   }
 
   render() {
-    const { alumni, input, result } = this.state
-    if (!alumni) return <Loading />
+    const { alumni, challenges, input, result } = this.state
+    if (!(alumni && challenges)) return <Loading />
     return (
       <div>
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Alumni</button>
@@ -162,6 +180,19 @@ export default class AlumniPage extends Component {
           <Form>
             <TextInput id="input.name" label="Full Name" value={input.name} onChange={this.setValue} />
             <TextInput id="input.email" label="Email Address" value={input.email} onChange={this.setValue} />
+            <hr />
+            <h4>Pledges</h4>
+            {
+              challenges.map(c => (
+                <TextInput
+                  key={c.id}
+                  id={`input.pledges.${c.id}`}
+                  label={c.name}
+                  value={input.pledges[c.id]}
+                  onChange={this.setValue}
+                />
+              ))
+            }
           </Form>
         </EditRoute>
 
