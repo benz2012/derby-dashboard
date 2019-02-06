@@ -23,18 +23,22 @@ export default class ChallengesPage extends Component {
       public: false,
     },
   }
+
   componentDidMount() {
     this.fetchChallengeData()
   }
+
   componentWillUnmount() {
     this.setState({ unmounting: true })
   }
+
   setValue = (e) => {
     if (e.target.type !== 'checkbox') e.preventDefault()
     const key = e.target.id.replace('input.', '')
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     setInput({ [key]: value }, this.setState.bind(this))
   }
+
   fetchChallengeData = () => {
     dataFetch('/data/challenges').then((data) => {
       if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
@@ -45,6 +49,7 @@ export default class ChallengesPage extends Component {
       if (!this.state.unmounting) this.setState({ teams: data })
     })
   }
+
   submitValues = () => {
     this.setState({ result: null })
     const { challenges, input } = this.state
@@ -62,6 +67,7 @@ export default class ChallengesPage extends Component {
         this.setState({ result: 'FAILURE' })
       })
   }
+
   addItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -77,6 +83,7 @@ export default class ChallengesPage extends Component {
         this.setState({ result: 'FAILURE' })
       })
   }
+
   removeItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -89,6 +96,7 @@ export default class ChallengesPage extends Component {
         this.setState({ result: 'FAILURE' })
       })
   }
+
   openEdit = (id) => {
     const { challenges, teams } = this.state
     const challenge = challenges.find(c => parseInt(c.id) === parseInt(id))
@@ -110,18 +118,22 @@ export default class ChallengesPage extends Component {
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
+
   openAdd = () => {
     this.props.history.replace(`${this.props.match.url}/add`)
   }
+
   openRemove = (id) => {
     const challenge = this.state.challenges.find(c => parseInt(c.id) === parseInt(id))
     setInput({ id: challenge.id, name: challenge.name }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/remove`)
   }
+
   closeModal = () => {
     this.resetValues()
     this.setState({ result: null })
   }
+
   includeAll = (e) => {
     e.preventDefault()
     const yes = Boolean(e.target.getAttribute('data-yes'))
@@ -130,6 +142,7 @@ export default class ChallengesPage extends Component {
       setInput({ [`scores.${k}.include`]: yes }, this.setState.bind(this))
     })
   }
+
   resetValues = () => {
     setInput({
       id: '',
@@ -139,6 +152,7 @@ export default class ChallengesPage extends Component {
       public: false,
     }, this.setState.bind(this))
   }
+
   scoreValues = (teams, scores) => (
     Object.keys(scores).length > 0 &&
     teams.map(t => ({
@@ -148,20 +162,21 @@ export default class ChallengesPage extends Component {
       include: scores[t.id].include,
     }))
   )
+
   render() {
     const { challenges, teams, input, result } = this.state
     if (!(challenges && teams)) return <Loading />
     const scoreValues = this.scoreValues(teams, input.scores)
     return (
       <div>
-        <button className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Challenge</button>
+        <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Challenge</button>
         <DataBin
           items={challenges}
           head={c => c.name}
           body={c => (
             <span>
               {c.description.substr(0, 100)}{c.description.length > 100 && '...'}<br />
-              {c.scores && `Scores Added: ${c.scores.length}`}
+              {c.scores && `Scores Added: ${Object.keys(c.scores).length}`}
             </span>
           )}
           onEdit={this.openEdit}
@@ -184,6 +199,7 @@ export default class ChallengesPage extends Component {
               onChange={this.setValue}
               rows={3}
             />
+            <hr />
             <h4>Scores</h4>
             <CheckboxInput id="input.public" label="Display Publicly" value={input.public} onChange={this.setValue} />
             {

@@ -9,7 +9,7 @@ import { TeamChallengeBlock } from '../components/ChallengeBlock'
 import FullWidthButton from '../components/Button/FullWidthButton'
 
 import { Body, Centered, CleanLink, Currency, RightArrow } from '../components/Content'
-import { HeadingText2 } from '../components/HeadingText'
+import HeadingText, { HeadingText2 } from '../components/HeadingText'
 import { LargeLine } from '../components/Chart'
 
 import { storageEnabled, storageGet, storageSet, dataFetch, objectSort } from '../util'
@@ -112,6 +112,13 @@ export default class TeamPage extends Component {
         <Block>
           <HeadingText2>Two Week History</HeadingText2>
           { history && <LargeLine values={history} /> }
+        </Block>
+
+        <Block>
+          <Centered>
+            <HeadingText>{team.members}</HeadingText>
+            <Body>Members with Donation Pages</Body>
+          </Centered>
         </Block>
 
         { team.snap &&

@@ -52,7 +52,7 @@ const substance = obj => (
   Object.keys(obj)
     .filter(key => obj[key] !== '')
     .reduce((prev, key) => {
-      prev[key] = obj[key]
+      prev[key] = obj[key] // eslint-disable-line no-param-reassign
       return prev
     }, {})
 )

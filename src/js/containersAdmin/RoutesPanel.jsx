@@ -7,6 +7,8 @@ import FundsPage from './FundsPage'
 import EventsPage from './EventsPage'
 import ChallengesPage from './ChallengesPage'
 import ReportsPage from './ReportsPage'
+import AlumniPage from './AlumniPage'
+import AlumniChallengesPage from './AlumniChallengesPage'
 
 import TopNav, { NavBrand, NavDropDown, NavButton } from '../componentsAdmin/TopNav'
 import SideNav from '../componentsAdmin/SideNav'
@@ -18,6 +20,7 @@ export default class RoutesPanel extends Component {
     name: null,
     picture: null,
   }
+
   componentWillMount() {
     loadBootstrapCSS() // prevents the public site from needing to load it
     const { uid } = this.props.authValues()
@@ -28,11 +31,13 @@ export default class RoutesPanel extends Component {
       })
     })
   }
+
   handleLogout = () => {
     if (!window.FB) return
     const { statusChangeCallback } = this.props
     window.FB.logout(statusChangeCallback)
   }
+
   render() {
     const { name, picture } = this.state
     const { match } = this.props
@@ -56,6 +61,8 @@ export default class RoutesPanel extends Component {
                 { to: `${match.url}/events`, display: 'Events' },
                 { to: `${match.url}/challenges`, display: 'Challenges' },
                 { to: `${match.url}/reports`, display: 'Reports' },
+                { to: `${match.url}/alumni`, display: 'Alumni' },
+                { to: `${match.url}/alumni-challenges`, display: 'Alumni Challenges' },
               ]}
             />
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-5">
@@ -95,6 +102,18 @@ export default class RoutesPanel extends Component {
                   path={`${match.url}/reports`}
                   render={props => (
                     <ReportsPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
+                <Route
+                  path={`${match.url}/alumni`}
+                  render={props => (
+                    <AlumniPage {...props} authValues={this.props.authValues} />
+                  )}
+                />
+                <Route
+                  path={`${match.url}/alumni-challenges`}
+                  render={props => (
+                    <AlumniChallengesPage {...props} authValues={this.props.authValues} />
                   )}
                 />
               </Switch>
