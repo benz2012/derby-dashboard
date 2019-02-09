@@ -14,6 +14,7 @@ export default class RoutesAdmin extends Component {
     stage: 'CHECKING',
     uid: null,
     token: null,
+    group: null,
   }
 
   componentDidMount() {
@@ -45,9 +46,9 @@ export default class RoutesAdmin extends Component {
       const uid = response.authResponse.userID
       const token = response.authResponse.accessToken
       this.setState({ uid, token })
-      dataFetch(`/data/auth?uid=${uid}`).then(({ authorized }) => {
+      dataFetch(`/data/auth?uid=${uid}`).then(({ authorized, group }) => {
         if (authorized) {
-          this.setState({ stage: 'AUTHORIZED' })
+          this.setState({ stage: 'AUTHORIZED', group })
           dataSend('/data/auth/access', 'POST', uid, token, { uid, token })
         } else {
           // user is not an authorized administrator
@@ -59,7 +60,10 @@ export default class RoutesAdmin extends Component {
     }
   }
 
-  authValues = () => ({ uid: this.state.uid, token: this.state.token })
+  authValues = () => {
+    const { uid, token, group } = this.state
+    return ({ uid, token, group })
+  }
 
   contents = (stage) => {
     const { uid } = this.state

@@ -3,6 +3,7 @@ const express = require('express')
 const alumni = require('./alumni')
 const application = require('./application')
 const auth = require('./auth')
+const authGroups = require('./authGroups')
 const challenges = require('./challenges')
 const events = require('./events')
 const history = require('./history')
@@ -41,7 +42,10 @@ router.use((req, res, next) => {
     }).then((data) => {
       const serverToken = data.AccessTokens[uid]
       const secure = serverToken === clientToken
-      if (client && secure) {
+      const group = Object.keys(data.AdminPanel)
+        .filter(g => data.AdminPanel[g].indexOf(uid) !== -1)[0]
+      const groupAllowed = authGroups[group].indexOf(req.url.split('/')[1]) !== -1
+      if (client && secure && groupAllowed) {
         return next()
       }
       return errorEnd('UNAUTHORIZED POST REQUEST', res)

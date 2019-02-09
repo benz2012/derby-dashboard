@@ -12,8 +12,11 @@ router.get('/', (req, res) => {
     TableName: 'Derby_App',
     Key: { DataName: 'Authorized' },
   }).then((data) => {
-    const authorized = data.AdminPanel.indexOf(uid) !== -1
-    return res.json({ authorized })
+    const groups = Object.keys(data.AdminPanel)
+      .filter(g => data.AdminPanel[g].indexOf(uid) !== -1)
+    const authorized = groups.length > 0
+    const group = authorized && groups[0]
+    return res.json({ authorized, group })
   }).catch(err => errorEnd(err, res))
 })
 
