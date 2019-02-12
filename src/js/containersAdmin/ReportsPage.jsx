@@ -143,6 +143,12 @@ export default class ReportsPage extends Component {
               {r.body.substr(0, 100)}{r.body.length > 100 && '...'}<br />
               {r.date}<br />
               <a href={this.reportURL(r.date)} target="_blank" rel="noopener noreferrer">{this.reportURL(r.date)}</a>
+              <br />
+              {r.publish ? (
+                <strong className="text-success">Published</strong>
+              ) : (
+                <strong className="text-warning">Hidden</strong>
+              )}
             </span>
           )}
           onEdit={this.openEdit}
@@ -196,9 +202,11 @@ export default class ReportsPage extends Component {
           <TextInput id="input.date" label="Report Date" value={input.date} onChange={this.setValue} help="YYYY-MM-DD" />
           <TextInput id="input.header" label="Header" value={input.header} onChange={this.setValue} />
           <TextAreaInput id="input.body" label="Body" value={input.body} onChange={this.setValue} rows={3} />
-          Report will not be published now, you must create it first.
-          Linking challenges and choosing to Publish happen on the edit menu.
-          There can only exist one report per date, so do not attempt to make more than one.
+          <p>
+            Report will <strong>not</strong> be published now, you must create it first.<br />
+            Linking challenges and choosing to Publish happen on the edit menu.<br />
+            There can only exist <u>one report per date</u>, so do not attempt to make more than one.
+          </p>
         </EditRoute>
 
         <EditRoute

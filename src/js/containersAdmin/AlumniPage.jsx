@@ -210,6 +210,9 @@ export default class AlumniPage extends Component {
           <Form>
             <TextInput id="input.name" label="Full Name" value={input.name} onChange={this.setValue} />
             <TextInput id="input.email" label="Email Address" value={input.email} onChange={this.setValue} />
+            <p>
+              <em>Adding challenge pledges happens on the edit menu.</em>
+            </p>
           </Form>
         </EditRoute>
 

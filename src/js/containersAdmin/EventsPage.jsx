@@ -223,6 +223,7 @@ export default class EventsPage extends Component {
             <TextInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} help="HH:MM (24hr)" />
             <TextInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} help="HH:MM (24hr)" />
             <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
+            <hr />
             <TextInput id="input.challengeId" label="Linked Challenge ID" value={input.challengeId} onChange={this.setValue} />
             <TextAreaInput id="input.challenge" label="Linked Challenge" value={input.challenge} rows={3} readOnly />
             <hr />

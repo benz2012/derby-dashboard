@@ -239,7 +239,8 @@ export default class AlumniChallengesPage extends Component {
           result={result}
           task="Removed"
         >
-          Are you sure you want to delete the <strong>{input.name}</strong> alumni challenge?
+          Are you sure you want to delete the <strong>{input.name}</strong> alumni challenge?<br />
+          This action will delete all Alumni Pledges tied to this challenge.
         </EditRoute>
       </div>
     )

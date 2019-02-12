@@ -176,7 +176,11 @@ export default class ChallengesPage extends Component {
           body={c => (
             <span>
               {c.description.substr(0, 100)}{c.description.length > 100 && '...'}<br />
-              {c.scores && `Scores Added: ${Object.keys(c.scores).length}`}
+              Scores: {c.public ? (
+                <strong className="text-success">Public</strong>
+              ) : (
+                <strong className="text-warning">Hidden</strong>
+              )}
             </span>
           )}
           onEdit={this.openEdit}
@@ -229,6 +233,9 @@ export default class ChallengesPage extends Component {
             onChange={this.setValue}
             rows={3}
           />
+          <p>
+            <em>Adding scores happens on the edit menu.</em>
+          </p>
         </EditRoute>
 
         <EditRoute

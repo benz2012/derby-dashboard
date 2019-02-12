@@ -106,7 +106,7 @@ export default class GeneralPage extends Component {
           onEdit={() => history.replace(`${match.url}/event`)}
         />
         <DataCard
-          head="HomePage Information"
+          head="Home Page Information"
           body={
             <span>
               {general.header}<br />
