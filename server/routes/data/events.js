@@ -16,6 +16,7 @@ const keyMap = {
   date: 'DateString',
   type: 'Type',
   challengeId: 'ChallengeId',
+  tags: 'Tags',
 }
 const mapEvent = event => ({
   id: event.EventId,
@@ -25,6 +26,7 @@ const mapEvent = event => ({
   date: event.DateString,
   type: event.Type,
   name: event.Name,
+  tags: event.Tags,
 })
 
 // Routes

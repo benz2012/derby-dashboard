@@ -101,9 +101,10 @@ export default class AlumniChallengesPage extends Component {
   }
 
   addCountDataItem = () => {
-    const nextId = Object.keys(this.state.input.countData)
+    const ids = Object.keys(this.state.input.countData)
       .map(k => parseInt(k, 10))
-      .sort((a, b) => (b - a))[0] + 1
+      .sort((a, b) => (b - a))
+    const nextId = ids.length === 0 ? 0 : ids[0] + 1
     setInput({ [`countData.${nextId}`]: '' }, this.setState.bind(this))
   }
 
@@ -199,7 +200,11 @@ export default class AlumniChallengesPage extends Component {
               </small>
             </div>
             <button type="button" className="btn btn-success btn-sm mb-4" onClick={this.addCountDataItem}>
-              + Add {input.countName.substring(0, input.countName.length - 1)}
+              + Add {
+                input.countName.slice(-1) === 's' ?
+                  input.countName.substring(0, input.countName.length - 1) :
+                  input.countName
+              }
             </button>
             <ListData
               data={Object.entries(input.countData).map(([id, value]) => ({ id, value }))}
