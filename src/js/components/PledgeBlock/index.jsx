@@ -11,7 +11,11 @@ const PledgeBlock = ({ pledge, count, countName }) => (
         <React.Fragment>
           <Feature colorName="Public Event">${pledge}</Feature>
           <Label>
-            pledge per {countName.substring(0, countName.length - 1)}
+            pledge per {
+              countName.slice(-1) === 's' ?
+                countName.substring(0, countName.length - 1) :
+                countName
+            }
           </Label>
         </React.Fragment>
 

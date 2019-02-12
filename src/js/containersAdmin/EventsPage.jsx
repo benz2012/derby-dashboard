@@ -5,6 +5,7 @@ import DataBin from '../componentsAdmin/DataBin'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
 import Form, { TextInput, TextAreaInput, SelectInput } from '../componentsAdmin/Form'
+import ListData from '../componentsAdmin/ListData'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort, timeSort } from '../util/date'
 import { setInput, newValues, substance } from '../util/form'
@@ -28,6 +29,7 @@ export default class EventsPage extends Component {
       type: '',
       challengeId: '',
       challenge: '',
+      tags: {},
     },
   }
 
@@ -68,7 +70,12 @@ export default class EventsPage extends Component {
     const { eventsFlat, input } = this.state
     const { uid, token } = this.props.authValues()
     const event = eventsFlat.find(e => parseInt(e.id) === parseInt(input.id))
-    dataSend(`/data/events/${input.id}`, 'POST', uid, token, newValues(event, input)).then((d) => {
+    const toSend = newValues(event, input).filter(elm => (
+      !(['tags'].includes(Object.keys(elm)[0]))
+    ))
+    toSend.push({ tags: Object.values(input.tags) })
+
+    dataSend(`/data/events/${input.id}`, 'POST', uid, token, toSend).then((d) => {
       if (d) {
         this.setState({ result: 'SUCCESS' })
         this.fetchEventData()
@@ -82,6 +89,7 @@ export default class EventsPage extends Component {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const event = substance(input)
+    event.tags = []
     dataSend('/data/events', 'PUT', uid, token, event)
       .then((d) => {
         if (d) {
@@ -105,8 +113,30 @@ export default class EventsPage extends Component {
       })
   }
 
+  addTag = () => {
+    const { tags } = this.state.input
+    const ids = Object.keys(tags)
+      .map(k => parseInt(k, 10))
+      .sort((a, b) => (b - a))
+    const nextId = ids.length === 0 ? 0 : ids[0] + 1
+    setInput({ [`tags.${nextId}`]: '' }, this.setState.bind(this))
+  }
+
+  removeTag = (id) => {
+    const { tags } = this.state.input
+    const updatedTags = Object.keys(tags)
+      .filter(k => k !== id)
+      .reduce((acc, k) => { acc[k] = tags[k]; return acc }, {})
+    setInput({ tags: updatedTags }, this.setState.bind(this))
+  }
+
   openEdit = (id) => {
     const event = this.state.eventsFlat.find(e => parseInt(e.id) === parseInt(id))
+    const tags = event.tags.reduce((acc, curr, idx) => {
+      acc[idx] = curr
+      return acc
+    }, {})
+
     setInput({
       id: event.id,
       name: event.name,
@@ -117,6 +147,7 @@ export default class EventsPage extends Component {
       type: event.type,
       challenge: event.challenge,
       challengeId: event.challengeId || '',
+      tags,
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
   }
@@ -150,6 +181,7 @@ export default class EventsPage extends Component {
       type: '',
       challenge: '',
       challengeId: '',
+      tags: {},
     }, this.setState.bind(this))
   }
 
@@ -193,6 +225,17 @@ export default class EventsPage extends Component {
             <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
             <TextInput id="input.challengeId" label="Linked Challenge ID" value={input.challengeId} onChange={this.setValue} />
             <TextAreaInput id="input.challenge" label="Linked Challenge" value={input.challenge} rows={3} readOnly />
+            <hr />
+            <h4>Tags</h4>
+            <button type="button" className="btn btn-success btn-sm mb-4" onClick={this.addTag}>
+              + Add Tag
+            </button>
+            <ListData
+              data={Object.entries(input.tags).map(([id, value]) => ({ id, value }))}
+              dataKey="tags"
+              onChange={this.setValue}
+              onDelete={this.removeTag}
+            />
           </Form>
         </EditRoute>
 

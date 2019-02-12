@@ -6,7 +6,8 @@ import ColoredOverview from '../components/ColoredOverview'
 import Loading from '../components/Loading'
 import { AlumniChallengeBlock } from '../components/ChallengeBlock'
 import { Body, Centered, Currency } from '../components/Content'
-import { dataFetch } from '../util'
+import { dataFetch, objectSort } from '../util'
+import { stringSort } from '../util/string'
 
 export default class AlumniChallengesPage extends Component {
   state = {
@@ -16,6 +17,7 @@ export default class AlumniChallengesPage extends Component {
 
   componentDidMount() {
     dataFetch('/data/alumni/challenges').then((data) => {
+      if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
       this.setState({ challenges: data })
     })
     dataFetch('/data/alumni/pledges').then((data) => {

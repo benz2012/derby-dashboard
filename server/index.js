@@ -1,6 +1,6 @@
 // load environment variables
 if (process.env.NODE_ENV !== 'production') {
-  require('../env') // eslint-disable-line
+  require('../env') // eslint-disable-line global-require
 }
 
 const express = require('express')
@@ -16,7 +16,16 @@ const socketHandler = require('./socketHandler')
 
 // Globals
 const app = express()
-const server = http.Server(app)
+let server
+if (process.env.NODE_ENV === 'production') {
+  server = http.Server(app)
+} else {
+  const fs = require('fs') // eslint-disable-line global-require
+  const https = require('https') // eslint-disable-line global-require
+  const privateKey = fs.readFileSync(`${process.cwd()}/local-https/localhost.key`)
+  const certificate = fs.readFileSync(`${process.cwd()}/local-https/localhost.crt`)
+  server = https.createServer({ key: privateKey, cert: certificate }, app)
+}
 const io = socketIO(server)
 
 // Redirects
