@@ -152,7 +152,7 @@ export default class AlumniPage extends Component {
         const pledge = pledges[key]
         return pledge > 0
       }).length
-    return `${num} Pledge${num > 1 ? 's' : ''}`
+    return `${num} Pledge${num !== 1 ? 's' : ''}`
   }
 
   render() {
