@@ -57,8 +57,11 @@ const substance = obj => (
     }, {})
 )
 
+const hasDefault = obj => typeof obj.preventDefault === 'function'
+
 export {
   setInput,
   newValues,
   substance,
+  hasDefault,
 }

@@ -4,11 +4,11 @@ import moment from 'moment'
 import DataBin from '../componentsAdmin/DataBin'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput, SelectInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput, SelectInput, DateInput } from '../componentsAdmin/Form'
 import ListData from '../componentsAdmin/ListData'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort, timeSort } from '../util/date'
-import { setInput, newValues, substance } from '../util/form'
+import { setInput, newValues, substance, hasDefault } from '../util/form'
 
 export default class EventsPage extends Component {
   state = {
@@ -42,7 +42,7 @@ export default class EventsPage extends Component {
   }
 
   setValue = (e) => {
-    e.preventDefault()
+    if (hasDefault(e)) e.preventDefault()
     const key = e.target.id.replace('input.', '')
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
@@ -248,11 +248,12 @@ export default class EventsPage extends Component {
           result={result}
           task="Added"
         >
+          <h4>Adding New Event</h4><hr />
           <Form>
             <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
             <TextInput id="input.location" label="Location" value={input.location} onChange={this.setValue} />
-            <TextInput id="input.date" label="Date" value={input.date} onChange={this.setValue} help="YYYY-MM-DD" />
+            <DateInput id="input.date" label="Date" value={input.date} onChange={this.setValue} />
             <TextInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} help="HH:MM (24hr)" />
             <TextInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} help="HH:MM (24hr)" />
             <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />

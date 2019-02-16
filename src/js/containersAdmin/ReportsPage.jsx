@@ -199,6 +199,7 @@ export default class ReportsPage extends Component {
           path="add"
           task="Added"
         >
+          <h4>Adding New Report</h4><hr />
           <TextInput id="input.date" label="Report Date" value={input.date} onChange={this.setValue} help="YYYY-MM-DD" />
           <TextInput id="input.header" label="Header" value={input.header} onChange={this.setValue} />
           <TextAreaInput id="input.body" label="Body" value={input.body} onChange={this.setValue} rows={3} />

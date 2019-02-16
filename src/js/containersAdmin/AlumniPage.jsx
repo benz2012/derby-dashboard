@@ -207,6 +207,7 @@ export default class AlumniPage extends Component {
           result={result}
           task="Added"
         >
+          <h4>Adding New Alumni</h4><hr />
           <Form>
             <TextInput id="input.name" label="Full Name" value={input.name} onChange={this.setValue} />
             <TextInput id="input.email" label="Email Address" value={input.email} onChange={this.setValue} />

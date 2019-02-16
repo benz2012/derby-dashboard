@@ -225,6 +225,7 @@ export default class ChallengesPage extends Component {
           path="add"
           task="Added"
         >
+          <h4>Adding New Challenge</h4><hr />
           <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
           <TextAreaInput
             id="input.description"

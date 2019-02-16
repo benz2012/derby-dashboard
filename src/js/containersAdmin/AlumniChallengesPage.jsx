@@ -223,6 +223,7 @@ export default class AlumniChallengesPage extends Component {
           result={result}
           task="Added"
         >
+          <h4>Adding New Alumni Challenge</h4><hr />
           <Form>
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} onChange={this.setValue} />
