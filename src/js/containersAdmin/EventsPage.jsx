@@ -4,7 +4,8 @@ import moment from 'moment'
 import DataBin from '../componentsAdmin/DataBin'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput, SelectInput, DateInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput, SelectInput,
+  DateInput, TimeInput } from '../componentsAdmin/Form'
 import ListData from '../componentsAdmin/ListData'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort, timeSort } from '../util/date'
@@ -194,12 +195,21 @@ export default class EventsPage extends Component {
         {
           events.map(dateObj => (
             <div key={dateObj.date}>
-              <h4>{moment(dateObj.date).format('dddd MMMM Do YYYY')}</h4>
+              <h4>{moment(dateObj.date).format('dddd, MMMM Do, YYYY')}</h4>
               <hr />
               <DataBin
                 items={dateObj.events}
                 head={e => e.name}
-                body={e => (<span>{e.date} {e.time.start}<br />{e.location}</span>)}
+                body={e => (
+                  <span>
+                    {moment(e.date).format('MMMM Do')}
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    {moment(e.time.start, 'HH:mm').format('h:mm a')} -&nbsp;
+                    {moment(e.time.end, 'HH:mm').format('h:mm a')}
+                    <br />
+                    {e.location}
+                  </span>
+                )}
                 onEdit={this.openEdit}
                 onDelete={this.openRemove}
               />
@@ -215,13 +225,18 @@ export default class EventsPage extends Component {
           result={result}
         >
           <Form>
-            <TextInput id="input.id" label="Event ID" value={input.id} readOnly />
             <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
             <TextInput id="input.location" label="Location" value={input.location} onChange={this.setValue} />
-            <TextInput id="input.date" label="Date" value={input.date} onChange={this.setValue} help="YYYY-MM-DD" />
-            <TextInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} help="HH:MM (24hr)" />
-            <TextInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} help="HH:MM (24hr)" />
+            <DateInput id="input.date" label="Date" value={input.date} onChange={this.setValue} />
+            <div className="form-row align-items-center">
+              <div className="col">
+                <TimeInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} />
+              </div>
+              <div className="col">
+                <TimeInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} />
+              </div>
+            </div>
             <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
             <hr />
             <TextInput id="input.challengeId" label="Linked Challenge ID" value={input.challengeId} onChange={this.setValue} />
@@ -254,8 +269,14 @@ export default class EventsPage extends Component {
             <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
             <TextInput id="input.location" label="Location" value={input.location} onChange={this.setValue} />
             <DateInput id="input.date" label="Date" value={input.date} onChange={this.setValue} />
-            <TextInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} help="HH:MM (24hr)" />
-            <TextInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} help="HH:MM (24hr)" />
+            <div className="form-row align-items-center">
+              <div className="col">
+                <TimeInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} />
+              </div>
+              <div className="col">
+                <TimeInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} />
+              </div>
+            </div>
             <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
           </Form>
         </EditRoute>

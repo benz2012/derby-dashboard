@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 
 import Loading from '../components/Loading'
 import DataCard from '../componentsAdmin/DataCard'
@@ -100,7 +101,10 @@ export default class GeneralPage extends Component {
           body={
             <span>
               Event Year: {general.year}<br />
-              Text Alert Date Range: {general.alertRange.start} to {general.alertRange.end}
+              Text Alert Date Range:&nbsp;
+              {moment(general.alertRange.start).format('MMMM Do')}
+              &nbsp;to&nbsp;
+              {moment(general.alertRange.end).format('MMMM Do')}
             </span>
           }
           onEdit={() => history.replace(`${match.url}/event`)}

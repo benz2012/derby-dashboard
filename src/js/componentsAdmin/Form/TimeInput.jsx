@@ -11,7 +11,7 @@ const WhiteFlatpicker = styled(Flatpickr)`
   }
 `
 
-const DateInput = ({ id, label, value, onChange, options, ...rest }) => (
+const TimeInput = ({ id, label, value, onChange, ...rest }) => (
   <InputContainer id={id} label={label} help={rest.help}>
     <WhiteFlatpicker
       id={id}
@@ -21,11 +21,12 @@ const DateInput = ({ id, label, value, onChange, options, ...rest }) => (
         target: { id, value: dateStr },
       })}
       options={{
-        altInput: true,
-        ...options,
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: 'H:i',
       }}
     />
   </InputContainer>
 )
 
-export default DateInput
+export default TimeInput

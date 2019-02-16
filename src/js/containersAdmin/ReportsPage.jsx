@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 
 import DataBin from '../componentsAdmin/DataBin'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput, CheckboxInput, MultiSelectInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput, CheckboxInput,
+  MultiSelectInput, DateInput } from '../componentsAdmin/Form'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort } from '../util/date'
-import { setInput, newValues, substance } from '../util/form'
+import { setInput, newValues, substance, hasDefault } from '../util/form'
 
 export default class ReportsPage extends Component {
   state = {
@@ -32,7 +34,7 @@ export default class ReportsPage extends Component {
   }
 
   setValue = (e) => {
-    if (e.target.type !== 'checkbox') e.preventDefault()
+    if (hasDefault(e) && e.target.type !== 'checkbox') e.preventDefault()
     const key = e.target.id.replace('input.', '')
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     setInput({ [key]: value }, this.setState.bind(this))
@@ -101,6 +103,7 @@ export default class ReportsPage extends Component {
   }
 
   openAdd = () => {
+    setInput({ date: Date.now() }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/add`)
   }
 
@@ -140,8 +143,7 @@ export default class ReportsPage extends Component {
           head={r => r.header}
           body={r => (
             <span>
-              {r.body.substr(0, 100)}{r.body.length > 100 && '...'}<br />
-              {r.date}<br />
+              {moment(r.date).format('dddd, MMMM Do, YYYY')}<br />
               <a href={this.reportURL(r.date)} target="_blank" rel="noopener noreferrer">{this.reportURL(r.date)}</a>
               <br />
               {r.publish ? (
@@ -162,7 +164,7 @@ export default class ReportsPage extends Component {
           result={result}
         >
           <Form>
-            <TextInput id="input.date" label="Report Date" value={input.date} readOnly />
+            <TextInput id="input.date" label="Report Date" value={moment(input.date).format('dddd, MMMM Do, YYYY')} readOnly />
             <TextInput id="display.url" label="Report URL" value={this.reportURL(input.date)} readOnly />
             <TextInput id="input.header" label="Header" value={input.header} onChange={this.setValue} />
             <TextAreaInput id="input.body" label="Body" value={input.body} onChange={this.setValue} rows={3} />
@@ -200,7 +202,7 @@ export default class ReportsPage extends Component {
           task="Added"
         >
           <h4>Adding New Report</h4><hr />
-          <TextInput id="input.date" label="Report Date" value={input.date} onChange={this.setValue} help="YYYY-MM-DD" />
+          <DateInput id="input.date" label="Report Date" value={input.date} onChange={this.setValue} options={{ altFormat: 'l, F j, Y' }} />
           <TextInput id="input.header" label="Header" value={input.header} onChange={this.setValue} />
           <TextAreaInput id="input.body" label="Body" value={input.body} onChange={this.setValue} rows={3} />
           <p>
@@ -218,7 +220,7 @@ export default class ReportsPage extends Component {
           path="remove"
           task="Removed"
         >
-          Are you sure you want to delete the <strong>{input.date}: {input.header}</strong> Report?
+          Are you sure you want to delete the <strong>{moment(input.date).format('dddd, MMMM Do, YYYY')}: {input.header}</strong> Report?
         </EditRoute>
       </div>
     )
