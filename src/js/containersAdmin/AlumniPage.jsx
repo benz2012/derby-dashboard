@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import DataBin from '../componentsAdmin/DataBin'
+import ExitModalIf from '../componentsAdmin/ExitModalIf'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
 import Form, { TextInput } from '../componentsAdmin/Form'
@@ -160,6 +161,7 @@ export default class AlumniPage extends Component {
     if (!(alumni && challenges)) return <Loading />
     return (
       <div>
+        <ExitModalIf value={input.id} paths={['edit']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Alumni</button>
         <DataBin
           items={alumni}

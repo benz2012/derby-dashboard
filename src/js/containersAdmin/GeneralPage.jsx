@@ -4,9 +4,9 @@ import moment from 'moment'
 import Loading from '../components/Loading'
 import DataCard from '../componentsAdmin/DataCard'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput, TimeInput } from '../componentsAdmin/Form'
 import { dataFetch, dataSend } from '../util'
-import { setInput, newValues } from '../util/form'
+import { setInput, newValues, hasDefault } from '../util/form'
 
 export default class GeneralPage extends Component {
   state = {
@@ -34,7 +34,7 @@ export default class GeneralPage extends Component {
   }
 
   setValue = (e) => {
-    e.preventDefault()
+    if (hasDefault(e)) e.preventDefault()
     const key = e.target.id.replace('input.', '')
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
@@ -101,10 +101,12 @@ export default class GeneralPage extends Component {
           body={
             <span>
               Event Year: {general.year}<br />
-              Text Alert Date Range:&nbsp;
+              Text Alerts:&nbsp;
               {moment(general.alertRange.start).format('MMMM Do')}
               &nbsp;to&nbsp;
               {moment(general.alertRange.end).format('MMMM Do')}
+              &nbsp;@&nbsp;
+              {moment(general.alertTime, 'HH:mm').format('H:mm a')}
             </span>
           }
           onEdit={() => history.replace(`${match.url}/event`)}
@@ -139,7 +141,7 @@ export default class GeneralPage extends Component {
               value={`${general.alertRange.start} to ${general.alertRange.end}`}
               readOnly
             />
-            <TextInput id="input.alertTime" label="Daily Text Alert Time" value={input.alertTime} onChange={this.setValue} help="HH:MM (24hr)" />
+            <TimeInput id="input.alertTime" label="Daily Text Alert Time" value={input.alertTime} onChange={this.setValue} />
           </Form>
         </EditRoute>
 

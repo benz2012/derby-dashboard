@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import DataBin from '../componentsAdmin/DataBin'
+import ExitModalIf from '../componentsAdmin/ExitModalIf'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
 import Form, { TextInput, TextAreaInput, CheckboxInput } from '../componentsAdmin/Form'
@@ -169,6 +170,7 @@ export default class ChallengesPage extends Component {
     const scoreValues = this.scoreValues(teams, input.scores)
     return (
       <div>
+        <ExitModalIf value={input.id} paths={['edit']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Challenge</button>
         <DataBin
           items={challenges}
