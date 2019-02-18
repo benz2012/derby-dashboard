@@ -167,7 +167,7 @@ export default class AlumniChallengesPage extends Component {
     if (!challenges) return <Loading />
     return (
       <div>
-        <ExitModalIf value={input.id} paths={['edit']} />
+        <ExitModalIf value={input.id} paths={['edit', 'remove']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Alumni Challenge</button>
         <DataBin
           items={challenges}

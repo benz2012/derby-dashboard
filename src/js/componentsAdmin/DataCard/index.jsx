@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DataCard = ({ id, head, body, onEdit, onDelete }) => (
+const DataCard = ({ id, head, body, onEdit, onPublish, isPublished, onDelete }) => (
   <div className="card mb-3">
     <div className="card-body">
       { head &&
@@ -12,6 +12,15 @@ const DataCard = ({ id, head, body, onEdit, onDelete }) => (
       { onEdit &&
         <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => onEdit(id)}>
           View/Edit
+        </button>
+      }
+      { onPublish &&
+        <button
+          type="button"
+          className="btn btn-outline-info btn-sm ml-2"
+          onClick={() => onPublish(id)}
+        >
+          {isPublished ? 'Unpublish' : 'Publish'}
         </button>
       }
       { onDelete &&
