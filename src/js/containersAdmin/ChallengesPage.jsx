@@ -4,7 +4,7 @@ import DataBin from '../componentsAdmin/DataBin'
 import ExitModalIf from '../componentsAdmin/ExitModalIf'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput, CheckboxInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput } from '../componentsAdmin/Form'
 import ScoreGroup from '../componentsAdmin/ScoreGroup'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
@@ -196,7 +196,7 @@ export default class ChallengesPage extends Component {
     const scoreValues = this.scoreValues(teams, input.scores)
     return (
       <div>
-        <ExitModalIf value={input.id} paths={['edit', 'remove']} />
+        <ExitModalIf value={input.id} paths={['edit', 'remove', 'publish']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Challenge</button>
         <DataBin
           items={challenges}
@@ -273,6 +273,7 @@ export default class ChallengesPage extends Component {
           submit={this.publish}
           result={result}
           path="publish"
+          task={input.publish ? 'Unpublished' : 'Published'}
         >
           Are you sure you want to <u>{input.public ? 'unpublish' : 'publish'}</u> the scores for the&nbsp;
           <strong>{input.name}</strong> challenge?

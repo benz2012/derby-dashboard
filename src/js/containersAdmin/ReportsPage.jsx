@@ -5,7 +5,7 @@ import DataBin from '../componentsAdmin/DataBin'
 import ExitModalIf from '../componentsAdmin/ExitModalIf'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput, CheckboxInput,
+import Form, { TextInput, TextAreaInput,
   MultiSelectInput, DateInput } from '../componentsAdmin/Form'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort } from '../util/date'
@@ -82,6 +82,15 @@ export default class ReportsPage extends Component {
       .catch(this.failure)
   }
 
+  publish = () => {
+    const { input } = this.state
+    const { uid, token } = this.props.authValues()
+    const data = [{ publish: !input.publish }]
+    dataSend(`/data/reports/${input.date}`, 'POST', uid, token, data)
+      .then(this.success)
+      .catch(this.failure)
+  }
+
   removeItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -106,6 +115,16 @@ export default class ReportsPage extends Component {
   openAdd = () => {
     setInput({ date: Date.now() }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/add`)
+  }
+
+  openPublish = (id) => {
+    const report = this.state.reports.find(r => r.date === id)
+    setInput({
+      date: report.date,
+      header: report.header,
+      publish: report.publish,
+    }, this.setState.bind(this))
+    this.props.history.replace(`${this.props.match.url}/publish`)
   }
 
   openRemove = (id) => {
@@ -137,7 +156,7 @@ export default class ReportsPage extends Component {
     // const challengeOptions = challenges.map(c => ({ value: c.id, label: c.name }))
     return (
       <div>
-        <ExitModalIf value={input.id} paths={['edit', 'remove']} />
+        <ExitModalIf value={input.id} paths={['edit', 'remove', 'publish']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Report</button>
         <DataBin
           items={reports}
@@ -156,6 +175,8 @@ export default class ReportsPage extends Component {
             </span>
           )}
           onEdit={this.openEdit}
+          isPublished={r => r.publish}
+          onPublish={this.openPublish}
           onDelete={this.openRemove}
         />
 
@@ -184,13 +205,6 @@ export default class ReportsPage extends Component {
               onChange={this.setValue}
               help="Add Comma Separated Challenge IDs with no space - ie. 12,4,7"
             />
-            <CheckboxInput
-              id="input.publish"
-              label="Publish"
-              value={input.publish}
-              onChange={this.setValue}
-              help="With this checked, all linked challeneges will be set to display publicly! - This feature doesn't work yet, so you'll need to manually make each challenge display public, but the report does need to be published!"
-            />
             {/* <div style={{ marginBottom: '150px' }}>&nbsp;</div> */}
           </Form>
         </EditRoute>
@@ -217,12 +231,25 @@ export default class ReportsPage extends Component {
         <EditRoute
           {...this.props}
           close={this.closeModal}
+          submit={this.publish}
+          result={result}
+          path="publish"
+          task={input.publish ? 'Unpublished' : 'Published'}
+        >
+          Are you sure you want to <u>{input.publish ? 'unpublish' : 'publish'}</u> the&nbsp;
+          the <strong>{moment(input.date).format('dddd, MMMM Do, YYYY')}: {input.header}</strong> Report?
+        </EditRoute>
+
+        <EditRoute
+          {...this.props}
+          close={this.closeModal}
           submit={this.removeItem}
           result={result}
           path="remove"
           task="Removed"
         >
-          Are you sure you want to delete the <strong>{moment(input.date).format('dddd, MMMM Do, YYYY')}: {input.header}</strong> Report?
+          Are you sure you want to delete the&nbsp;
+          <strong>{moment(input.date).format('dddd, MMMM Do, YYYY')}: {input.header}</strong> Report?
         </EditRoute>
       </div>
     )
