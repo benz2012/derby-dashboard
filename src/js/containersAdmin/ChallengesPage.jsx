@@ -196,7 +196,6 @@ export default class ChallengesPage extends Component {
           result={result}
         >
           <Form>
-            <TextInput id="input.id" label="Challenge ID" value={input.id} readOnly />
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput
               id="input.description"
