@@ -15,6 +15,8 @@ import { dateSort, timeSort } from '../util/date'
 import { stringSort } from '../util/string'
 import { setInput, newValues, substance, hasDefault } from '../util/form'
 
+const eventTypeList = ['Individual Activity', 'Team Activity', 'Public Event']
+
 export default class EventsPage extends Component {
   state = {
     unmounting: false,
@@ -22,6 +24,7 @@ export default class EventsPage extends Component {
     events: null,
     eventsFlat: null,
     challenges: null,
+    linkableChallenges: null,
     input: {
       id: '',
       name: '',
@@ -89,10 +92,24 @@ export default class EventsPage extends Component {
           this.setState({ eventsFlat: flatDataList })
         }
       }
-    })
-    dataFetch('/data/challenges').then((data) => {
-      if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
-      if (!this.state.unmounting) this.setState({ challenges: data })
+    }).then(() => {
+      dataFetch('/data/challenges').then((data) => {
+        if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
+        if (!this.state.unmounting) this.setState({ challenges: data })
+        const linkableChallenges = data.filter(c => !(
+          this.state.eventsFlat.find(e => parseInt(e.challengeId) === parseInt(c.id))
+        ))
+        if (!this.state.unmounting) {
+          const currLC = this.state.linkableChallenges
+          if (currLC && currLC[0] && currLC[0].name) {
+            const sortedLC = [...currLC]
+            objectSort(sortedLC, 'name', stringSort)
+            this.setState({ linkableChallenges: sortedLC })
+          } else {
+            this.setState({ linkableChallenges })
+          }
+        }
+      })
     })
   }
 
@@ -102,9 +119,11 @@ export default class EventsPage extends Component {
     const { uid, token } = this.props.authValues()
     const event = eventsFlat.find(e => parseInt(e.id) === parseInt(input.id))
     const toSend = newValues(event, input).filter(elm => (
-      !(['tags', 'challengeName', 'challenge'].includes(Object.keys(elm)[0]))
+      !(['tags', 'challengeName', 'challenge', 'challengeId']
+        .includes(Object.keys(elm)[0]))
     ))
     toSend.push({ tags: Object.values(input.tags) })
+    toSend.push({ challengeId: input.challengeId || null })
 
     dataSend(`/data/events/${input.id}`, 'POST', uid, token, toSend).then((d) => {
       if (d) {
@@ -168,11 +187,20 @@ export default class EventsPage extends Component {
       return acc
     }, {})
     const challenge = this.state.challenges.find(c => parseInt(c.id) === event.challengeId)
-    const challengeData = challenge && ({
-      challengeId: challenge.id,
-      challengeName: challenge.name,
-      challenge: challenge.description,
-    })
+    let challengeData
+    if (challenge) {
+      challengeData = {
+        challengeId: challenge.id,
+        challengeName: challenge.name,
+        challenge: challenge.description,
+      }
+      this.setState(state => ({
+        linkableChallenges: [
+          challenge,
+          ...state.linkableChallenges,
+        ],
+      }))
+    }
 
     setInput({
       id: event.id,
@@ -199,6 +227,15 @@ export default class EventsPage extends Component {
   }
 
   closeModal = () => {
+    this.setState(state => ({
+      linkableChallenges: (
+        state.input.challengeId ?
+          state.linkableChallenges.filter(c => (
+            parseInt(c.id) !== parseInt(state.input.challengeId)
+          )) :
+          state.linkableChallenges
+      ),
+    }))
     this.resetValues()
     this.setState({ result: null })
   }
@@ -223,8 +260,8 @@ export default class EventsPage extends Component {
   }
 
   render() {
-    const { events, challenges, input, result } = this.state
-    if (!(events && challenges)) return <Loading />
+    const { events, challenges, linkableChallenges, input, result } = this.state
+    if (!(events && challenges && linkableChallenges)) return <Loading />
     return (
       <div>
         <ExitModalIf value={input.id} paths={['edit', 'remove']} />
@@ -280,9 +317,16 @@ export default class EventsPage extends Component {
                 <TimeInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} />
               </div>
             </div>
-            <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
+            <SelectInput id="input.type" label="Type" options={eventTypeList} value={input.type} onChange={this.setValue} />
             <hr />
-            <SelectInput id="input.challengeName" label="Linked Challenge" options={['-- None --', ...challenges.map(c => c.name)]} ids={[null, ...challenges.map(c => c.id)]} value={input.challengeName} onChange={this.setChallengeValue} />
+            <SelectInput
+              id="input.challengeName"
+              label="Linked Challenge"
+              options={['-- None --', ...linkableChallenges.map(c => c.name)]}
+              ids={[null, ...linkableChallenges.map(c => c.id)]}
+              value={input.challengeName}
+              onChange={this.setChallengeValue}
+            />
             <TextAreaInput id="input.challenge" label="Linked Challenge Description" value={input.challenge} rows={3} readOnly />
             <hr />
             <h4>Tags</h4>
@@ -320,7 +364,7 @@ export default class EventsPage extends Component {
                 <TimeInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} />
               </div>
             </div>
-            <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
+            <SelectInput id="input.type" label="Type" options={eventTypeList} value={input.type} onChange={this.setValue} />
           </Form>
           <p>
             <em>Linking challenges and adding tags happen on the edit menu.</em>
