@@ -4,9 +4,11 @@ import moment from 'moment'
 import Loading from '../components/Loading'
 import DataCard from '../componentsAdmin/DataCard'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput, TimeInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput, TimeInput, DateInput } from '../componentsAdmin/Form'
 import { dataFetch, dataSend } from '../util'
 import { setInput, newValues, hasDefault } from '../util/form'
+
+const ALERT_RANGE_MAX = 8
 
 export default class GeneralPage extends Component {
   state = {
@@ -22,6 +24,10 @@ export default class GeneralPage extends Component {
       videoURL: '',
       year: '',
       alertTime: '',
+      alertRange: {
+        start: '',
+        end: '',
+      },
     },
   }
 
@@ -39,11 +45,20 @@ export default class GeneralPage extends Component {
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
 
+  setAlertRange = (e) => {
+    const { selectedDates } = e.target
+    const dateStrs = selectedDates.map(dt => moment(dt).format('YYYY-MM-DD'))
+    setInput({
+      alertRange: { start: dateStrs[0], end: dateStrs[1] },
+    }, this.setState.bind(this))
+  }
+
   submitValues = (url) => {
     this.setState({ result: null })
     const { general, input } = this.state
     const { uid, token } = this.props.authValues()
-    dataSend(url, 'POST', uid, token, newValues(general, input)).then((d) => {
+    const toSend = newValues(general, input)
+    dataSend(url, 'POST', uid, token, toSend).then((d) => {
       if (d) {
         this.setState({ result: 'SUCCESS' })
         this.fetchGeneralData()
@@ -76,6 +91,7 @@ export default class GeneralPage extends Component {
       videoURL: this.state.general.videoURL,
       year: this.state.general.year,
       alertTime: this.state.general.alertTime,
+      alertRange: this.state.general.alertRange,
     }, this.setState.bind(this))
   }
 
@@ -134,12 +150,24 @@ export default class GeneralPage extends Component {
 
         <EditRoute {...this.props} path="event" close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
           <Form>
-            <TextInput id="input.year" label="Event Year" value={input.year} onChange={this.setValue} help="YYYY" />
-            <TextInput
-              id="general.alertRange"
+            <TextInput id="input.year" label="Event Year" value={input.year} onChange={this.setValue} />
+            <DateInput
               label="Text Alert Date Range"
-              value={`${general.alertRange.start} to ${general.alertRange.end}`}
-              readOnly
+              options={{
+                mode: 'range',
+                altFormat: 'F J Y',
+                disable: [(date) => {
+                  if (input.alertRange.start && input.alertRange.end) return false
+                  const selected = moment(input.alertRange.start)
+                  return (
+                    moment(date).isAfter(moment(selected).add(ALERT_RANGE_MAX, 'days')) ||
+                    moment(date).isBefore(moment(selected))
+                  )
+                }],
+              }}
+              value={[input.alertRange.start, input.alertRange.end]}
+              onChange={this.setAlertRange}
+              help={`The maximum allowed range is ${ALERT_RANGE_MAX} days`}
             />
             <TimeInput id="input.alertTime" label="Daily Text Alert Time" value={input.alertTime} onChange={this.setValue} />
           </Form>

@@ -18,7 +18,7 @@ const DateInput = ({ id, label, value, onChange, options, ...rest }) => (
       className="form-control flatpicker-input"
       value={value}
       onChange={(selectedDates, dateStr) => onChange({
-        target: { id, value: dateStr },
+        target: { id, value: dateStr, selectedDates },
       })}
       options={{
         altInput: true,
