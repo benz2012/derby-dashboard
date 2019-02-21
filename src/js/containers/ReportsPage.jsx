@@ -27,6 +27,7 @@ export default class MorePage extends Component {
     })
     dataFetch('/data/challenges').then((data) => {
       objectSort(data, 'name', stringSort)
+
       this.setState({ challenges: data })
     })
     dataFetch('/data/teams').then((data) => {

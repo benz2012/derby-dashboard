@@ -273,7 +273,7 @@ export default class ChallengesPage extends Component {
           submit={this.publish}
           result={result}
           path="publish"
-          task={input.publish ? 'Unpublished' : 'Published'}
+          task={input.public ? 'Unpublished' : 'Published'}
         >
           Are you sure you want to <u>{input.public ? 'unpublish' : 'publish'}</u> the scores for the&nbsp;
           <strong>{input.name}</strong> challenge?

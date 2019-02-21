@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 
+import EditRoute from './EditRoute'
+import Loading from '../components/Loading'
+
 import DataBin from '../componentsAdmin/DataBin'
 import ExitModalIf from '../componentsAdmin/ExitModalIf'
-import Loading from '../components/Loading'
-import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput,
-  MultiSelectInput, DateInput } from '../componentsAdmin/Form'
+import ListData from '../componentsAdmin/ListData'
+import Form, { TextInput, TextAreaInput, SelectInput,
+  DateInput } from '../componentsAdmin/Form'
+
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort } from '../util/date'
 import { setInput, newValues, substance, hasDefault } from '../util/form'
@@ -21,7 +24,8 @@ export default class ReportsPage extends Component {
       header: '',
       body: '',
       date: '',
-      challenges: '',
+      challenges: {},
+      challengeNames: {},
       publish: false,
     },
   }
@@ -39,6 +43,25 @@ export default class ReportsPage extends Component {
     const key = e.target.id.replace('input.', '')
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     setInput({ [key]: value }, this.setState.bind(this))
+  }
+
+  setChallengeName = (e) => {
+    const optionIndex = e.target.selectedIndex
+    const optionElement = e.target.childNodes[optionIndex]
+    const index = e.target.id
+    const challengeId = optionElement.getAttribute('id')
+    const challenge = this.state.challenges.find(c => parseInt(c.id) === parseInt(challengeId))
+    if (challenge) {
+      setInput({
+        [`challenges.${index}`]: challenge.id,
+        [`challengeNames.${index}`]: challenge.name,
+      }, this.setState.bind(this))
+    } else {
+      setInput({
+        [`challenges.${index}`]: null,
+        [`challengeNames.${index}`]: e.target.value,
+      }, this.setState.bind(this))
+    }
   }
 
   fetchReportData = () => {
@@ -68,7 +91,16 @@ export default class ReportsPage extends Component {
     const { reports, input } = this.state
     const { uid, token } = this.props.authValues()
     const report = reports.find(r => r.date === input.date)
-    dataSend(`/data/reports/${input.date}`, 'POST', uid, token, newValues(report, input))
+    const toSend = newValues(report, input).filter(elm => (
+      !(['challenges', 'challengeNames'].includes(Object.keys(elm)[0]))
+    ))
+    toSend.push({
+      challenges: Object.values(input.challenges)
+        .filter(ch => (ch !== '' && ch !== null && ch !== undefined)),
+    })
+    console.log(toSend)
+
+    dataSend(`/data/reports/${input.date}`, 'POST', uid, token, toSend)
       .then(this.success)
       .catch(this.failure)
   }
@@ -77,6 +109,7 @@ export default class ReportsPage extends Component {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const report = substance(input)
+    report.challenges = []
     dataSend('/data/reports', 'PUT', uid, token, report)
       .then(this.success)
       .catch(this.failure)
@@ -99,14 +132,38 @@ export default class ReportsPage extends Component {
       .catch(this.failure)
   }
 
+  addLink = () => {
+    const { challenges } = this.state.input
+    const ids = Object.keys(challenges)
+      .map(k => parseInt(k, 10))
+      .sort((a, b) => (b - a))
+    const nextId = ids.length === 0 ? 0 : ids[0] + 1
+    setInput({ [`challenges.${nextId}`]: '' }, this.setState.bind(this))
+  }
+
+  removeLink = (id) => {
+    const { challenges } = this.state.input
+    const updatedChallenges = Object.keys(challenges)
+      .filter(k => k !== id)
+      .reduce((acc, k) => { acc[k] = challenges[k]; return acc }, {})
+    setInput({ challenges: updatedChallenges }, this.setState.bind(this))
+  }
+
   openEdit = (id) => {
-    const { reports } = this.state
+    const { reports, challenges } = this.state
     const report = reports.find(r => r.date === id)
+    const challengeNames = {}
+    const challengesData = report.challenges.reduce((acc, curr, idx) => {
+      acc[idx] = curr
+      challengeNames[idx] = challenges.find(c => parseInt(c.id) === parseInt(curr)).name
+      return acc
+    }, {})
     setInput({
       header: report.header,
       body: report.body,
       date: report.date,
-      challenges: report.challenges.join(','),
+      challenges: challengesData,
+      challengeNames,
       publish: report.publish,
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
@@ -143,7 +200,8 @@ export default class ReportsPage extends Component {
       header: '',
       body: '',
       date: '',
-      challenges: '',
+      challenges: {},
+      challengeNames: {},
       publish: false,
     }, this.setState.bind(this))
   }
@@ -153,10 +211,9 @@ export default class ReportsPage extends Component {
   render() {
     const { reports, challenges, input, result } = this.state
     if (!(reports && challenges)) return <Loading />
-    // const challengeOptions = challenges.map(c => ({ value: c.id, label: c.name }))
     return (
       <div>
-        <ExitModalIf value={input.id} paths={['edit', 'remove', 'publish']} />
+        <ExitModalIf value={input.date} paths={['edit', 'remove', 'publish']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Report</button>
         <DataBin
           items={reports}
@@ -191,21 +248,24 @@ export default class ReportsPage extends Component {
             <TextInput id="display.url" label="Report URL" value={this.reportURL(input.date)} readOnly />
             <TextInput id="input.header" label="Header" value={input.header} onChange={this.setValue} />
             <TextAreaInput id="input.body" label="Body" value={input.body} onChange={this.setValue} rows={3} />
-            {/* <MultiSelectInput
-              id="input.challenges"
-              label="Linked Challenges"
-              options={challengeOptions}
-              value={this.state.blip}
-              onChange={this.setMulti}
-            /> */}
-            <TextInput
-              id="input.challenges"
-              label="Linked Challenges"
-              value={input.challenges}
-              onChange={this.setValue}
-              help="Add Comma Separated Challenge IDs with no space - ie. 12,4,7"
+            <hr />
+            <h4>Linked Challenges</h4>
+            <button type="button" className="btn btn-success btn-sm mb-4" onClick={this.addLink}>
+              + Add Link
+            </button>
+            <ListData
+              data={Object.entries(input.challenges).map(([id, value]) => ({ id, value }))}
+              renderInput={({ id }) => (
+                <SelectInput
+                  id={id}
+                  options={['-- None --', ...challenges.map(c => c.name)]}
+                  ids={[null, ...challenges.map(c => c.id)]}
+                  value={input.challengeNames[id]}
+                  onChange={this.setChallengeName}
+                />
+              )}
+              onDelete={this.removeLink}
             />
-            {/* <div style={{ marginBottom: '150px' }}>&nbsp;</div> */}
           </Form>
         </EditRoute>
 
@@ -222,9 +282,7 @@ export default class ReportsPage extends Component {
           <TextInput id="input.header" label="Header" value={input.header} onChange={this.setValue} />
           <TextAreaInput id="input.body" label="Body" value={input.body} onChange={this.setValue} rows={3} />
           <p>
-            Report will <strong>not</strong> be published now, you must create it first.<br />
-            Linking challenges and choosing to Publish happen on the edit menu.<br />
-            There can only exist <u>one report per date</u>, so do not attempt to make more than one.
+            Linking challenges happens on the edit menu.
           </p>
         </EditRoute>
 
@@ -236,8 +294,14 @@ export default class ReportsPage extends Component {
           path="publish"
           task={input.publish ? 'Unpublished' : 'Published'}
         >
-          Are you sure you want to <u>{input.publish ? 'unpublish' : 'publish'}</u> the&nbsp;
-          the <strong>{moment(input.date).format('dddd, MMMM Do, YYYY')}: {input.header}</strong> Report?
+          Are you sure you want to&nbsp;
+          <u>{input.publish ? 'unpublish' : 'publish'}</u> the&nbsp;
+          <strong>{
+            moment(input.date).format('dddd, MMMM Do, YYYY')
+          }: {input.header}
+          </strong>
+          &nbsp;Report? This will also <u>publish scores</u>
+          &nbsp;for all challenges linked to this report.
         </EditRoute>
 
         <EditRoute

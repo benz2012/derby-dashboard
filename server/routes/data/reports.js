@@ -54,10 +54,7 @@ router.put('/', (req, res) => {
     return (
       put({
         TableName: 'Derby_Reports',
-        Item: Object.assign(item, {
-          SchoolId: config.SCHOOL_ID_HARD,
-          LinkedChallenges: [],
-        }),
+        Item: Object.assign(item, { SchoolId: config.SCHOOL_ID_HARD }),
       }).then(data => res.json(data)).catch(err => errorEnd(err, res))
     )
   }
@@ -71,33 +68,38 @@ router.post('/:date', (req, res) => {
       req.body.map((u) => {
         const k = Object.keys(u)[0]
         let v = u[k]
-        console.log(k === 'publish' && v === true)
 
         if (k === 'challenges') {
-          v = v.split(',').map(s => parseInt(s))
+          v = v.map(s => parseInt(s))
         }
         if (k === 'publish' && v === true) {
-          const chs = req.body.challenges
-          if (chs && chs !== '' && chs.length > 0) {
-            const linkedChallenges = chs.split(',').map(s => parseInt(s))
-            return Promise.all(
-              linkedChallenges.map(chId => (
-                update(params.attrUpdate(
-                  'Derby_Challenges',
-                  { SchoolId: config.SCHOOL_ID_HARD, ChallengeId: chId },
-                  'ScoresPublic',
-                  true
+          return get({
+            TableName: 'Derby_Reports',
+            Key: { SchoolId: config.SCHOOL_ID_HARD, DateString: dateString },
+          }).then((data) => {
+            const chs = data.LinkedChallenges
+            if (chs && chs.length > 0) {
+              const linkedChallenges = chs.map(s => parseInt(s))
+              return Promise.all(
+                linkedChallenges.map(chId => (
+                  update(params.attrUpdate(
+                    'Derby_Challenges',
+                    { SchoolId: config.SCHOOL_ID_HARD, ChallengeId: chId },
+                    'ScoresPublic',
+                    true
+                  ))
                 ))
-              ))
-            ).then(() => {
-              update(params.attrUpdate(
-                'Derby_Reports',
-                { SchoolId: config.SCHOOL_ID_HARD, DateString: dateString },
-                keyMap[k],
-                v
-              ))
-            })
-          }
+              )
+            }
+            return null
+          }).then(() => (
+            update(params.attrUpdate(
+              'Derby_Reports',
+              { SchoolId: config.SCHOOL_ID_HARD, DateString: dateString },
+              keyMap[k],
+              v
+            ))
+          ))
         }
 
         return update(params.attrUpdate(
