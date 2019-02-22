@@ -18,6 +18,8 @@ import { setInput, newValues, substance, hasDefault } from '../util/form'
 const eventTypeList = ['Individual Activity', 'Team Activity', 'Public Event']
 
 export default class EventsPage extends Component {
+  addForm = React.createRef()
+
   state = {
     unmounting: false,
     result: null,
@@ -136,6 +138,11 @@ export default class EventsPage extends Component {
   }
 
   addItem = () => {
+    const form = this.addForm.current
+    const valid = form.checkValidity()
+    form.classList.add('was-validated')
+    if (valid === false) return
+
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const event = substance(input)
@@ -351,8 +358,8 @@ export default class EventsPage extends Component {
           task="Added"
         >
           <h4>Adding New Event</h4><hr />
-          <Form>
-            <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
+          <Form ref={this.addForm}>
+            <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} required />
             <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
             <TextInput id="input.location" label="Location" value={input.location} onChange={this.setValue} />
             <DateInput id="input.date" label="Date" value={input.date} onChange={this.setValue} />
