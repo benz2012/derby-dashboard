@@ -2,7 +2,7 @@ import React from 'react'
 
 import DataCard from '../DataCard'
 
-const DataBin = ({ items, head, body, id, onEdit, onDelete }) => (
+const DataBin = ({ items, head, body, id, isPublished, ...rest }) => (
   items.map((i) => {
     const itemId = id ? id(i) : i.id
     return (
@@ -11,8 +11,8 @@ const DataBin = ({ items, head, body, id, onEdit, onDelete }) => (
         id={itemId}
         head={head && head(i)}
         body={body && body(i)}
-        onEdit={onEdit}
-        onDelete={onDelete}
+        isPublished={isPublished && isPublished(i)}
+        {...rest}
       />
     )
   })

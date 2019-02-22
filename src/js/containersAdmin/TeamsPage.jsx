@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import DataBin from '../componentsAdmin/DataBin'
+import ExitModalIf from '../componentsAdmin/ExitModalIf'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
 import Form, { TextInput } from '../componentsAdmin/Form'
@@ -103,6 +104,7 @@ export default class TeamsPage extends Component {
     if (!teams) return <Loading />
     return (
       <div>
+        <ExitModalIf value={input.id} paths={['edit']} />
         <DataBin
           items={teams}
           head={t => t.org}

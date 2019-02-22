@@ -4,7 +4,8 @@ import TextInput from './TextInput'
 import TextAreaInput from './TextAreaInput'
 import SelectInput from './SelectInput'
 import CheckboxInput from './CheckboxInput'
-import MultiSelectInput from './MultiSelectInput'
+import DateInput from './DateInput'
+import TimeInput from './TimeInput'
 
 const FormContainer = ({ children }) => (
   <form>
@@ -18,5 +19,6 @@ export {
   TextAreaInput,
   SelectInput,
   CheckboxInput,
-  MultiSelectInput,
+  DateInput,
+  TimeInput,
 }

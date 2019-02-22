@@ -94,6 +94,13 @@ router.post('/:id', (req, res) => {
         let v = u[k]
 
         if (k === 'challengeId') {
+          if (v === undefined || v === null) {
+            return update(params.attrRemove(
+              'Derby_Events',
+              { SchoolId: config.SCHOOL_ID_HARD, EventId: eventId },
+              'ChallengeId'
+            ))
+          }
           v = parseInt(v)
           return query(params.eventsQuery(config.SCHOOL_ID_HARD))
             .then((events) => {
@@ -135,7 +142,6 @@ router.post('/:id', (req, res) => {
                 eventId
               ))
             ))
-            .catch(err => errorEnd(err, res))
         }
 
         if (k === 'time') {

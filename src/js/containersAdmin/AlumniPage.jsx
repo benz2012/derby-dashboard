@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import DataBin from '../componentsAdmin/DataBin'
+import ExitModalIf from '../componentsAdmin/ExitModalIf'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
 import Form, { TextInput } from '../componentsAdmin/Form'
@@ -160,6 +161,7 @@ export default class AlumniPage extends Component {
     if (!(alumni && challenges)) return <Loading />
     return (
       <div>
+        <ExitModalIf value={input.id} paths={['edit', 'remove']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Alumni</button>
         <DataBin
           items={alumni}
@@ -207,9 +209,13 @@ export default class AlumniPage extends Component {
           result={result}
           task="Added"
         >
+          <h4>Adding New Alumni</h4><hr />
           <Form>
             <TextInput id="input.name" label="Full Name" value={input.name} onChange={this.setValue} />
             <TextInput id="input.email" label="Email Address" value={input.email} onChange={this.setValue} />
+            <p>
+              <em>Adding challenge pledges happens on the edit menu.</em>
+            </p>
           </Form>
         </EditRoute>
 

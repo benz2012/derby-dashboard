@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 
 import DataBin from '../componentsAdmin/DataBin'
+import ExitModalIf from '../componentsAdmin/ExitModalIf'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput, DateInput } from '../componentsAdmin/Form'
 import ListData from '../componentsAdmin/ListData'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
-import { setInput } from '../util/form'
+import { setInput, hasDefault } from '../util/form'
 
 export default class AlumniChallengesPage extends Component {
   state = {
@@ -33,7 +34,7 @@ export default class AlumniChallengesPage extends Component {
   }
 
   setValue = (e) => {
-    e.preventDefault()
+    if (hasDefault(e)) e.preventDefault()
     const key = e.target.id.replace('input.', '')
     setInput({ [key]: e.target.value }, this.setState.bind(this))
   }
@@ -166,6 +167,7 @@ export default class AlumniChallengesPage extends Component {
     if (!challenges) return <Loading />
     return (
       <div>
+        <ExitModalIf value={input.id} paths={['edit', 'remove']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Alumni Challenge</button>
         <DataBin
           items={challenges}
@@ -189,7 +191,7 @@ export default class AlumniChallengesPage extends Component {
           <Form>
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} onChange={this.setValue} />
-            <TextInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} help="YYYY-MM-DD" />
+            <DateInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} />
             <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
             <hr />
             <h4>Count Data: {input.countName}</h4>
@@ -223,10 +225,11 @@ export default class AlumniChallengesPage extends Component {
           result={result}
           task="Added"
         >
+          <h4>Adding New Alumni Challenge</h4><hr />
           <Form>
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} onChange={this.setValue} />
-            <TextInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} help="YYYY-MM-DD" />
+            <DateInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} />
             <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
           </Form>
         </EditRoute>
@@ -239,7 +242,8 @@ export default class AlumniChallengesPage extends Component {
           result={result}
           task="Removed"
         >
-          Are you sure you want to delete the <strong>{input.name}</strong> alumni challenge?
+          Are you sure you want to delete the <strong>{input.name}</strong> alumni challenge?<br />
+          This action will delete all Alumni Pledges tied to this challenge.
         </EditRoute>
       </div>
     )

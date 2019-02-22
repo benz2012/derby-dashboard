@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
     const events = response.Derby_Events
     const challengesHydrated = challenges.map((c) => {
       let name = c.Name
-      if (events) {
+      if (!name && events) {
         const event = events.find(e => e.EventId === c.EventId)
         if (event) {
           name = event.Name
@@ -69,7 +69,7 @@ router.get('/:id', (req, res) => {
       public: c.ScoresPublic,
     }
     if (Object.keys(event).length !== 0) {
-      challengeData.name = event.Name
+      challengeData.name = c.Name || event.Name
       challengeData.linkedEvent = {
         id: c.EventId,
         location: event.Location,

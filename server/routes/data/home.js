@@ -17,6 +17,7 @@ const keyMap = {
   videoURL: 'VideoURL',
   year: 'EventYear',
   alertTime: 'AlertTime',
+  alertRange: 'AlertDateRange',
 }
 
 
@@ -32,7 +33,7 @@ router.get('/', (req, res) => {
       avatar: school.AvatarURL,
       schoolURL: school.URL,
       year: school.EventYear,
-      alertRange: school.AlertDateRange,
+      alertRange: { start: school.AlertDateRange.Start, end: school.AlertDateRange.End },
       alertTime: school.AlertTime,
     }
     res.json(home)
@@ -44,7 +45,15 @@ router.post('/', (req, res) => {
     return Promise.all(
       req.body.map((u) => {
         const k = Object.keys(u)[0]
-        const v = u[k]
+        let v = u[k]
+
+        if (k === 'alertRange') {
+          v = {
+            Start: v.start,
+            End: v.end,
+          }
+        }
+
         return update(params.attrUpdate(
           'Derby_Schools', { SchoolId: config.SCHOOL_ID_HARD }, keyMap[k], v
         ))
@@ -60,6 +69,7 @@ router.post('/page', (req, res) => {
       req.body.map((u) => {
         const k = Object.keys(u)[0]
         const v = u[k]
+
         return update({
           TableName: 'Derby_Schools',
           Key: { SchoolId: config.SCHOOL_ID_HARD },

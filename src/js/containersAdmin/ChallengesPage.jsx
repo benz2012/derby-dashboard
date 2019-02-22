@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 
 import DataBin from '../componentsAdmin/DataBin'
+import ExitModalIf from '../componentsAdmin/ExitModalIf'
 import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput, CheckboxInput } from '../componentsAdmin/Form'
+import Form, { TextInput, TextAreaInput } from '../componentsAdmin/Form'
 import ScoreGroup from '../componentsAdmin/ScoreGroup'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
@@ -84,6 +85,22 @@ export default class ChallengesPage extends Component {
       })
   }
 
+  publish = () => {
+    const { input } = this.state
+    const { uid, token } = this.props.authValues()
+    const data = [{ public: !input.public }]
+    dataSend(`/data/challenges/${input.id}`, 'POST', uid, token, data)
+      .then((d) => {
+        if (d) {
+          this.setState({ result: 'SUCCESS' })
+          this.fetchChallengeData()
+        }
+      }).catch((e) => {
+        console.log(e)
+        this.setState({ result: 'FAILURE' })
+      })
+  }
+
   removeItem = () => {
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -121,6 +138,16 @@ export default class ChallengesPage extends Component {
 
   openAdd = () => {
     this.props.history.replace(`${this.props.match.url}/add`)
+  }
+
+  openPublish = (id) => {
+    const challenge = this.state.challenges.find(c => parseInt(c.id) === parseInt(id))
+    setInput({
+      id: challenge.id,
+      name: challenge.name,
+      public: challenge.public,
+    }, this.setState.bind(this))
+    this.props.history.replace(`${this.props.match.url}/publish`)
   }
 
   openRemove = (id) => {
@@ -169,6 +196,7 @@ export default class ChallengesPage extends Component {
     const scoreValues = this.scoreValues(teams, input.scores)
     return (
       <div>
+        <ExitModalIf value={input.id} paths={['edit', 'remove', 'publish']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Challenge</button>
         <DataBin
           items={challenges}
@@ -176,10 +204,16 @@ export default class ChallengesPage extends Component {
           body={c => (
             <span>
               {c.description.substr(0, 100)}{c.description.length > 100 && '...'}<br />
-              {c.scores && `Scores Added: ${Object.keys(c.scores).length}`}
+              Scores: {c.public ? (
+                <strong className="text-success">Published</strong>
+              ) : (
+                <strong className="text-warning">Hidden</strong>
+              )}
             </span>
           )}
           onEdit={this.openEdit}
+          isPublished={c => c.public}
+          onPublish={this.openPublish}
           onDelete={this.openRemove}
         />
 
@@ -190,7 +224,6 @@ export default class ChallengesPage extends Component {
           result={result}
         >
           <Form>
-            <TextInput id="input.id" label="Challenge ID" value={input.id} readOnly />
             <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput
               id="input.description"
@@ -200,8 +233,7 @@ export default class ChallengesPage extends Component {
               rows={3}
             />
             <hr />
-            <h4>Scores</h4>
-            <CheckboxInput id="input.public" label="Display Publicly" value={input.public} onChange={this.setValue} />
+            <h4>Scores [{input.public ? 'Published' : 'Hidden'}]</h4>
             {
               Object.keys(input.scores).length > 0 &&
               <ScoreGroup
@@ -221,6 +253,7 @@ export default class ChallengesPage extends Component {
           path="add"
           task="Added"
         >
+          <h4>Adding New Challenge</h4><hr />
           <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
           <TextAreaInput
             id="input.description"
@@ -229,6 +262,21 @@ export default class ChallengesPage extends Component {
             onChange={this.setValue}
             rows={3}
           />
+          <p>
+            <em>Adding scores happens on the edit menu.</em>
+          </p>
+        </EditRoute>
+
+        <EditRoute
+          {...this.props}
+          close={this.closeModal}
+          submit={this.publish}
+          result={result}
+          path="publish"
+          task={input.public ? 'Unpublished' : 'Published'}
+        >
+          Are you sure you want to <u>{input.public ? 'unpublish' : 'publish'}</u> the scores for the&nbsp;
+          <strong>{input.name}</strong> challenge?
         </EditRoute>
 
         <EditRoute

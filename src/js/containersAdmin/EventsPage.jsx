@@ -1,14 +1,21 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 
-import DataBin from '../componentsAdmin/DataBin'
-import Loading from '../components/Loading'
 import EditRoute from './EditRoute'
-import Form, { TextInput, TextAreaInput, SelectInput } from '../componentsAdmin/Form'
+import Loading from '../components/Loading'
+
+import DataBin from '../componentsAdmin/DataBin'
+import ExitModalIf from '../componentsAdmin/ExitModalIf'
+import Form, { TextInput, TextAreaInput, SelectInput,
+  DateInput, TimeInput } from '../componentsAdmin/Form'
 import ListData from '../componentsAdmin/ListData'
+
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort, timeSort } from '../util/date'
-import { setInput, newValues, substance } from '../util/form'
+import { stringSort } from '../util/string'
+import { setInput, newValues, substance, hasDefault } from '../util/form'
+
+const eventTypeList = ['Individual Activity', 'Team Activity', 'Public Event']
 
 export default class EventsPage extends Component {
   state = {
@@ -16,6 +23,8 @@ export default class EventsPage extends Component {
     result: null,
     events: null,
     eventsFlat: null,
+    challenges: null,
+    linkableChallenges: null,
     input: {
       id: '',
       name: '',
@@ -28,6 +37,7 @@ export default class EventsPage extends Component {
       date: '',
       type: '',
       challengeId: '',
+      challengeName: '',
       challenge: '',
       tags: {},
     },
@@ -42,9 +52,29 @@ export default class EventsPage extends Component {
   }
 
   setValue = (e) => {
-    e.preventDefault()
+    if (hasDefault(e)) e.preventDefault()
     const key = e.target.id.replace('input.', '')
     setInput({ [key]: e.target.value }, this.setState.bind(this))
+  }
+
+  setChallengeValue = (e) => {
+    const index = e.target.selectedIndex
+    const optionElement = e.target.childNodes[index]
+    const challengeId = optionElement.getAttribute('id')
+    const challenge = this.state.challenges.find(c => parseInt(c.id) === parseInt(challengeId))
+    if (challenge) {
+      setInput({
+        challengeId: challenge.id,
+        challengeName: challenge.name,
+        challenge: challenge.description,
+      }, this.setState.bind(this))
+    } else {
+      setInput({
+        challengeId: '',
+        challengeName: e.target.value,
+        challenge: '',
+      }, this.setState.bind(this))
+    }
   }
 
   fetchEventData = () => {
@@ -62,6 +92,24 @@ export default class EventsPage extends Component {
           this.setState({ eventsFlat: flatDataList })
         }
       }
+    }).then(() => {
+      dataFetch('/data/challenges').then((data) => {
+        if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
+        if (!this.state.unmounting) this.setState({ challenges: data })
+        const linkableChallenges = data.filter(c => !(
+          this.state.eventsFlat.find(e => parseInt(e.challengeId) === parseInt(c.id))
+        ))
+        if (!this.state.unmounting) {
+          const currLC = this.state.linkableChallenges
+          if (currLC && currLC[0] && currLC[0].name) {
+            const sortedLC = [...currLC]
+            objectSort(sortedLC, 'name', stringSort)
+            this.setState({ linkableChallenges: sortedLC })
+          } else {
+            this.setState({ linkableChallenges })
+          }
+        }
+      })
     })
   }
 
@@ -71,9 +119,11 @@ export default class EventsPage extends Component {
     const { uid, token } = this.props.authValues()
     const event = eventsFlat.find(e => parseInt(e.id) === parseInt(input.id))
     const toSend = newValues(event, input).filter(elm => (
-      !(['tags'].includes(Object.keys(elm)[0]))
+      !(['tags', 'challengeName', 'challenge', 'challengeId']
+        .includes(Object.keys(elm)[0]))
     ))
     toSend.push({ tags: Object.values(input.tags) })
+    toSend.push({ challengeId: input.challengeId || null })
 
     dataSend(`/data/events/${input.id}`, 'POST', uid, token, toSend).then((d) => {
       if (d) {
@@ -136,6 +186,21 @@ export default class EventsPage extends Component {
       acc[idx] = curr
       return acc
     }, {})
+    const challenge = this.state.challenges.find(c => parseInt(c.id) === event.challengeId)
+    let challengeData
+    if (challenge) {
+      challengeData = {
+        challengeId: challenge.id,
+        challengeName: challenge.name,
+        challenge: challenge.description,
+      }
+      this.setState(state => ({
+        linkableChallenges: [
+          challenge,
+          ...state.linkableChallenges,
+        ],
+      }))
+    }
 
     setInput({
       id: event.id,
@@ -145,8 +210,7 @@ export default class EventsPage extends Component {
       time: event.time,
       date: event.date,
       type: event.type,
-      challenge: event.challenge,
-      challengeId: event.challengeId || '',
+      ...challengeData,
       tags,
     }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/edit`)
@@ -163,6 +227,15 @@ export default class EventsPage extends Component {
   }
 
   closeModal = () => {
+    this.setState(state => ({
+      linkableChallenges: (
+        state.input.challengeId ?
+          state.linkableChallenges.filter(c => (
+            parseInt(c.id) !== parseInt(state.input.challengeId)
+          )) :
+          state.linkableChallenges
+      ),
+    }))
     this.resetValues()
     this.setState({ result: null })
   }
@@ -179,27 +252,44 @@ export default class EventsPage extends Component {
       },
       date: '',
       type: '',
-      challenge: '',
       challengeId: '',
+      challenge: '',
+      challengeName: '',
       tags: {},
     }, this.setState.bind(this))
   }
 
   render() {
-    const { events, input, result } = this.state
-    if (!events) return <Loading />
+    const { events, challenges, linkableChallenges, input, result } = this.state
+    if (!(events && challenges && linkableChallenges)) return <Loading />
     return (
       <div>
+        <ExitModalIf value={input.id} paths={['edit', 'remove']} />
         <button type="button" className="btn btn-success mb-4" onClick={this.openAdd}>+ Add Event</button>
         {
           events.map(dateObj => (
             <div key={dateObj.date}>
-              <h4>{moment(dateObj.date).format('dddd MMMM Do YYYY')}</h4>
+              <h4>{moment(dateObj.date).format('dddd, MMMM Do, YYYY')}</h4>
               <hr />
               <DataBin
                 items={dateObj.events}
                 head={e => e.name}
-                body={e => (<span>{e.date} {e.time.start}<br />{e.location}</span>)}
+                body={e => (
+                  <span>
+                    {moment(e.date).format('MMMM Do')}
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    {moment(e.time.start, 'HH:mm').format('h:mm a')} -&nbsp;
+                    {moment(e.time.end, 'HH:mm').format('h:mm a')}
+                    <br />
+                    {e.location}
+                    <br />
+                    {e.challengeId && (
+                      <em>Linked to:&nbsp;
+                        {challenges.find(c => parseInt(c.id) === parseInt(e.challengeId)).name}
+                      </em>
+                    )}
+                  </span>
+                )}
                 onEdit={this.openEdit}
                 onDelete={this.openRemove}
               />
@@ -215,16 +305,29 @@ export default class EventsPage extends Component {
           result={result}
         >
           <Form>
-            <TextInput id="input.id" label="Event ID" value={input.id} readOnly />
             <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
             <TextInput id="input.location" label="Location" value={input.location} onChange={this.setValue} />
-            <TextInput id="input.date" label="Date" value={input.date} onChange={this.setValue} help="YYYY-MM-DD" />
-            <TextInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} help="HH:MM (24hr)" />
-            <TextInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} help="HH:MM (24hr)" />
-            <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
-            <TextInput id="input.challengeId" label="Linked Challenge ID" value={input.challengeId} onChange={this.setValue} />
-            <TextAreaInput id="input.challenge" label="Linked Challenge" value={input.challenge} rows={3} readOnly />
+            <DateInput id="input.date" label="Date" value={input.date} onChange={this.setValue} />
+            <div className="form-row align-items-center">
+              <div className="col">
+                <TimeInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} />
+              </div>
+              <div className="col">
+                <TimeInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} />
+              </div>
+            </div>
+            <SelectInput id="input.type" label="Type" options={eventTypeList} value={input.type} onChange={this.setValue} />
+            <hr />
+            <SelectInput
+              id="input.challengeName"
+              label="Linked Challenge"
+              options={['-- None --', ...linkableChallenges.map(c => c.name)]}
+              ids={[null, ...linkableChallenges.map(c => c.id)]}
+              value={input.challengeName}
+              onChange={this.setChallengeValue}
+            />
+            <TextAreaInput id="input.challenge" label="Linked Challenge Description" value={input.challenge} rows={3} readOnly />
             <hr />
             <h4>Tags</h4>
             <button type="button" className="btn btn-success btn-sm mb-4" onClick={this.addTag}>
@@ -247,15 +350,25 @@ export default class EventsPage extends Component {
           result={result}
           task="Added"
         >
+          <h4>Adding New Event</h4><hr />
           <Form>
             <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} />
             <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
             <TextInput id="input.location" label="Location" value={input.location} onChange={this.setValue} />
-            <TextInput id="input.date" label="Date" value={input.date} onChange={this.setValue} help="YYYY-MM-DD" />
-            <TextInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} help="HH:MM (24hr)" />
-            <TextInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} help="HH:MM (24hr)" />
-            <SelectInput id="input.type" label="Type" options={['Individual Activity', 'Team Activity', 'Public Event']} value={input.type} onChange={this.setValue} />
+            <DateInput id="input.date" label="Date" value={input.date} onChange={this.setValue} />
+            <div className="form-row align-items-center">
+              <div className="col">
+                <TimeInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} />
+              </div>
+              <div className="col">
+                <TimeInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} />
+              </div>
+            </div>
+            <SelectInput id="input.type" label="Type" options={eventTypeList} value={input.type} onChange={this.setValue} />
           </Form>
+          <p>
+            <em>Linking challenges and adding tags happen on the edit menu.</em>
+          </p>
         </EditRoute>
 
         <EditRoute
