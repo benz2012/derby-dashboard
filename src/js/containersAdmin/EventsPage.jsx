@@ -13,7 +13,8 @@ import ListData from '../componentsAdmin/ListData'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort, timeSort } from '../util/date'
 import { stringSort } from '../util/string'
-import { setInput, newValues, substance, hasDefault } from '../util/form'
+import { setInput, setError, newValues, isFormValidAndSetErrors,
+  substance, hasDefault } from '../util/form'
 
 const eventTypeList = ['Individual Activity', 'Team Activity', 'Public Event']
 
@@ -43,6 +44,7 @@ export default class EventsPage extends Component {
       challenge: '',
       tags: {},
     },
+    errors: {},
   }
 
   componentDidMount() {
@@ -138,10 +140,9 @@ export default class EventsPage extends Component {
   }
 
   addItem = () => {
-    const form = this.addForm.current
-    const valid = form.checkValidity()
-    form.classList.add('was-validated')
-    if (valid === false) return
+    if (isFormValidAndSetErrors(this.addForm.current, this) === false) {
+      return
+    }
 
     const { input } = this.state
     const { uid, token } = this.props.authValues()
@@ -266,8 +267,16 @@ export default class EventsPage extends Component {
     }, this.setState.bind(this))
   }
 
+  checkEndTime = () => {
+    const { start, end } = this.state.input.time
+    if (moment(end, 'HH:mm').isSameOrBefore(moment(start, 'HH:mm'))) {
+      return 'End Time must be after Start Time.'
+    }
+    return ''
+  }
+
   render() {
-    const { events, challenges, linkableChallenges, input, result } = this.state
+    const { events, challenges, linkableChallenges, input, errors, result } = this.state
     if (!(events && challenges && linkableChallenges)) return <Loading />
     return (
       <div>
@@ -359,19 +368,19 @@ export default class EventsPage extends Component {
         >
           <h4>Adding New Event</h4><hr />
           <Form ref={this.addForm}>
-            <TextInput id="input.name" label="Event Name" value={input.name} onChange={this.setValue} required />
-            <TextAreaInput id="input.description" label="Description" value={input.description} onChange={this.setValue} rows={3} />
-            <TextInput id="input.location" label="Location" value={input.location} onChange={this.setValue} />
-            <DateInput id="input.date" label="Date" value={input.date} onChange={this.setValue} />
+            <TextInput id="input.name" label="Event Name" value={input.name} error={errors.name} onChange={this.setValue} required />
+            <TextAreaInput id="input.description" label="Description" value={input.description} error={errors.description} onChange={this.setValue} rows={3} />
+            <TextInput id="input.location" label="Location" value={input.location} error={errors.location} onChange={this.setValue} required />
+            <DateInput id="input.date" label="Date" value={input.date} error={errors.date} onChange={this.setValue} required />
             <div className="form-row align-items-center">
               <div className="col">
-                <TimeInput id="input.time.start" label="Start Time" value={input.time.start} onChange={this.setValue} />
+                <TimeInput id="input.time.start" label="Start Time" value={input.time.start} error={errors.time && errors.time.start} onChange={this.setValue} required />
               </div>
               <div className="col">
-                <TimeInput id="input.time.end" label="End Time " value={input.time.end} onChange={this.setValue} />
+                <TimeInput id="input.time.end" label="End Time " value={input.time.end} error={errors.time && errors.time.end} onChange={this.setValue} required customvalid="checkEndTime" />
               </div>
             </div>
-            <SelectInput id="input.type" label="Type" options={eventTypeList} value={input.type} onChange={this.setValue} />
+            <SelectInput id="input.type" label="Type" options={eventTypeList} value={input.type} onChange={this.setValue} required />
           </Form>
           <p>
             <em>Linking challenges and adding tags happen on the edit menu.</em>

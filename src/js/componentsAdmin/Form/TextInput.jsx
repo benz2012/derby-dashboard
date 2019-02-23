@@ -2,8 +2,8 @@ import React from 'react'
 
 import InputContainer from './InputContainer'
 
-const TextInput = ({ id, label, value, onChange, ...rest }) => (
-  <InputContainer id={id} label={label} help={rest.help}>
+const TextInput = ({ id, label, value, error, onChange, ...rest }) => (
+  <InputContainer id={id} label={label} help={rest.help} error={error}>
     <input
       type="text"
       className="form-control"
