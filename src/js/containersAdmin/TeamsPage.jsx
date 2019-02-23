@@ -7,9 +7,11 @@ import EditRoute from './EditRoute'
 import Form, { TextInput } from '../componentsAdmin/Form'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
-import { setInput, newValues } from '../util/form'
+import { setInput, newValues, isFormValidAndSetErrors } from '../util/form'
 
 export default class TeamsPage extends Component {
+  editForm = React.createRef()
+
   state = {
     unmounting: false,
     result: null,
@@ -25,6 +27,7 @@ export default class TeamsPage extends Component {
       members: '',
       snap: '',
     },
+    errors: {},
   }
 
   componentDidMount() {
@@ -49,6 +52,10 @@ export default class TeamsPage extends Component {
   }
 
   submitValues = () => {
+    if (isFormValidAndSetErrors(this.editForm.current, this) === false) {
+      return
+    }
+
     this.setState({ result: null })
     const { teams, input } = this.state
     const { uid, token } = this.props.authValues()
@@ -100,7 +107,7 @@ export default class TeamsPage extends Component {
   }
 
   render() {
-    const { teams, input, result } = this.state
+    const { teams, input, errors, result } = this.state
     if (!teams) return <Loading />
     return (
       <div>
@@ -123,9 +130,9 @@ export default class TeamsPage extends Component {
           submit={this.submitValues}
           result={result}
         >
-          <Form>
+          <Form ref={this.editForm}>
             <TextInput id="input.name" label="Team Name" value={input.name} readOnly />
-            <TextInput id="input.org" label="Organization" value={input.org} onChange={this.setValue} />
+            <TextInput id="input.org" label="Organization" value={input.org} error={errors.org} onChange={this.setValue} required />
             <TextInput id="input.orgId" label="Organization Identifier" value={input.orgId} onChange={this.setValue} />
             <TextInput id="input.snap" label="Snapchat Lens URL" value={input.snap} onChange={this.setValue} />
             <TextInput id="input.avatar" label="Avatar Photo" value={input.avatar} readOnly />
