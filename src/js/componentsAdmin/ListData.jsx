@@ -2,7 +2,7 @@ import React from 'react'
 
 import { TextInput } from './Form'
 
-const ListData = ({ data, dataKey, renderInput, onChange, onDelete }) => (
+const ListData = ({ data, dataKey, renderInput, errors, onChange, onDelete }) => (
   data.sort((a, b) => (parseInt(b.id) - parseInt(a.id)))
     .map(dataItem => (
       <div key={dataItem.id} className="form-row align-items-center" style={{ marginBottom: '24px' }}>
@@ -14,6 +14,8 @@ const ListData = ({ data, dataKey, renderInput, onChange, onDelete }) => (
               id={`input.${dataKey}.${dataItem.id}`}
               value={dataItem.value}
               onChange={onChange}
+              error={errors && errors[dataKey] && errors[dataKey][dataItem.id]}
+              required
             />
           )}
         </div>
