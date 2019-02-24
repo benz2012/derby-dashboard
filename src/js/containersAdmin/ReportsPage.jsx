@@ -12,9 +12,14 @@ import Form, { TextInput, TextAreaInput, SelectInput,
 
 import { dataFetch, dataSend, objectSort } from '../util'
 import { dateSort } from '../util/date'
-import { setInput, newValues, substance, hasDefault } from '../util/form'
+import { setInput, newValues, substance, hasDefault,
+  isFormValidAndSetErrors } from '../util/form'
 
 export default class ReportsPage extends Component {
+  addForm = React.createRef()
+
+  editForm = React.createRef()
+
   state = {
     unmounting: false,
     reports: null,
@@ -28,6 +33,7 @@ export default class ReportsPage extends Component {
       challengeNames: {},
       publish: false,
     },
+    errors: {},
   }
 
   componentDidMount() {
@@ -48,7 +54,7 @@ export default class ReportsPage extends Component {
   setChallengeName = (e) => {
     const optionIndex = e.target.selectedIndex
     const optionElement = e.target.childNodes[optionIndex]
-    const index = e.target.id
+    const index = e.target.id.replace('input.challenges.', '')
     const challengeId = optionElement.getAttribute('id')
     const challenge = this.state.challenges.find(c => parseInt(c.id) === parseInt(challengeId))
     if (challenge) {
@@ -87,6 +93,10 @@ export default class ReportsPage extends Component {
   }
 
   submitValues = () => {
+    if (isFormValidAndSetErrors(this.editForm.current, this) === false) {
+      return
+    }
+
     this.setState({ result: null })
     const { reports, input } = this.state
     const { uid, token } = this.props.authValues()
@@ -98,7 +108,6 @@ export default class ReportsPage extends Component {
       challenges: Object.values(input.challenges)
         .filter(ch => (ch !== '' && ch !== null && ch !== undefined)),
     })
-    console.log(toSend)
 
     dataSend(`/data/reports/${input.date}`, 'POST', uid, token, toSend)
       .then(this.success)
@@ -106,6 +115,10 @@ export default class ReportsPage extends Component {
   }
 
   addItem = () => {
+    if (isFormValidAndSetErrors(this.addForm.current, this) === false) {
+      return
+    }
+
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const report = substance(input)
@@ -170,7 +183,7 @@ export default class ReportsPage extends Component {
   }
 
   openAdd = () => {
-    setInput({ date: Date.now() }, this.setState.bind(this))
+    setInput({ date: moment(Date.now()).format('YYYY-MM-DD') }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/add`)
   }
 
@@ -208,8 +221,21 @@ export default class ReportsPage extends Component {
 
   reportURL = date => (date && `https://www.derbydashboard.io/reports/${date}`)
 
+  checkUniqueLink = ({ id }) => {
+    const elm = document.getElementById(id)
+    const optionIndex = elm.selectedIndex
+    const optionElement = elm.childNodes[optionIndex]
+    const challengeId = optionElement.getAttribute('id')
+    const same = Object.values(this.state.input.challenges)
+      .filter(i => parseInt(i) === parseInt(challengeId))
+    if (same.length > 1) {
+      return 'Duplicate challenge links are not allowed.'
+    }
+    return ''
+  }
+
   render() {
-    const { reports, challenges, input, result } = this.state
+    const { reports, challenges, input, errors, result } = this.state
     if (!(reports && challenges)) return <Loading />
     return (
       <div>
@@ -243,11 +269,11 @@ export default class ReportsPage extends Component {
           submit={this.submitValues}
           result={result}
         >
-          <Form>
+          <Form ref={this.editForm}>
             <TextInput id="input.date" label="Report Date" value={moment(input.date).format('dddd, MMMM Do, YYYY')} readOnly />
             <TextInput id="display.url" label="Report URL" value={this.reportURL(input.date)} readOnly />
-            <TextInput id="input.header" label="Header" value={input.header} onChange={this.setValue} />
-            <TextAreaInput id="input.body" label="Body" value={input.body} onChange={this.setValue} rows={3} />
+            <TextInput id="input.header" label="Header" value={input.header} error={errors.header} onChange={this.setValue} required />
+            <TextAreaInput id="input.body" label="Body" value={input.body} error={errors.body} onChange={this.setValue} rows={3} required />
             <hr />
             <h4>Linked Challenges</h4>
             <button type="button" className="btn btn-success btn-sm mb-4" onClick={this.addLink}>
@@ -257,11 +283,13 @@ export default class ReportsPage extends Component {
               data={Object.entries(input.challenges).map(([id, value]) => ({ id, value }))}
               renderInput={({ id }) => (
                 <SelectInput
-                  id={id}
+                  id={`input.challenges.${id}`}
                   options={['-- None --', ...challenges.map(c => c.name)]}
                   ids={[null, ...challenges.map(c => c.id)]}
                   value={input.challengeNames[id]}
                   onChange={this.setChallengeName}
+                  customvalid="checkUniqueLink"
+                  error={errors && errors.challenges && errors.challenges[id]}
                 />
               )}
               onDelete={this.removeLink}
@@ -278,9 +306,11 @@ export default class ReportsPage extends Component {
           task="Added"
         >
           <h4>Adding New Report</h4><hr />
-          <DateInput id="input.date" label="Report Date" value={input.date} onChange={this.setValue} options={{ altFormat: 'l, F j, Y' }} />
-          <TextInput id="input.header" label="Header" value={input.header} onChange={this.setValue} />
-          <TextAreaInput id="input.body" label="Body" value={input.body} onChange={this.setValue} rows={3} />
+          <Form ref={this.addForm}>
+            <DateInput id="input.date" label="Report Date" value={input.date} error={errors.date} onChange={this.setValue} options={{ altFormat: 'l, F j, Y' }} required />
+            <TextInput id="input.header" label="Header" value={input.header} error={errors.header} onChange={this.setValue} required />
+            <TextAreaInput id="input.body" label="Body" value={input.body} error={errors.body} onChange={this.setValue} rows={3} required />
+          </Form>
           <p>
             Linking challenges happens on the edit menu.
           </p>

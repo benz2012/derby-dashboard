@@ -68,19 +68,19 @@ const formChildren = ['input', 'select', 'textarea'].join(', ')
 const isFormValidAndSetErrors = (form, cls) => {
   const elms = form.querySelectorAll(formChildren)
   elms.forEach((elm) => {
+    const id = elm.getAttribute('id')
     const customValid = elm.getAttribute('customvalid')
     const { validity } = elm
 
     elm.setCustomValidity('')
     if (validity.valid === true && customValid) {
-      const customValidity = cls[customValid]()
+      const customValidity = cls[customValid]({ id })
       if (customValidity !== '') {
         elm.setCustomValidity(customValidity)
       }
     }
 
     if (validity.valid === false) {
-      const id = elm.getAttribute('id')
       const classNames = elm.getAttribute('class')
       let key
       if (id && id.includes('input')) {
