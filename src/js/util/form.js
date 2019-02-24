@@ -69,6 +69,7 @@ const isFormValidAndSetErrors = (form, cls) => {
   const elms = form.querySelectorAll(formChildren)
   elms.forEach((elm) => {
     const id = elm.getAttribute('id')
+    const title = elm.getAttribute('title')
     const customValid = elm.getAttribute('customvalid')
     const { validity } = elm
 
@@ -81,6 +82,10 @@ const isFormValidAndSetErrors = (form, cls) => {
     }
 
     if (validity.valid === false) {
+      if (title && validity.patternMismatch) {
+        elm.setCustomValidity(`${elm.validationMessage} ${title}`)
+      }
+
       const classNames = elm.getAttribute('class')
       let key
       if (id && id.includes('input')) {
