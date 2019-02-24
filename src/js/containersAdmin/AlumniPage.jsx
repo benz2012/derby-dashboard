@@ -54,11 +54,11 @@ export default class AlumniPage extends Component {
   }
 
   submitValues = () => {
+    this.setState({ result: null })
     if (isFormValidAndSetErrors(this.editForm.current, this) === false) {
       return
     }
 
-    this.setState({ result: null })
     const { input } = this.state
     const { uid, token } = this.props.authValues()
 

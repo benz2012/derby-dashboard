@@ -52,11 +52,11 @@ export default class TeamsPage extends Component {
   }
 
   submitValues = () => {
+    this.setState({ result: null })
     if (isFormValidAndSetErrors(this.editForm.current, this) === false) {
       return
     }
 
-    this.setState({ result: null })
     const { teams, input } = this.state
     const { uid, token } = this.props.authValues()
     const team = teams.find(t => parseInt(t.id) === parseInt(input.id))

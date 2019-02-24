@@ -8,6 +8,7 @@ const UnauthorizedPage = ({ uid }) => (
   <Page>
     <Block>
       <HeadingText>Derby Dashboard Admin Panel</HeadingText>
+      <p>You have succesfully signed in with Facebook.</p>
       <p>You are <strong>NOT</strong> authorized to use this admin panel.</p>
       <p>Please provide this Faecbook user ID # to a site maintainer for access: {uid}</p>
     </Block>

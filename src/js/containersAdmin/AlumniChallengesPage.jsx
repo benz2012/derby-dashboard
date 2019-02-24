@@ -52,11 +52,11 @@ export default class AlumniChallengesPage extends Component {
   }
 
   submitValues = () => {
+    this.setState({ result: null })
     if (isFormValidAndSetErrors(this.editForm.current, this) === false) {
       return
     }
 
-    this.setState({ result: null })
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const toSend = {
