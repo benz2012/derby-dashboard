@@ -61,7 +61,6 @@ export default class AlumniPage extends Component {
 
     const { input } = this.state
     const { uid, token } = this.props.authValues()
-
     const toSend = { ...input }
     delete toSend.id
     toSend.pledges = Object.keys(toSend.pledges).reduce((acc, key) => {

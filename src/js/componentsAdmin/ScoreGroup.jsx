@@ -23,7 +23,7 @@ const ScoreGroup = ({ teams, errors, onChange, includeAll }) => (
             title="Scores should be integer numbers."
           />
         </div>
-        <div className="col">
+        <div className="col pt-4">
           <CheckboxInput
             id={`input.scores.${t.id}.include`}
             label="Include"
