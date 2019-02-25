@@ -19,6 +19,8 @@ const ScoreGroup = ({ teams, errors, onChange, includeAll }) => (
             disabled={!t.include}
             error={errors && errors.scores && errors.scores[t.id] && errors.scores[t.id].score}
             required
+            pattern="[0-9]+"
+            title="Scores should be integer numbers."
           />
         </div>
         <div className="col">

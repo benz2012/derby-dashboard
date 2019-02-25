@@ -134,7 +134,15 @@ export default class TeamsPage extends Component {
             <TextInput id="input.name" label="Team Name" value={input.name} readOnly />
             <TextInput id="input.org" label="Organization" value={input.org} error={errors.org} onChange={this.setValue} required />
             <TextInput id="input.orgId" label="Organization Identifier" value={input.orgId} onChange={this.setValue} />
-            <TextInput id="input.snap" label="Snapchat Lens URL" value={input.snap} onChange={this.setValue} />
+            <TextInput
+              id="input.snap"
+              label="Snapchat Lens URL"
+              value={input.snap}
+              error={errors.snap}
+              onChange={this.setValue}
+              pattern="^(http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+              title="URL should be formatted similar to http://www.website.com/page"
+            />
             <TextInput id="input.avatar" label="Avatar Photo" value={input.avatar} readOnly />
             <TextInput id="input.cover" label="Cover Photo" value={input.cover} readOnly />
             <TextInput id="input.url" label="Derby Challenge URL" value={input.url} readOnly />
