@@ -164,7 +164,16 @@ export default class GeneralPage extends Component {
 
         <EditRoute {...this.props} path="event" close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
           <Form ref={this.eventForm}>
-            <TextInput id="input.year" label="Event Year" value={input.year} error={errors.year} onChange={this.setValue} required />
+            <TextInput
+              id="input.year"
+              label="Event Year"
+              value={input.year}
+              error={errors.year}
+              onChange={this.setValue}
+              required
+              pattern="[0-9]{4}"
+              title="Year should be 4 digits formatted as YYYY."
+            />
             <DateInput
               id="input.alertRange"
               label="Text Alert Date Range"
