@@ -8,9 +8,13 @@ import Form, { TextInput, TextAreaInput, DateInput } from '../componentsAdmin/Fo
 import ListData from '../componentsAdmin/ListData'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
-import { setInput, hasDefault } from '../util/form'
+import { setInput, hasDefault, isFormValidAndSetErrors } from '../util/form'
 
 export default class AlumniChallengesPage extends Component {
+  addForm = React.createRef()
+
+  editForm = React.createRef()
+
   state = {
     unmounting: false,
     result: null,
@@ -23,6 +27,7 @@ export default class AlumniChallengesPage extends Component {
       countData: {},
       countName: '',
     },
+    errors: {},
   }
 
   componentDidMount() {
@@ -48,6 +53,10 @@ export default class AlumniChallengesPage extends Component {
 
   submitValues = () => {
     this.setState({ result: null })
+    if (isFormValidAndSetErrors(this.editForm.current, this) === false) {
+      return
+    }
+
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const toSend = {
@@ -69,6 +78,10 @@ export default class AlumniChallengesPage extends Component {
   }
 
   addItem = () => {
+    if (isFormValidAndSetErrors(this.addForm.current, this) === false) {
+      return
+    }
+
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const toSend = {
@@ -163,7 +176,7 @@ export default class AlumniChallengesPage extends Component {
   }
 
   render() {
-    const { challenges, input, result } = this.state
+    const { challenges, input, errors, result } = this.state
     if (!challenges) return <Loading />
     return (
       <div>
@@ -188,11 +201,19 @@ export default class AlumniChallengesPage extends Component {
           submit={this.submitValues}
           result={result}
         >
-          <Form>
-            <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
-            <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} onChange={this.setValue} />
-            <DateInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} />
-            <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
+          <Form ref={this.editForm}>
+            <TextInput id="input.name" label="Challenge Name" value={input.name} error={errors.name} onChange={this.setValue} required />
+            <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} error={errors.description} onChange={this.setValue} required />
+            <DateInput id="input.endDate" label="End Date" value={input.endDate} error={errors.endDate} onChange={this.setValue} required />
+            <TextInput
+              id="input.countName"
+              label="Count Name"
+              value={input.countName}
+              error={errors.countName}
+              onChange={this.setValue}
+              help="This name represents the plural quantifier of the data being counted, ie. Brothers"
+              required
+            />
             <hr />
             <h4>Count Data: {input.countName}</h4>
             <div style={{ marginBottom: '16px' }}>
@@ -213,6 +234,7 @@ export default class AlumniChallengesPage extends Component {
               dataKey="countData"
               onChange={this.setValue}
               onDelete={this.removeCountDataItem}
+              errors={errors}
             />
           </Form>
         </EditRoute>
@@ -226,11 +248,19 @@ export default class AlumniChallengesPage extends Component {
           task="Added"
         >
           <h4>Adding New Alumni Challenge</h4><hr />
-          <Form>
-            <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
-            <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} onChange={this.setValue} />
-            <DateInput id="input.endDate" label="End Date" value={input.endDate} onChange={this.setValue} />
-            <TextInput id="input.countName" label="Count Name" value={input.countName} onChange={this.setValue} help="This name represents the plural quantifier of the data being counted, ie. Brothers" />
+          <Form ref={this.addForm}>
+            <TextInput id="input.name" label="Challenge Name" value={input.name} error={errors.name} onChange={this.setValue} required />
+            <TextAreaInput id="input.description" rows={3} label="Description" value={input.description} error={errors.description} onChange={this.setValue} required />
+            <DateInput id="input.endDate" label="End Date" value={input.endDate} error={errors.endDate} onChange={this.setValue} required />
+            <TextInput
+              id="input.countName"
+              label="Count Name"
+              value={input.countName}
+              error={errors.countName}
+              onChange={this.setValue}
+              help="This name represents the plural quantifier of the data being counted, ie. Brothers"
+              required
+            />
           </Form>
         </EditRoute>
 

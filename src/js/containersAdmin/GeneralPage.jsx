@@ -6,11 +6,18 @@ import DataCard from '../componentsAdmin/DataCard'
 import EditRoute from './EditRoute'
 import Form, { TextInput, TextAreaInput, TimeInput, DateInput } from '../componentsAdmin/Form'
 import { dataFetch, dataSend } from '../util'
-import { setInput, newValues, hasDefault } from '../util/form'
+import { setInput, newValues, hasDefault,
+  isFormValidAndSetErrors } from '../util/form'
 
 const ALERT_RANGE_MAX = 8
 
 export default class GeneralPage extends Component {
+  schoolForm = React.createRef()
+
+  eventForm = React.createRef()
+
+  homepageForm = React.createRef()
+
   state = {
     unmounting: false,
     result: null,
@@ -29,6 +36,7 @@ export default class GeneralPage extends Component {
         end: '',
       },
     },
+    errors: {},
   }
 
   componentDidMount() {
@@ -55,6 +63,12 @@ export default class GeneralPage extends Component {
 
   submitValues = (url) => {
     this.setState({ result: null })
+    const paths = this.props.location.pathname.split('/')
+    const path = paths[paths.length - 1]
+    if (isFormValidAndSetErrors(this[`${path}Form`].current, this) === false) {
+      return
+    }
+
     const { general, input } = this.state
     const { uid, token } = this.props.authValues()
     const toSend = newValues(general, input)
@@ -96,7 +110,7 @@ export default class GeneralPage extends Component {
   }
 
   render() {
-    const { general, input, result } = this.state
+    const { general, input, errors, result } = this.state
     const { history, match } = this.props
     if (!general) return <Loading />
     return (
@@ -140,18 +154,28 @@ export default class GeneralPage extends Component {
         />
 
         <EditRoute {...this.props} path="school" close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
-          <Form>
-            <TextInput id="input.name" label="School Name" value={input.name} onChange={this.setValue} />
-            <TextInput id="input.abbrv" label="School Abbreviation" value={input.abbrv} onChange={this.setValue} />
+          <Form ref={this.schoolForm}>
+            <TextInput id="input.name" label="School Name" value={input.name} error={errors.name} onChange={this.setValue} required />
+            <TextInput id="input.abbrv" label="School Abbreviation" value={input.abbrv} error={errors.abbrv} onChange={this.setValue} required />
             <TextInput id="general.schoolURL" label="Derby Challenge URL" value={general.schoolURL} readOnly />
             <TextInput id="general.avatar" label="Derby Challenge Avatar" value={general.avatar} readOnly />
           </Form>
         </EditRoute>
 
         <EditRoute {...this.props} path="event" close={this.closeModal} submit={() => this.submitValues('/data/home')} result={result}>
-          <Form>
-            <TextInput id="input.year" label="Event Year" value={input.year} onChange={this.setValue} />
+          <Form ref={this.eventForm}>
+            <TextInput
+              id="input.year"
+              label="Event Year"
+              value={input.year}
+              error={errors.year}
+              onChange={this.setValue}
+              required
+              pattern="[0-9]{4}"
+              title="Year should be 4 digits formatted as YYYY."
+            />
             <DateInput
+              id="input.alertRange"
               label="Text Alert Date Range"
               options={{
                 mode: 'range',
@@ -166,19 +190,39 @@ export default class GeneralPage extends Component {
                 }],
               }}
               value={[input.alertRange.start, input.alertRange.end]}
+              error={errors.alertRange}
               onChange={this.setAlertRange}
               help={`The maximum allowed range is ${ALERT_RANGE_MAX} days`}
+              required
             />
-            <TimeInput id="input.alertTime" label="Daily Text Alert Time" value={input.alertTime} onChange={this.setValue} />
+            <TimeInput id="input.alertTime" label="Daily Text Alert Time" value={input.alertTime} error={errors.alertTime} onChange={this.setValue} required />
           </Form>
         </EditRoute>
 
         <EditRoute {...this.props} path="homepage" close={this.closeModal} submit={() => this.submitValues('/data/home/page')} result={result}>
-          <Form>
-            <TextInput id="input.header" label="Header Line" value={input.header} onChange={this.setValue} />
-            <TextAreaInput id="input.body" label="Body Text" value={input.body} onChange={this.setValue} rows={3} />
-            <TextInput id="input.learnMoreURL" label="Learn More URL" value={input.learnMoreURL} onChange={this.setValue} />
-            <TextInput id="input.videoURL" label="Video URL" value={input.videoURL} onChange={this.setValue} />
+          <Form ref={this.homepageForm}>
+            <TextInput id="input.header" label="Header Line" value={input.header} error={errors.header} onChange={this.setValue} required />
+            <TextAreaInput id="input.body" label="Body Text" value={input.body} error={errors.body} onChange={this.setValue} rows={3} required />
+            <TextInput
+              id="input.learnMoreURL"
+              label="Learn More URL"
+              value={input.learnMoreURL}
+              error={errors.learnMoreURL}
+              onChange={this.setValue}
+              required
+              pattern="^(http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+              title="URL should be formatted similar to http://www.website.com/page"
+            />
+            <TextInput
+              id="input.videoURL"
+              label="Video URL"
+              value={input.videoURL}
+              error={errors.videoURL}
+              onChange={this.setValue}
+              required
+              pattern="^(http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+              title="URL should be formatted similar to http://www.website.com/page"
+            />
           </Form>
         </EditRoute>
       </div>

@@ -8,9 +8,14 @@ import Form, { TextInput, TextAreaInput } from '../componentsAdmin/Form'
 import ScoreGroup from '../componentsAdmin/ScoreGroup'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
-import { setInput, newValues, substance } from '../util/form'
+import { setInput, newValues, substance,
+  isFormValidAndSetErrors } from '../util/form'
 
 export default class ChallengesPage extends Component {
+  addForm = React.createRef()
+
+  editForm = React.createRef()
+
   state = {
     unmounting: false,
     challenges: null,
@@ -22,6 +27,9 @@ export default class ChallengesPage extends Component {
       description: '',
       scores: {},
       public: false,
+    },
+    errors: {
+      scores: {},
     },
   }
 
@@ -53,6 +61,10 @@ export default class ChallengesPage extends Component {
 
   submitValues = () => {
     this.setState({ result: null })
+    if (isFormValidAndSetErrors(this.editForm.current, this) === false) {
+      return
+    }
+
     const { challenges, input } = this.state
     const { uid, token } = this.props.authValues()
     const challenge = challenges.find(c => parseInt(c.id) === parseInt(input.id))
@@ -70,6 +82,10 @@ export default class ChallengesPage extends Component {
   }
 
   addItem = () => {
+    if (isFormValidAndSetErrors(this.addForm.current, this) === false) {
+      return
+    }
+
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const challenge = substance(input)
@@ -191,7 +207,7 @@ export default class ChallengesPage extends Component {
   )
 
   render() {
-    const { challenges, teams, input, result } = this.state
+    const { challenges, teams, input, errors, result } = this.state
     if (!(challenges && teams)) return <Loading />
     const scoreValues = this.scoreValues(teams, input.scores)
     return (
@@ -223,14 +239,16 @@ export default class ChallengesPage extends Component {
           submit={this.submitValues}
           result={result}
         >
-          <Form>
-            <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
+          <Form ref={this.editForm}>
+            <TextInput id="input.name" label="Challenge Name" value={input.name} error={errors.name} onChange={this.setValue} required />
             <TextAreaInput
               id="input.description"
               label="Description"
               value={input.description}
+              error={errors.description}
               onChange={this.setValue}
               rows={3}
+              required
             />
             <hr />
             <h4>Scores [{input.public ? 'Published' : 'Hidden'}]</h4>
@@ -238,6 +256,7 @@ export default class ChallengesPage extends Component {
               Object.keys(input.scores).length > 0 &&
               <ScoreGroup
                 teams={scoreValues}
+                errors={errors}
                 onChange={this.setValue}
                 includeAll={this.includeAll}
               />
@@ -254,14 +273,18 @@ export default class ChallengesPage extends Component {
           task="Added"
         >
           <h4>Adding New Challenge</h4><hr />
-          <TextInput id="input.name" label="Challenge Name" value={input.name} onChange={this.setValue} />
-          <TextAreaInput
-            id="input.description"
-            label="Description"
-            value={input.description}
-            onChange={this.setValue}
-            rows={3}
-          />
+          <Form ref={this.addForm}>
+            <TextInput id="input.name" label="Challenge Name" value={input.name} error={errors.name} onChange={this.setValue} required />
+            <TextAreaInput
+              id="input.description"
+              label="Description"
+              value={input.description}
+              error={errors.description}
+              onChange={this.setValue}
+              rows={3}
+              required
+            />
+          </Form>
           <p>
             <em>Adding scores happens on the edit menu.</em>
           </p>

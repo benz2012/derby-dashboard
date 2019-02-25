@@ -11,8 +11,8 @@ const WhiteFlatpicker = styled(Flatpickr)`
   }
 `
 
-const DateInput = ({ id, label, value, onChange, options, ...rest }) => (
-  <InputContainer id={id} label={label} help={rest.help}>
+const DateInput = ({ id, label, value, error, onChange, options, ...rest }) => (
+  <InputContainer id={id} label={label} help={rest.help} error={error}>
     <WhiteFlatpicker
       id={id}
       className="form-control flatpicker-input"
@@ -22,8 +22,11 @@ const DateInput = ({ id, label, value, onChange, options, ...rest }) => (
       })}
       options={{
         altInput: true,
+        allowInput: true,
+        altInputClass: id,
         ...options,
       }}
+      {...rest}
     />
   </InputContainer>
 )

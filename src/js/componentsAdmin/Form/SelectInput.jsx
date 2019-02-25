@@ -2,9 +2,9 @@ import React from 'react'
 
 import InputContainer from './InputContainer'
 
-const SelectInput = ({ id, label, options, ids, value, onChange, ...rest }) => (
-  <InputContainer id={id} label={label} help={rest.help}>
-    <select className="form-control" id={id} value={value} onChange={onChange}>
+const SelectInput = ({ id, label, options, ids, value, error, onChange, customvalid, ...rest }) => (
+  <InputContainer id={id} label={label} help={rest.help} error={error}>
+    <select className="form-control" id={id} value={value} onChange={onChange} customvalid={customvalid}>
       {
         options.map((opt, idx) => (
           <option

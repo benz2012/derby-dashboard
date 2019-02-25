@@ -7,9 +7,13 @@ import EditRoute from './EditRoute'
 import Form, { TextInput } from '../componentsAdmin/Form'
 import { dataFetch, dataSend, objectSort } from '../util'
 import { stringSort } from '../util/string'
-import { setInput } from '../util/form'
+import { setInput, isFormValidAndSetErrors } from '../util/form'
 
 export default class AlumniPage extends Component {
+  addForm = React.createRef()
+
+  editForm = React.createRef()
+
   state = {
     unmounting: false,
     result: null,
@@ -21,6 +25,7 @@ export default class AlumniPage extends Component {
       email: '',
       pledges: {},
     },
+    errors: {},
   }
 
   componentDidMount() {
@@ -50,9 +55,12 @@ export default class AlumniPage extends Component {
 
   submitValues = () => {
     this.setState({ result: null })
+    if (isFormValidAndSetErrors(this.editForm.current, this) === false) {
+      return
+    }
+
     const { input } = this.state
     const { uid, token } = this.props.authValues()
-
     const toSend = { ...input }
     delete toSend.id
     toSend.pledges = Object.keys(toSend.pledges).reduce((acc, key) => {
@@ -73,6 +81,10 @@ export default class AlumniPage extends Component {
   }
 
   addItem = () => {
+    if (isFormValidAndSetErrors(this.addForm.current, this) === false) {
+      return
+    }
+
     const { input } = this.state
     const { uid, token } = this.props.authValues()
     const toSend = { ...input }
@@ -157,7 +169,7 @@ export default class AlumniPage extends Component {
   }
 
   render() {
-    const { alumni, challenges, input, result } = this.state
+    const { alumni, challenges, input, errors, result } = this.state
     if (!(alumni && challenges)) return <Loading />
     return (
       <div>
@@ -182,9 +194,18 @@ export default class AlumniPage extends Component {
           submit={this.submitValues}
           result={result}
         >
-          <Form>
-            <TextInput id="input.name" label="Full Name" value={input.name} onChange={this.setValue} />
-            <TextInput id="input.email" label="Email Address" value={input.email} onChange={this.setValue} />
+          <Form ref={this.editForm}>
+            <TextInput id="input.name" label="Full Name" value={input.name} error={errors.name} onChange={this.setValue} required />
+            <TextInput
+              id="input.email"
+              label="Email Address"
+              value={input.email}
+              error={errors.email}
+              onChange={this.setValue}
+              required
+              pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+              title="Email should look like name@website.com"
+            />
             <hr />
             <h4>Pledges</h4>
             {
@@ -195,6 +216,10 @@ export default class AlumniPage extends Component {
                   label={c.name}
                   value={input.pledges[c.id]}
                   onChange={this.setValue}
+                  error={errors && errors.pledges && errors.pledges[c.id]}
+                  required
+                  pattern="[0-9]+"
+                  title="Pledges should be integer numbers."
                 />
               ))
             }
@@ -210,13 +235,22 @@ export default class AlumniPage extends Component {
           task="Added"
         >
           <h4>Adding New Alumni</h4><hr />
-          <Form>
-            <TextInput id="input.name" label="Full Name" value={input.name} onChange={this.setValue} />
-            <TextInput id="input.email" label="Email Address" value={input.email} onChange={this.setValue} />
-            <p>
-              <em>Adding challenge pledges happens on the edit menu.</em>
-            </p>
+          <Form ref={this.addForm}>
+            <TextInput id="input.name" label="Full Name" value={input.name} error={errors.name} onChange={this.setValue} required />
+            <TextInput
+              id="input.email"
+              label="Email Address"
+              value={input.email}
+              error={errors.email}
+              onChange={this.setValue}
+              required
+              pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+              title="Email should look like name@website.com"
+            />
           </Form>
+          <p>
+            <em>Adding challenge pledges happens on the edit menu.</em>
+          </p>
         </EditRoute>
 
         <EditRoute

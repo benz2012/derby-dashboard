@@ -7,11 +7,11 @@ import CheckboxInput from './CheckboxInput'
 import DateInput from './DateInput'
 import TimeInput from './TimeInput'
 
-const FormContainer = ({ children }) => (
-  <form>
+const FormContainer = React.forwardRef(({ children }, ref) => (
+  <form ref={ref}>
     {children}
   </form>
-)
+))
 
 export default FormContainer
 export {
