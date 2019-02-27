@@ -3,6 +3,7 @@ import { Route, Redirect } from 'react-router-dom'
 import moment from 'moment'
 
 import Page from '../components/Page'
+import Empty from '../components/Empty'
 import DateViewer from '../components/Date/DateViewer'
 import DateLink from '../components/Date/DateLink'
 import Day from '../components/Day'
@@ -17,7 +18,6 @@ export default class SchedulePage extends Component {
   componentDidMount() {
     dataFetch('/data/events').then((data) => {
       this.setState({ events: data })
-      this.selectFirstDate(data)
     })
   }
 
@@ -40,7 +40,7 @@ export default class SchedulePage extends Component {
   }
 
   selectFirstDate = (events) => {
-    if (!events) { return null }
+    if (!(events && events.length > 0)) { return null }
     const dates = Object.keys(events).sort(dateSort)
     const today = dates.find(d => moment(d).isSame(moment(), 'day'))
     return today || dates[0]
@@ -52,6 +52,10 @@ export default class SchedulePage extends Component {
     if (!events) { return null }
 
     const firstDate = this.selectFirstDate(events)
+    if (!firstDate) {
+      return (<Empty alone>No events have been added to the schedule.</Empty>)
+    }
+
     const urlDateMatch = new RegExp(`${match.url}/(\\d{4}-\\d{2}-\\d{2}).*`)
     const dateMatch = location.pathname.match(urlDateMatch)
     if (!dateMatch) {

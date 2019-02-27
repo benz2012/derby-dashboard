@@ -6,6 +6,7 @@ import HeadingText from '../components/HeadingText'
 import Video from '../components/Video'
 import TeamBlock from '../components/TeamBlock'
 import Loading from '../components/Loading'
+import Empty from '../components/Empty'
 import { SidePad, Body, Ranking,
   Currency, ExternalLink } from '../components/Content'
 import { dataFetch } from '../util'
@@ -36,7 +37,7 @@ export default class HomePage extends Component {
   }
 
   buildHomeTeam = (teams, raised) => {
-    if (!teams || !raised) { return null }
+    if (!(teams && teams.length > 0 && raised && raised.length > 0)) { return null }
     const homeTeam = teams.find(t => t.homeTeam)
     const homeTeamRaised = raised.find(t => t.id === homeTeam.id)
     const teamTotal = sumTeamFunds(homeTeamRaised)
@@ -52,7 +53,7 @@ export default class HomePage extends Component {
   }
 
   buildTeamsRaised = (teams, raised) => {
-    if (!teams || !raised) { return null }
+    if (!(teams && teams.length > 0 && raised && raised.length > 0)) { return null }
     const teamsData = teams.filter(t => !t.homeTeam)
     teamsData.forEach((team) => {
       const tRaised = raised.find(t => t.id === team.id)
@@ -99,10 +100,14 @@ export default class HomePage extends Component {
           />
         </Block>
 
-        <Block>
-          {homeTeam}
-          {teamsRaised}
-        </Block>
+        { (homeTeam || teamsRaised) ? (
+          <Block>
+            {homeTeam}
+            {teamsRaised}
+          </Block>
+        ) : (
+          <Empty>No teams have been added.</Empty>
+        )}
       </Page>
     )
   }

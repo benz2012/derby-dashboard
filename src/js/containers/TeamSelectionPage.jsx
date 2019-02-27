@@ -6,6 +6,7 @@ import Block from '../components/Block'
 import HeadingText from '../components/HeadingText'
 import TeamBlock from '../components/TeamBlock'
 import Loading from '../components/Loading'
+import Empty from '../components/Empty'
 import SaveSelection from '../components/Button/SaveSelection'
 import { SidePad, CleanLink, RightArrow } from '../components/Content'
 import { dataFetch, objectSort, storageEnabled,
@@ -80,14 +81,14 @@ export default class TeamSelectionPage extends Component {
   }
 
   buildTeamLinks(teams) {
-    if (!teams) { return null }
+    if (!(teams && teams.length > 0)) { return null }
     const teamsData = teams.filter(t => !t.homeTeam)
     const sortedTeamsData = objectSort(teamsData, 'org', stringSort)
     return sortedTeamsData.map(this.teamLink)
   }
 
   buildHomeTeamLink(teams) {
-    if (!teams) { return null }
+    if (!(teams && teams.length > 0)) { return null }
     const homeTeam = teams.find(t => t.homeTeam)
     return this.teamLink(homeTeam)
   }
@@ -102,7 +103,6 @@ export default class TeamSelectionPage extends Component {
 
     const teamLinks = this.buildTeamLinks(teams)
     const homeTeamLink = this.buildHomeTeamLink(teams)
-    const loading = !teamLinks && !homeTeamLink ? <Loading /> : null
     return (
       <Page>
         <Block>
@@ -116,9 +116,18 @@ export default class TeamSelectionPage extends Component {
           </SidePad>
         </Block>
 
-        {loading}
-        { !loading && <Block>{teamLinks}</Block> }
-        { !loading && <Block>{homeTeamLink}</Block> }
+        { teams === null ? (
+          <Loading />
+        ) : (
+          <React.Fragment>
+            { teamLinks && (<Block>{teamLinks}</Block>)}
+            { homeTeamLink && (<Block>{homeTeamLink}</Block>)}
+          </React.Fragment>
+        )}
+
+        { (teams && teams.length === 0) && (
+          <Empty>No teams have been added.</Empty>
+        )}
       </Page>
     )
   }

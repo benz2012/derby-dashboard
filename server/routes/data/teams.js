@@ -31,6 +31,9 @@ router.get('/', (req, res) => {
   getSchool().then((school) => {
     homeTeamId = school.HomeTeamId
     const teamKeys = school.Teams.map(t => ({ TeamId: t }))
+    if (teamKeys.length === 0) {
+      return ({ Derby_Teams: [] })
+    }
     return batchGet({
       RequestItems: { Derby_Teams: { Keys: teamKeys } },
     })

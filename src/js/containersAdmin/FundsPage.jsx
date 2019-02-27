@@ -194,7 +194,7 @@ export default class FundsPage extends Component {
           id={e => `team-${e.teamId}-id-${e.entryId}`}
           body={e => (
             <span>
-              {teams.find(t => t.id === e.teamId).org}:&nbsp;
+              {teams.length > 0 && teams.find(t => t.id === e.teamId).org}:&nbsp;
               {this.formatFund(e.amount)}<br />
               {moment(e.dateString).format('MMM do, YYYY')}
             </span>
@@ -209,7 +209,7 @@ export default class FundsPage extends Component {
           items={raised}
           head={r => (
             <span>
-              {teams.find(t => t.id === r.id).org}:&nbsp;
+              {teams.length > 0 && teams.find(t => t.id === r.id).org}:&nbsp;
               {this.formatFund(r.raised)}
             </span>
           )}
