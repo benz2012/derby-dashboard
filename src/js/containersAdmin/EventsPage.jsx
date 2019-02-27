@@ -97,25 +97,29 @@ export default class EventsPage extends Component {
           this.setState({ events: dataList })
           this.setState({ eventsFlat: flatDataList })
         }
-      }
-    }).then(() => {
-      dataFetch('/data/challenges').then((data) => {
-        if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
-        if (!this.state.unmounting) this.setState({ challenges: data })
-        const linkableChallenges = data.filter(c => !(
-          this.state.eventsFlat.find(e => parseInt(e.challengeId) === parseInt(c.id))
-        ))
+      } else {
+        // eslint-disable-next-line no-lonely-if
         if (!this.state.unmounting) {
-          const currLC = this.state.linkableChallenges
-          if (currLC && currLC[0] && currLC[0].name) {
-            const sortedLC = [...currLC]
-            objectSort(sortedLC, 'name', stringSort)
-            this.setState({ linkableChallenges: sortedLC })
-          } else {
-            this.setState({ linkableChallenges })
-          }
+          this.setState({ events: [] })
+          this.setState({ eventsFlat: [] })
         }
-      })
+      }
+    }).then(() => dataFetch('/data/challenges')).then((data) => {
+      if (data[0] && data[0].name) objectSort(data, 'name', stringSort)
+      if (!this.state.unmounting) this.setState({ challenges: data })
+      const linkableChallenges = data.filter(c => !(
+        this.state.eventsFlat.find(e => parseInt(e.challengeId) === parseInt(c.id))
+      ))
+      if (!this.state.unmounting) {
+        const currLC = this.state.linkableChallenges
+        if (currLC && currLC[0] && currLC[0].name) {
+          const sortedLC = [...currLC]
+          objectSort(sortedLC, 'name', stringSort)
+          this.setState({ linkableChallenges: sortedLC })
+        } else {
+          this.setState({ linkableChallenges })
+        }
+      }
     })
   }
 

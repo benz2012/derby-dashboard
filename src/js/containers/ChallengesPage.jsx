@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Page from '../components/Page'
 import Block from '../components/Block'
 import Loading from '../components/Loading'
+import Empty from '../components/Empty'
 import HeadingText, { Prefix } from '../components/HeadingText'
 import Leaderboard from '../components/Leaderboard'
 import { CleanLink, RightArrow, Ellipsis } from '../components/Content'
@@ -90,13 +91,22 @@ export default class ChallengesPage extends Component {
     const challengeBlocks = this.buildBlocks(challenges, teams)
     const totals = this.totalScores(challenges, teams)
     totals.sort((a, b) => (b.score - a.score))
+
+    if (!(totals && totals.length > 0 && challengeBlocks)) {
+      return (<Empty alone>No challenges have been added.</Empty>)
+    }
+
     return (
       <Page>
-        <Block style={{ marginBottom: '0px' }}>
-          <HeadingText style={{ marginBottom: '0px' }}>Total Scores</HeadingText>
-          <Prefix>All points from all challenges</Prefix>
-        </Block>
-        { totals && <Leaderboard scores={totals} /> }
+        { (totals && totals.length > 0) && (
+          <React.Fragment>
+            <Block style={{ marginBottom: '0px' }}>
+              <HeadingText style={{ marginBottom: '0px' }}>Total Scores</HeadingText>
+              <Prefix>All points from all challenges</Prefix>
+            </Block>
+            <Leaderboard scores={totals} />
+          </React.Fragment>
+        )}
 
         {challengeBlocks}
       </Page>

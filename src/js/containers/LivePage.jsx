@@ -4,6 +4,7 @@ import io from 'socket.io-client'
 import Page from '../components/Page'
 import Block from '../components/Block'
 import Loading from '../components/Loading'
+import Empty from '../components/Empty'
 import StickyFooter from '../components/StickyFooter'
 import LiveCard from '../components/LiveCard'
 
@@ -135,6 +136,10 @@ export default class Live extends Component {
             <Currency fontSize={50}>{schoolTotal}</Currency>
           </Centered>
         </Block>
+
+        { (teamCards.length === 0) && (
+          <Empty>No teams have been added.</Empty>
+        )}
 
         <CardFlexContainer>
           {teamCards}
