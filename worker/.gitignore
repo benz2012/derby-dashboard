@@ -1,15 +1,3 @@
-## Directories
-node_modules
-build
-local-https
-
-
-## Files
-._*
-*.log
-.DS_Store
-env.js
-build.zip
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

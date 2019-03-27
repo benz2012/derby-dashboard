@@ -1,0 +1,7 @@
+./.elasticbeanstalk
+
+./scrape
+./database
+
+./index.js
+./package.json
