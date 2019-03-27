@@ -7,8 +7,10 @@ const SECRET = process.env.LAMBDA_SECRET_ACCESS_KEY_POST
 
 const send = (t, f, a) => {
   const options = {
-    uri: 'http://localhost:8080/live',
+    uri: 'https://localhost:8080/live',
     method: 'POST',
+    insecure: true,
+    strictSSL: false,
     json: {
       key: KEY,
       secret: SECRET,
@@ -36,4 +38,4 @@ const send = (t, f, a) => {
   })
 }
 
-send(3502, 'raised', 100)
+send(30966, 'raised', 1200)
