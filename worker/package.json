@@ -1,0 +1,18 @@
+{
+  "name": "worker",
+  "version": "1.0.0",
+  "description": "A web scraper set to run at a high interval to give the illusion of live data",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "compress": "zip -r -q ./build -@ < ./compress.txt && echo \"successfully zipped\" || echo \"failure\""
+  },
+  "author": "benz2012",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.396.0",
+    "cheerio": "^1.0.0-rc.2",
+    "moment": "^2.24.0",
+    "request": "^2.83.0"
+  }
+}
