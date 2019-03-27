@@ -93,13 +93,14 @@ export default class Live extends Component {
 
   mergeLiveUpdate(teamId, mergable) {
     this.setState((prevState) => {
+      const order = prevState.raised.map(t => t.id)
       const prevRaised = prevState.raised.find(t => parseInt(t.id) === parseInt(teamId))
-      return {
-        raised: [
-          ...prevState.raised.filter(t => parseInt(t.id) !== parseInt(teamId)),
-          Object.assign({}, prevRaised, mergable),
-        ],
-      }
+      const updated = [
+        ...prevState.raised.filter(t => parseInt(t.id) !== parseInt(teamId)),
+        Object.assign({}, prevRaised, mergable),
+      ]
+      updated.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id))
+      return { raised: updated }
     })
   }
 
