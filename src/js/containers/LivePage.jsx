@@ -129,7 +129,6 @@ export default class Live extends Component {
     if (!(teams && raised)) { return <Loading /> }
 
     const teamCards = this.buildTeams(teams, raised, initial, teamChoice, cheering)
-    console.log(raised)
     const schoolTotal = sumSchoolFunds(raised)
     return (
       <Page>
