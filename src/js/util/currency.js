@@ -19,10 +19,23 @@ const sumTeamFunds = ({ raised, external }) => {
 }
 
 const sumSchoolFunds = (teams) => {
-  const total = teams.reduce((accum, current) => (
-    accum.add(sumTeamFunds(current))
-  ), currency(0))
-  return total.value
+  // NOTE: the last `team` represents the school total on the donation website
+
+  const simplyRaised = teams.reduce((accum, { raised }, index) => {
+    if (index === teams.length - 1) return accum
+    return accum.add(raised)
+  }, currency(0))
+
+  const schoolTotal = currency(teams[teams.length - 1].raised)
+  const donatedToSchool = currency(schoolTotal).subtract(simplyRaised)
+
+  const teamTotal = teams.reduce((accum, current, index) => {
+    if (index === teams.length - 1) return accum
+    return accum.add(sumTeamFunds(current))
+  }, currency(0))
+  const final = teamTotal.add(donatedToSchool)
+
+  return final.value
 }
 
 const joinFundsHistory = ({ raised, external }) => {

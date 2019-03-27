@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { query, getSchool, put, update, remove } = require('../../database')
+const { query, getSchool, put, remove } = require('../../database')
 const params = require('../../database/params')
 const { errorEnd, lastDateTimeString, applyKeyMapToObj } = require('./utility')
 
@@ -58,7 +58,7 @@ const getFundsForTeam = teamId => (
     if (fundsRaised[0] && fundsRaised[0].Raised) {
       structured.raised = fundsRaised[0].Raised
     }
-    if (fundsExternal[0] && fundsExternal[0].EntryId) {
+    if (fundsExternal[0] && fundsExternal[0].EntryId !== undefined) {
       fundsExternal.forEach((fund) => {
         structured.external[fund.EntryId] = fund.Amount
       })
@@ -134,6 +134,7 @@ router.get('/', (req, res) => {
     const fundQueries = school.Teams.map(tid => (
       getFundsForTeam(tid)
     ))
+    fundQueries.push(getFundsForTeam(school.SchoolId))
     return Promise.all(fundQueries)
   }).then((responses) => {
     res.json(responses)
