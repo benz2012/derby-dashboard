@@ -209,7 +209,11 @@ export default class FundsPage extends Component {
           items={raised}
           head={r => (
             <span>
-              {teams.length > 0 && teams.find(t => t.id === r.id).org}:&nbsp;
+              {teams.length > 0 && (
+                teams.find(t => t.id === r.id) ?
+                  teams.find(t => t.id === r.id).org :
+                  'School total as reported by donation website'
+              )}:&nbsp;
               {this.formatFund(r.raised)}
             </span>
           )}
