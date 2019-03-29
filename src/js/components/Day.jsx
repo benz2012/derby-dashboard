@@ -21,6 +21,7 @@ const Day = ({ match, events }) => {
         name={e.name}
         type={e.type}
         time={time}
+        tags={e.tags}
         eventUrl={`${match.url}/${e.id}`}
       />
     )

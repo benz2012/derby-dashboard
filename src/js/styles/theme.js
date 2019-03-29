@@ -13,5 +13,6 @@ export default {
   fontBody: "'Roboto', sans-serif",
   'Individual Activity': 'rgb(6, 150, 136)',
   'Team Activity': 'rgb(232, 30, 99)',
-  'Public Event': 'rgb(63, 81, 180)',
+  'Public Event': '#3f51b4',
+  tagBG: '#FF9F1C',
 }

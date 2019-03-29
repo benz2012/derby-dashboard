@@ -1,31 +1,34 @@
-const filterChallenges = (challenges, teamId) => {
-  const filteredChallenges = challenges.filter(c => (
-    (Object.keys(c.scores).length > 0) &&
-    (c.public === true) &&
-    (Object.keys(c.scores[teamId]).length > 0) &&
-    (c.scores[teamId].include === true)
-  )).map((c) => {
-    const ourScore = c.scores[teamId].score
-    const rank = Object.keys(c.scores)
-      .filter(tid => (
-        (parseInt(tid) !== parseInt(teamId)) &&
-        (c.scores[tid].include === true)
-      ))
-      .map(tid => c.scores[tid].score)
-      .reduce((acc, they) => {
-        if (they > ourScore) return acc + 1
-        return acc
-      }, 1)
-    return ({
-      id: c.id,
-      name: c.name,
-      description: c.description,
-      score: ourScore,
-      rank,
+/* eslint no-param-reassign: 0 */
+
+const filterChallenges = (challenges, teamId) => (
+  challenges
+    .filter(c => (
+      Object.keys(c.scores).length > 0 &&
+      c.public === true &&
+      Object.keys(c.scores[teamId]).length > 0 &&
+      c.scores[teamId].include === true
+    ))
+    .map((c) => {
+      const ourScore = c.scores[teamId].score
+      const rank = Object.keys(c.scores)
+        .filter(tid => (
+          parseInt(tid) !== parseInt(teamId) &&
+          c.scores[tid].include
+        ))
+        .map(tid => c.scores[tid].score)
+        .reduce((acc, they) => {
+          if (they > ourScore) return acc + 1
+          return acc
+        }, 1)
+      return ({
+        id: c.id,
+        name: c.name,
+        description: c.description,
+        score: ourScore,
+        rank,
+      })
     })
-  })
-  return filteredChallenges
-}
+)
 
 const hydrateScores = (scores, teams) => {
   if (Object.keys(scores).length === 0) return null
@@ -45,7 +48,19 @@ const hydrateScores = (scores, teams) => {
         avatar: thisTeam.avatar,
       })
     })
-    .sort((a, b) => (b.score - a.score))
+    .sort((a, b) => {
+      if (b.score === a.score) {
+        return a.name.localeCompare(b.name)
+      }
+      return b.score - a.score
+    })
+    .map((team, index, sortedTeams) => {
+      const rank = sortedTeams.reduce((acc, them) => {
+        if (them.score > team.score) return acc + 1
+        return acc
+      }, 1)
+      return ({ ...team, rank })
+    })
 }
 
 

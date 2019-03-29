@@ -8,7 +8,7 @@ import Empty from '../components/Empty'
 import StickyFooter from '../components/StickyFooter'
 import LiveCard from '../components/LiveCard'
 
-import { Currency, Centered, IconWhite } from '../components/Content'
+import { Currency, Centered, IconWhite, SidePad, Cheering } from '../components/Content'
 import { HeadingText2 } from '../components/HeadingText'
 import { CardFlexContainer } from '../components/Card'
 import { dataFetch } from '../util'
@@ -145,6 +145,16 @@ export default class Live extends Component {
         <CardFlexContainer>
           {teamCards}
         </CardFlexContainer>
+
+        <SidePad>
+          <Cheering>
+            <em>What is Cheering?</em><br />
+            Tap on any card to cheer for that team. If multiple people are watching
+            the live updates, it helps distinguish which team you are supporting
+            while watching. You can change your selection in real time, but to
+            deselect your card and stop cheering, refresh the page.
+          </Cheering>
+        </SidePad>
 
         <StickyFooter>
           <IconWhite fontSize={36} style={{ paddingLeft: '10px' }}>remove_red_eye</IconWhite>

@@ -24,6 +24,7 @@ export default class Event extends Component {
     if (!events) { return null }
     const event = events.find(e => e.id === parseInt(match.params.eventId))
     if (!event) { return null }
+    console.log(event)
     const duration = durationString(event.time.start, event.time.end)
     return (
       <div role="button" onClick={this.back} tabIndex={0}>
@@ -38,16 +39,25 @@ export default class Event extends Component {
                   <IconWhite fontSize={24}>event</IconWhite>
                   <EventDetailText>{moment(event.date).format('dddd, MMM Do')}</EventDetailText>
                 </EventDetail>
+
                 <EventDetail>
                   <IconWhite fontSize={24}>watch_later</IconWhite>
                   <EventDetailText>{duration}</EventDetailText>
                 </EventDetail>
+
                 <EventDetail>
                   <IconWhite fontSize={24}>place</IconWhite>
                   <EventDetailText>{event.location}</EventDetailText>
                 </EventDetail>
-                {
-                  event.challenge &&
+
+                {(event.tags && event.tags.length) > 0 &&
+                  <EventDetail>
+                    <IconWhite fontSize={24}>local_offer</IconWhite>
+                    <EventDetailText>{event.tags.join(', ')}</EventDetailText>
+                  </EventDetail>
+                }
+
+                {event.challenge &&
                   <EventDetail>
                     <IconWhite fontSize={24}>stars</IconWhite>
                     <EventDetailText>{event.challenge}</EventDetailText>

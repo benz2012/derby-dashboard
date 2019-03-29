@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
 import Menu from './Menu'
 import MenuButton from './MenuButton'
@@ -28,13 +28,15 @@ export default class NavBar extends Component {
   render() {
     const { linkData } = this.props
     const { menuOpen, year } = this.state
-    return [
-      <NavBarContainer key={0}>
-        <MenuButton onClick={this.toggleMenu}>menu</MenuButton>
-        <TitleContainer>{year ? `Derby Days ${year}` : '\u00a0'}</TitleContainer>
-        { menuOpen && <Menu linkData={linkData} toggleMenu={this.toggleMenu} /> }
-      </NavBarContainer>,
-      <NavBarShadow key={1} />,
-    ]
+    return (
+      <Fragment>
+        <NavBarContainer>
+          <MenuButton onClick={this.toggleMenu}>menu</MenuButton>
+          <TitleContainer>{year ? `Derby Days ${year}` : '\u00a0'}</TitleContainer>
+          { menuOpen && <Menu linkData={linkData} toggleMenu={this.toggleMenu} /> }
+        </NavBarContainer>
+        <NavBarShadow />
+      </Fragment>
+    )
   }
 }

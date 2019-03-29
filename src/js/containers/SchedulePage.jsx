@@ -40,7 +40,7 @@ export default class SchedulePage extends Component {
   }
 
   selectFirstDate = (events) => {
-    if (!(events && events.length > 0)) { return null }
+    if (!(events && Object.keys(events).length > 0)) { return null }
     const dates = Object.keys(events).sort(dateSort)
     const today = dates.find(d => moment(d).isSame(moment(), 'day'))
     return today || dates[0]

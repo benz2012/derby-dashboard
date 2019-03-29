@@ -39,6 +39,7 @@ const MenuContianer = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 100;
 
   background-color: rgba(255, 255, 255, 0.9);
 `
@@ -57,7 +58,6 @@ const NavLinkStyled = styled(NavLink)`
   color: ${props => props.theme.contentFG};
   font-weight: 300;
   text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
   display: block;
   margin-bottom: 30px;
   text-align: center;

@@ -16,6 +16,7 @@ const MenuButtonContainer = styled(PlainButton)`
   width: 60px;
   height: 100%;
   margin: auto;
+  -webkit-tap-highlight-color: inherit;
 `
 
 export default withTheme(MenuButton)

@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: 0 */
 import React, { Component } from 'react'
 
 import Page from '../components/Page'
@@ -53,24 +54,40 @@ export default class HomePage extends Component {
   }
 
   buildTeamsRaised = (teams, raised) => {
-    if (!(teams && teams.length > 0 && raised && raised.length > 0)) { return null }
-    const teamsData = teams.filter(t => !t.homeTeam)
-    teamsData.forEach((team) => {
-      const tRaised = raised.find(t => t.id === team.id)
-      const tIndex = teamsData.findIndex(t => t.id === team.id)
-      teamsData[tIndex].raised = sumTeamFunds(tRaised)
-    })
-    teamsData.sort((a, b) => (b.raised - a.raised))
-    return teamsData.map((t, idx) => (
-      <TeamBlock
-        key={t.id}
-        name={t.org}
-        subName={t.orgId}
-        avatar={t.avatar}
-        left={<Ranking>{idx + 1}</Ranking>}
-        right={<Currency>{t.raised}</Currency>}
-      />
-    ))
+    if (!(
+      teams && teams.length > 0 &&
+      raised && raised.length > 0)
+    ) return null
+
+    return teams
+      .filter(t => !t.homeTeam)
+      .map((team) => {
+        const tRaised = raised.find(t => t.id === team.id)
+        return ({ ...team, raised: sumTeamFunds(tRaised) })
+      })
+      .sort((a, b) => {
+        if (b.raised === a.raised) {
+          return a.org.localeCompare(b.org)
+        }
+        return b.raised - a.raised
+      })
+      .map((team, index, sortedTeams) => {
+        const rank = sortedTeams.reduce((acc, them) => {
+          if (them.raised > team.raised) return acc + 1
+          return acc
+        }, 1)
+        return ({ ...team, rank })
+      })
+      .map(t => (
+        <TeamBlock
+          key={t.id}
+          name={t.org}
+          subName={t.orgId}
+          avatar={t.avatar}
+          left={<Ranking>{t.rank}</Ranking>}
+          right={<Currency>{t.raised}</Currency>}
+        />
+      ))
   }
 
   render() {

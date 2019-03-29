@@ -235,6 +235,7 @@ export default class EventsPage extends Component {
   }
 
   openAdd = () => {
+    setInput({ type: eventTypeList[0] }, this.setState.bind(this))
     this.props.history.replace(`${this.props.match.url}/add`)
   }
 

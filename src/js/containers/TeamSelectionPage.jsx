@@ -83,6 +83,7 @@ export default class TeamSelectionPage extends Component {
   buildTeamLinks(teams) {
     if (!(teams && teams.length > 0)) { return null }
     const teamsData = teams.filter(t => !t.homeTeam)
+    if (teamsData.length === 0) return null
     const sortedTeamsData = objectSort(teamsData, 'org', stringSort)
     return sortedTeamsData.map(this.teamLink)
   }

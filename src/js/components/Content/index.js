@@ -7,6 +7,7 @@ import CleanLink from './CleanLink'
 import FontIcon, { IconWhite } from './FontIcon'
 import IconLink from './IconLink'
 import RightArrow from './RightArrow'
+import Cheering from './Cheering'
 
 const SidePad = styled.div`
   padding-left: 15px;
@@ -68,4 +69,5 @@ export {
   IconLink,
   RightArrow,
   Ellipsis,
+  Cheering,
 }
