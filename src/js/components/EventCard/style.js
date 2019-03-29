@@ -22,6 +22,31 @@ const EventTime = styled.div`
   margin-bottom: 6px;
 `
 
+const TagContiner = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`
+
+const EventTag = styled.div`
+  position: relative;
+  padding: 4px 6px 4px 24px;
+  margin: 0px 6px 6px 0px;
+  color: ${props => props.theme.buttonFG};
+  background-color: ${props => props.theme.tagBG};
+  border-radius: 12px 0px 0px 12px;
+
+  &::before {
+    content:'';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    background-color: ${props => props.theme.buttonFG};
+  }
+`
+
 const IconContainer = styled.div`
   position: absolute;
   right: 10px;
@@ -33,5 +58,7 @@ export {
   EventContent,
   EventName,
   EventTime,
+  TagContiner,
+  EventTag,
   IconContainer,
 }
