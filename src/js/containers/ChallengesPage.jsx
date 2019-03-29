@@ -92,7 +92,7 @@ export default class ChallengesPage extends Component {
     const totals = this.totalScores(challenges, teams)
     totals.sort((a, b) => (b.score - a.score))
 
-    if (!challengeBlocks) {
+    if (challengeBlocks.length === 0) {
       return (<Empty alone>No challenges have been added.</Empty>)
     }
 

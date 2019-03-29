@@ -57,7 +57,6 @@ const NavLinkStyled = styled(NavLink)`
   color: ${props => props.theme.contentFG};
   font-weight: 300;
   text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
   display: block;
   margin-bottom: 30px;
   text-align: center;

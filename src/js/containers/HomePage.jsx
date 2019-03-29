@@ -54,28 +54,30 @@ export default class HomePage extends Component {
   }
 
   buildTeamsRaised = (teams, raised) => {
-    if (!(teams && teams.length > 0 && raised && raised.length > 0)) { return null }
-    const teamsData = teams.filter(t => !t.homeTeam)
-    teamsData.forEach((team) => {
-      const tRaised = raised.find(t => t.id === team.id)
-      const tIndex = teamsData.findIndex(t => t.id === team.id)
-      teamsData[tIndex].raised = sumTeamFunds(tRaised)
-    })
-    return teamsData
+    if (!(
+      teams && teams.length > 0 &&
+      raised && raised.length > 0)
+    ) return null
+
+    return teams
+      .filter(t => !t.homeTeam)
+      .map((team) => {
+        const tRaised = raised.find(t => t.id === team.id)
+        return ({ ...team, raised: sumTeamFunds(tRaised) })
+      })
       .sort((a, b) => {
         if (b.raised === a.raised) {
           return a.org.localeCompare(b.org)
         }
         return b.raised - a.raised
       })
-      .reduce((rank, team, index, sortedTeams) => {
-        const prevTeam = index > 0 ? sortedTeams[index - 1] : -1
-        if (team.raised !== prevTeam.raised) {
-          rank += 1
-        }
-        team.rank = rank
-        return rank
-      }, 0)
+      .map((team, index, sortedTeams) => {
+        const rank = sortedTeams.reduce((acc, them) => {
+          if (them.raised > team.raised) return acc + 1
+          return acc
+        }, 1)
+        return ({ ...team, rank })
+      })
       .map(t => (
         <TeamBlock
           key={t.id}

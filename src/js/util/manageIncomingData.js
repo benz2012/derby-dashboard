@@ -54,14 +54,13 @@ const hydrateScores = (scores, teams) => {
       }
       return b.score - a.score
     })
-    .reduce((rank, team, index, sortedTeams) => {
-      const prevTeam = index > 0 ? sortedTeams[index - 1] : -1
-      if (team.score !== prevTeam.score) {
-        rank += 1
-      }
-      team.rank = rank
-      return rank
-    }, 0)
+    .map((team, index, sortedTeams) => {
+      const rank = sortedTeams.reduce((acc, them) => {
+        if (them.score > team.score) return acc + 1
+        return acc
+      }, 1)
+      return ({ ...team, rank })
+    })
 }
 
 
