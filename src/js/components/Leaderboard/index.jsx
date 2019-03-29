@@ -11,11 +11,11 @@ const Leaderboard = ({ scores, simple }) => {
   const colorLight = rank => (simple ? 'inherit' : `hsl(167, 74%, ${rank > 5 ? 100 : 84 + (4 * rank)}%)`)
   const blockStyle = rank => (simple ? {} : { backgroundColor: colorLight(rank), padding: '0px 10px' })
   const score = num => (simple ? num : <RightPad><Score>{num}</Score></RightPad>)
-  const scoreBlocks = scores.map((team, index) => {
+  const scoreBlocks = scores.map((team) => {
     const block = simple ? (
       <TeamBlock
         name={team.name}
-        left={<Ranking>{index + 1}</Ranking>}
+        left={<Ranking>{team.rank}</Ranking>}
         right={score(team.score)}
         tight
       />
@@ -24,13 +24,13 @@ const Leaderboard = ({ scores, simple }) => {
         avatar={team.avatar}
         name={team.name}
         subName={team.orgId}
-        left={<Ranking darker>{index + 1}</Ranking>}
+        left={<Ranking darker>{team.rank}</Ranking>}
         right={score(team.score)}
         darker
       />
     )
     return (
-      <div key={team.id} style={blockStyle(index)}>
+      <div key={team.id} style={blockStyle(team.rank - 1)}>
         {block}
       </div>
     )
