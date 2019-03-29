@@ -181,6 +181,7 @@ router.put('/', (req, res) => {
     return query(params.eventsQuery(config.SCHOOL_ID_HARD))
       .then((events) => {
         const ids = events.map(e => parseInt(e.EventId))
+        if (ids.length === 0) return 0
         return Math.max(...ids) + 1
       })
       .then(eid => (

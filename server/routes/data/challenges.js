@@ -94,6 +94,7 @@ router.put('/', (req, res) => {
     return query(params.challengesQuery(config.SCHOOL_ID_HARD))
       .then((challenges) => {
         const ids = challenges.map(c => parseInt(c.ChallengeId))
+        if (ids.length === 0) return 0
         return Math.max(...ids) + 1
       })
       .then(cid => (
