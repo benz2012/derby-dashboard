@@ -13,6 +13,7 @@ import SchedulePage from './SchedulePage'
 import TeamPage from './TeamPage'
 import TeamSelectionPage from './TeamSelectionPage'
 
+import AlertBar from '../components/AlertBar'
 import NavBar from '../components/NavBar'
 import NoMatch from '../components/NoMatch'
 
@@ -28,6 +29,7 @@ const RoutesPublic = () => (
         { to: '/more', display: 'More' },
       ]}
     />
+    <AlertBar />
     <Switch>
       <Route exact path="/" component={HomePage} />
       <Route path="/schedule" component={SchedulePage} />

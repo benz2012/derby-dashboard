@@ -22,10 +22,28 @@ export default class MorePage extends Component {
     statusText: null,
   }
 
+  saveAsAppRef = React.createRef()
+
+  scrollTimer = null
+
   componentDidMount() {
     dataFetch('/data/application/more').then((data) => {
       this.setState({ more: data })
     })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { hash } = this.props.location
+    if (hash === '#save-as-app' && prevState.more !== this.state.more) {
+      this.scrollTimer = setTimeout(() => {
+        const { top } = this.saveAsAppRef.current.getBoundingClientRect()
+        window.scrollTo(0, top - 50)
+      }, 750)
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.scrollTimer)
   }
 
   htmlString = html => (
@@ -76,7 +94,7 @@ export default class MorePage extends Component {
           </FullPad>
         </Block>
 
-        <Block>
+        <Block ref={this.saveAsAppRef}>
           <FullPad>
             <HeadingText2>Save this Website as an App</HeadingText2>
             <BodyFromMarkdown>
