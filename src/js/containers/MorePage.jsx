@@ -46,10 +46,6 @@ export default class MorePage extends Component {
     clearTimeout(this.scrollTimer)
   }
 
-  htmlString = html => (
-    <div dangerouslySetInnerHTML={{ __html: html }} /> // eslint-disable-line
-  )
-
   handleNumberChange = (e) => {
     this.setState({ telephone: e.target.value })
   }
@@ -97,18 +93,14 @@ export default class MorePage extends Component {
         <Block ref={this.saveAsAppRef}>
           <FullPad>
             <HeadingText2>Save this Website as an App</HeadingText2>
-            <BodyFromMarkdown>
-              {this.htmlString(more.bookmark)}
-            </BodyFromMarkdown>
+            <BodyFromMarkdown>{more.bookmark}</BodyFromMarkdown>
           </FullPad>
         </Block>
 
         <Block>
           <FullPad>
             <HeadingText2>Text (SMS) Notifications</HeadingText2>
-            <BodyFromMarkdown>
-              {this.htmlString(more.texting)}
-            </BodyFromMarkdown>
+            <BodyFromMarkdown>{more.texting}</BodyFromMarkdown>
 
             <Telephone value={telephone} onChange={this.handleNumberChange} />
             <FullButton onClick={this.handleSubscribe} primary>Subscribe</FullButton>
@@ -120,18 +112,14 @@ export default class MorePage extends Component {
         <Block>
           <FullPad>
             <HeadingText2>Disclaimer</HeadingText2>
-            <BodyFromMarkdown>
-              {this.htmlString(more.disclaimer)}
-            </BodyFromMarkdown>
+            <BodyFromMarkdown>{more.disclaimer}</BodyFromMarkdown>
           </FullPad>
         </Block>
 
         <Block>
           <FullPad>
             <HeadingText2>Support</HeadingText2>
-            <BodyFromMarkdown>
-              {this.htmlString(more.support)}
-            </BodyFromMarkdown>
+            <BodyFromMarkdown>{more.support}</BodyFromMarkdown>
           </FullPad>
         </Block>
       </Page>
