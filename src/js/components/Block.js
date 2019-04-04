@@ -17,6 +17,8 @@ const Block = styled.div`
   ${media.desktop`
     width: 600px;
     margin: auto;
+    margin-bottom: 10px;
+    border-radius: 3px;
   `}
 `
 

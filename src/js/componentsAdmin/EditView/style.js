@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import media from '../../styles/media'
+
 const EditContainer = styled.div`
   z-index: 70;
   position: fixed;
@@ -15,8 +17,7 @@ const EditContainer = styled.div`
   -webkit-tap-highlight-color: transparent;
 `
 const EditPane = styled.div`
-  width: 60%;
-  max-width: 700px;
+  width: 90%;
   height: auto;
   max-height: 85%;
 
@@ -28,6 +29,11 @@ const EditPane = styled.div`
   background-color: white;
   border-radius: 3px;
   cursor: auto;
+
+  ${media.tablet`
+    width: 60%;
+    max-width: 700px;
+  `}
 `
 const ViewContent = styled.div`
   padding: 25px;
@@ -43,6 +49,8 @@ const ViewActions = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 6px 0px;
+
+  box-shadow: 0 -2px 10px 0px rgba(0, 0, 0, 0.1);
 `
 
 export {
