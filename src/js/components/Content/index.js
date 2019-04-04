@@ -8,6 +8,7 @@ import FontIcon, { IconWhite } from './FontIcon'
 import IconLink from './IconLink'
 import RightArrow from './RightArrow'
 import Cheering from './Cheering'
+import BodyFromMarkdown from './BodyFromMarkdown'
 
 const SidePad = styled.div`
   padding-left: 15px;
@@ -19,11 +20,6 @@ const FullPad = styled.div`
 const Body = styled.div`
   font-weight: 300;
   padding-bottom: 3px;
-`
-const BodyFromMarkdown = styled(Body)`
-  > div > p > img {
-    width: 100%;
-  }
 `
 const Ranking = styled.div`
   font-size: 12px;

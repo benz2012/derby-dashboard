@@ -8,7 +8,8 @@ import Loading from '../components/Loading'
 import HeadingText from '../components/HeadingText'
 import Leaderboard from '../components/Leaderboard'
 import FullWidthButton from '../components/Button/FullWidthButton'
-import { Body, SidePad, FullPad, CleanLink, RightArrow, Ellipsis } from '../components/Content'
+import { Body, SidePad, FullPad, CleanLink,
+  RightArrow, Ellipsis, BodyFromMarkdown } from '../components/Content'
 import { dataFetch, objectSort } from '../util'
 import { stringSort } from '../util/string'
 import { hydrateScores } from '../util/manageIncomingData'
@@ -80,7 +81,9 @@ export default class MorePage extends Component {
             <HeadingText>{report.header}</HeadingText>
             <Body>
               <p>Report for {moment(report.date).format('dddd, MMMM Do YYYY')}</p>
-              <p>{report.body}</p>
+              <BodyFromMarkdown>
+                {report.body}
+              </BodyFromMarkdown>
             </Body>
           </SidePad>
         </Block>

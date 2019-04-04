@@ -274,6 +274,12 @@ export default class ReportsPage extends Component {
             <TextInput id="display.url" label="Report URL" value={this.reportURL(input.date)} readOnly />
             <TextInput id="input.header" label="Header" value={input.header} error={errors.header} onChange={this.setValue} required />
             <TextAreaInput id="input.body" label="Body" value={input.body} error={errors.body} onChange={this.setValue} rows={3} required />
+            <div style={{ marginTop: '-16px', marginBottom: '16px' }}>
+              <small>
+                You can add images, videos and styles to the body using&nbsp;
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown</a>
+              </small>
+            </div>
             <hr />
             <h4>Linked Challenges</h4>
             <button type="button" className="btn btn-success btn-sm mb-4" onClick={this.addLink}>
@@ -310,6 +316,12 @@ export default class ReportsPage extends Component {
             <DateInput id="input.date" label="Report Date" value={input.date} error={errors.date} onChange={this.setValue} options={{ altFormat: 'l, F j, Y' }} required />
             <TextInput id="input.header" label="Header" value={input.header} error={errors.header} onChange={this.setValue} required />
             <TextAreaInput id="input.body" label="Body" value={input.body} error={errors.body} onChange={this.setValue} rows={3} required />
+            <div style={{ marginTop: '-16px', marginBottom: '16px' }}>
+              <small>
+                You can add images, videos and styles to the body using&nbsp;
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Markdown</a>
+              </small>
+            </div>
           </Form>
           <p>
             Linking challenges happens on the edit menu.

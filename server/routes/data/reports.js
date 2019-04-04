@@ -3,7 +3,7 @@ const express = require('express')
 const { query, get, put, update, remove } = require('../../database')
 const config = require('../../database/config')
 const params = require('../../database/params')
-const { errorEnd } = require('./utility')
+const { errorEnd, markdownToHTML } = require('./utility')
 
 const router = express.Router()
 
@@ -39,6 +39,7 @@ router.get('/:date', (req, res) => {
     Key: { SchoolId: config.SCHOOL_ID_HARD, DateString: dateString },
   }).then((data) => {
     const reportData = mapReport(data)
+    reportData.body = markdownToHTML(reportData.body)
     // console.log(reportData)
     res.json(reportData)
   }).catch(err => errorEnd(err, res))

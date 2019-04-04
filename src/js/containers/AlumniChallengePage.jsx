@@ -28,18 +28,6 @@ export default class AlumniChallengePage extends Component {
     pledges.reduce((acc, cur) => (acc + (cur[cid] || 0)), 0)
   )
 
-  htmlString = html => (
-    <div dangerouslySetInnerHTML={{ __html: html }} /> // eslint-disable-line
-  )
-
-  renderCountData = countData => (
-    countData.map((data, idx) => (
-      <BodyFromMarkdown key={idx}> {/* eslint-disable-line */}
-        {this.htmlString(data)}
-      </BodyFromMarkdown>
-    ))
-  )
-
   render() {
     const { challenge, pledges } = this.state
     if (!(challenge && pledges)) return <Loading />
@@ -65,7 +53,9 @@ export default class AlumniChallengePage extends Component {
 
         <Block>
           <HeadingText2>{countName}</HeadingText2>
-          {this.renderCountData(countData)}
+          {countData.map(data => (
+            <BodyFromMarkdown key={JSON.stringify(data)}>{data}</BodyFromMarkdown>
+          ))}
           {countData.length === 0 && (
             <Prefix>No data has been added.</Prefix>
           )}

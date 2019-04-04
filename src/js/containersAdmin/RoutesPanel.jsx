@@ -12,15 +12,18 @@ import AlumniChallengesPage from './AlumniChallengesPage'
 
 import TopNav, { NavBrand, NavDropDown, NavButton } from '../componentsAdmin/TopNav'
 import SideNav from '../componentsAdmin/SideNav'
+import MobileMenu from '../componentsAdmin/MobileMenu'
 import Avatar from '../components/TeamBlock/Avatar'
 import NoMatch from '../components/NoMatch'
 import authGroups from '../util/authGroups'
 import { loadBootstrapCSS } from '../styles/app'
+import { showWhenSmall } from '../componentsAdmin/styleUtils'
 
 export default class RoutesPanel extends Component {
   state = {
     name: null,
     picture: null,
+    menu: false,
   }
 
   componentWillMount() {
@@ -40,6 +43,8 @@ export default class RoutesPanel extends Component {
     window.FB.logout(statusChangeCallback)
   }
 
+  toggleMenu = () => this.setState((prev) => ({ menu: !prev.menu }))
+
   linkDataForRoute = (route, match) => {
     const linkData = {
       general: { to: `${match.url}/general`, display: 'General' },
@@ -54,91 +59,47 @@ export default class RoutesPanel extends Component {
     return linkData[route]
   }
 
-  componentForRoute = (route, match, authValues) => {
+  componentFactory = (route, ToRender) => {
+    const { match, authValues } = this.props
+    return ({
+      [route]: (
+        <Route
+          key={route}
+          path={`${match.url}/${route}`}
+          render={props => (
+            <ToRender {...props} authValues={authValues} />
+          )}
+        />
+      ),
+    })
+  }
+
+  componentForRoute = (route) => {
     const components = {
-      general: (
-        <Route
-          key={route}
-          path={`${match.url}/general`}
-          render={props => (
-            <GeneralPage {...props} authValues={authValues} />
-          )}
-        />
-      ),
-      teams: (
-        <Route
-          key={route}
-          path={`${match.url}/teams`}
-          render={props => (
-            <TeamsPage {...props} authValues={authValues} />
-          )}
-        />
-      ),
-      funds: (
-        <Route
-          key={route}
-          path={`${match.url}/funds`}
-          render={props => (
-            <FundsPage {...props} authValues={authValues} />
-          )}
-        />
-      ),
-      events: (
-        <Route
-          key={route}
-          path={`${match.url}/events`}
-          render={props => (
-            <EventsPage {...props} authValues={authValues} />
-          )}
-        />
-      ),
-      challenges: (
-        <Route
-          key={route}
-          path={`${match.url}/challenges`}
-          render={props => (
-            <ChallengesPage {...props} authValues={authValues} />
-          )}
-        />
-      ),
-      reports: (
-        <Route
-          key={route}
-          path={`${match.url}/reports`}
-          render={props => (
-            <ReportsPage {...props} authValues={authValues} />
-          )}
-        />
-      ),
-      alumni: (
-        <Route
-          key={route}
-          path={`${match.url}/alumni`}
-          render={props => (
-            <AlumniPage {...props} authValues={authValues} />
-          )}
-        />
-      ),
-      'alumni-challenges': (
-        <Route
-          key={route}
-          path={`${match.url}/alumni-challenges`}
-          render={props => (
-            <AlumniChallengesPage {...props} authValues={authValues} />
-          )}
-        />
-      ),
+      ...this.componentFactory('general', GeneralPage),
+      ...this.componentFactory('teams', TeamsPage),
+      ...this.componentFactory('funds', FundsPage),
+      ...this.componentFactory('events', EventsPage),
+      ...this.componentFactory('challenges', ChallengesPage),
+      ...this.componentFactory('reports', ReportsPage),
+      ...this.componentFactory('alumni', AlumniPage),
+      ...this.componentFactory('alumni-challenges', AlumniChallengesPage),
     }
     return components[route]
   }
 
   render() {
-    const { name, picture } = this.state
+    const { name, picture, menu } = this.state
     const { match, authValues } = this.props
     const { group } = authValues()
+    const SmallDiv = showWhenSmall('div')
+    const linkData = authGroups[group].map(route => this.linkDataForRoute(route, match))
     return (
       <div>
-        <TopNav brand={<NavBrand to={match.url}>Derby Dashboard Admin</NavBrand>}>
+        <TopNav
+          toggleMenu={this.toggleMenu}
+          brand={<NavBrand to={match.url}>Derby Dashboard Admin</NavBrand>}
+        >
           <NavButton to="/">Public Site</NavButton>
           <NavDropDown>
             <Avatar src={picture} size={25} style={{ marginRight: '7px' }} />
@@ -146,13 +107,17 @@ export default class RoutesPanel extends Component {
           </NavDropDown>
         </TopNav>
 
+        {menu &&
+          <MobileMenu
+            toggleMenu={this.toggleMenu}
+            linkData={linkData}
+          />
+        }
+
         <div className="container-fluid">
           <div className="row">
-            <SideNav
-              linkData={
-                authGroups[group].map(route => this.linkDataForRoute(route, match))
-              }
-            />
+            <SideNav linkData={linkData} />
+            <SmallDiv style={{ width: '100%', marginTop: '30px' }} />
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-5">
               <Switch>
                 <Redirect exact from={match.url} to={`${match.url}/${authGroups[group][0]}`} />

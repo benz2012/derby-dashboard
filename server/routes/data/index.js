@@ -48,6 +48,7 @@ router.use((req, res, next) => {
       if (client && secure && groupAllowed) {
         return next()
       }
+      console.log({ client, secure, groupAllowed })
       return errorEnd('UNAUTHORIZED POST REQUEST', res)
     }).catch(err => errorEnd(`ERROR AUTHORIZING POST REQUEST: ${err}`, res))
   }
