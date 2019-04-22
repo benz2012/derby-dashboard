@@ -12,6 +12,7 @@ const socketHandler = (io) => {
       clients[address] = {}
     }
     clients[address][socket.id] = true
+    console.log(JSON.stringify(clients))
     io.emit('watching', Object.keys(clients).length)
     io.emit('cheering', cheering)
 
@@ -35,6 +36,7 @@ const socketHandler = (io) => {
       }
 
       // Send the updates to anyone still connected
+      console.log(JSON.stringify(clients))
       io.emit('watching', Object.keys(clients).length)
       io.emit('cheering', cheering)
     })
