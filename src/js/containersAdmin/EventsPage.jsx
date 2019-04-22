@@ -137,7 +137,7 @@ export default class EventsPage extends Component {
         .includes(Object.keys(elm)[0]))
     ))
     toSend.push({ tags: Object.values(input.tags) })
-    toSend.push({ challengeId: input.challengeId || null })
+    toSend.push({ challengeId: input.challengeId === undefined ? null : input.challengeId })
 
     dataSend(`/data/events/${input.id}`, 'POST', uid, token, toSend).then((d) => {
       if (d) {
@@ -248,7 +248,7 @@ export default class EventsPage extends Component {
   closeModal = () => {
     this.setState(state => ({
       linkableChallenges: (
-        state.input.challengeId ?
+        (state.input.challengeId !== undefined && state.input.challengeId !== null) ?
           state.linkableChallenges.filter(c => (
             parseInt(c.id) !== parseInt(state.input.challengeId)
           )) :
@@ -310,7 +310,7 @@ export default class EventsPage extends Component {
                     <br />
                     {e.location}
                     <br />
-                    {e.challengeId && (
+                    {e.challengeId !== undefined && (
                       <em>Linked to:&nbsp;
                         {challenges.find(c => parseInt(c.id) === parseInt(e.challengeId)).name}
                       </em>
