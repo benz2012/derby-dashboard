@@ -17,7 +17,7 @@ const get = params => new Promise((resolve, reject) => {
   db.get(params, (err, data) => {
     if (err) { return reject(err) }
     if (!data || !data.Item) {
-      return reject(new Error(`database response was invalid for: ${params}`))
+      return reject(new Error(`database response was invalid for: ${JSON.stringify(params)}`))
     }
     return resolve(data.Item)
   })
@@ -27,7 +27,7 @@ const batchGet = params => new Promise((resolve, reject) => {
   db.batchGet(params, (err, data) => {
     if (err) { return reject(err) }
     if (!data || !data.Responses) {
-      return reject(new Error(`database response was invalid for: ${params}`))
+      return reject(new Error(`database response was invalid for: ${JSON.stringify(params)}`))
     }
     return resolve(data.Responses)
   })
@@ -37,7 +37,7 @@ const query = params => new Promise((resolve, reject) => {
   db.query(params, (err, data) => {
     if (err) { return reject(err) }
     if (!data || !data.Items) {
-      return reject(new Error(`database response was invalid for: ${params}`))
+      return reject(new Error(`database response was invalid for: ${JSON.stringify(params)}`))
     }
     return resolve(data.Items)
   })
@@ -47,7 +47,7 @@ const scan = params => new Promise((resolve, reject) => {
   db.scan(params, (err, data) => {
     if (err) { return reject(err) }
     if (!data || !data.Items) {
-      return reject(new Error(`database response was invalid for: ${params}`))
+      return reject(new Error(`database response was invalid for: ${JSON.stringify(params)}`))
     }
     return resolve(data.Items)
   })
