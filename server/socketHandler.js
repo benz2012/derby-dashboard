@@ -3,7 +3,7 @@ const socketHandler = (io) => {
   const cheering = {}
 
   io.on('connection', (socket) => {
-    const { remoteAddress } = socket.connection
+    const { remoteAddress } = socket.conn
     console.log(`connected ${remoteAddress} with socket ${socket.id}`)
     socket.emit('address', remoteAddress) // send browser their IP string
 
