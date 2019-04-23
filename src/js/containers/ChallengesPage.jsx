@@ -29,8 +29,14 @@ export default class ChallengesPage extends Component {
 
   totalScores = (challenges, teams) => {
     const teamsData = teams.filter(t => !t.homeTeam)
-    const initial = Object.assign({}, ...teamsData.map(t => ({ [t.id]: 0 })))
-    const totals = challenges
+    const initial = { include: true, score: 0 }
+    const initialSet = Object.assign({}, ...teamsData.map(t => ({
+      [t.id]: {
+        ...initial,
+      },
+    })))
+
+    return challenges
       .filter(c => (
         (Object.keys(c.scores).length > 0) &&
         (c.public === true)
@@ -39,22 +45,11 @@ export default class ChallengesPage extends Component {
         Object.keys(current.scores).forEach((tid) => {
           if (current.scores[tid].include === true) {
             // eslint-disable-next-line no-param-reassign
-            accum[tid] += current.scores[tid].score
+            accum[tid].score += current.scores[tid].score
           }
         })
         return accum
-      }, initial)
-    return Object.keys(totals)
-      .map((tid) => {
-        const thisTeam = teamsData.find(t => parseInt(t.id) === parseInt(tid))
-        return ({
-          id: tid,
-          score: totals[tid],
-          name: thisTeam.org,
-          orgId: thisTeam.orgId,
-          avatar: thisTeam.avatar,
-        })
-      })
+      }, initialSet)
   }
 
   buildBlocks(challenges, teams) {
@@ -90,7 +85,7 @@ export default class ChallengesPage extends Component {
 
     const challengeBlocks = this.buildBlocks(challenges, teams)
     const totals = this.totalScores(challenges, teams)
-    totals.sort((a, b) => (b.score - a.score))
+    const totalsHydrated = hydrateScores(totals, teams)
 
     if (challengeBlocks.length === 0) {
       return (<Empty alone>No challenges have been added.</Empty>)
@@ -98,13 +93,13 @@ export default class ChallengesPage extends Component {
 
     return (
       <Page>
-        { (totals && totals.length > 0) && (
+        { (totalsHydrated && totalsHydrated.length > 0) && (
           <React.Fragment>
             <Block style={{ marginBottom: '0px' }}>
               <HeadingText style={{ marginBottom: '0px' }}>Total Scores</HeadingText>
               <Prefix>All points from all challenges</Prefix>
             </Block>
-            <Leaderboard scores={totals} />
+            <Leaderboard scores={totalsHydrated} />
           </React.Fragment>
         )}
 
