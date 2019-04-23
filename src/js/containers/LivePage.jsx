@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client'
+import uuidv4 from 'uuid/v4'
 
 import Page from '../components/Page'
 import Block from '../components/Block'
@@ -11,14 +12,13 @@ import LiveCard from '../components/LiveCard'
 import { Currency, Centered, IconWhite, SidePad, Cheering } from '../components/Content'
 import { HeadingText2 } from '../components/HeadingText'
 import { CardFlexContainer } from '../components/Card'
-import { dataFetch } from '../util'
+import { dataFetch, storageGet, storageSet } from '../util'
 import { sumTeamFunds, sumSchoolFunds } from '../util/currency'
 
-const socket = io({ autoConnect: false })
-
 export default class Live extends Component {
+  /* eslint react/sort-comp: 0 */
   state = {
-    address: null,
+    browserId: null,
     watching: 0,
     cheering: null,
     teamChoice: null,
@@ -27,6 +27,8 @@ export default class Live extends Component {
     initial: true,
   }
 
+  socket
+
   componentDidMount() {
     dataFetch('/data/raised').then((data) => {
       this.setState({ raised: data })
@@ -34,21 +36,53 @@ export default class Live extends Component {
     dataFetch('/data/teams').then((data) => {
       this.setState({ teams: data })
     })
-    socket.open()
+
+    let browserId = storageGet('browserId')
+    if (!browserId) {
+      browserId = uuidv4()
+      storageSet('browserId', browserId)
+    }
+    this.setState({ browserId })
+
+    if (!this.socket) {
+      this.socket = io({
+        autoConnect: false,
+        query: { browserId },
+      })
+    }
+    this.socket.open()
     this.enableSocketListeners()
   }
 
   componentWillUnmount() {
     this.disableSocketListeners([
-      'liveUpdate', 'address', 'watching', 'cheering',
+      'liveUpdate', 'watching', 'cheering',
     ])
-    socket.close()
+    this.socket.close()
+  }
+
+  enableSocketListeners = () => {
+    this.socket.on('liveUpdate', (update) => {
+      // will prevent resorting of the list after initial render
+      this.setState({ initial: false })
+      const { teamId, mergable } = update
+      this.mergeLiveUpdate(teamId, mergable)
+    })
+    this.socket.on('watching', (data) => {
+      this.setState({ watching: data })
+    })
+    this.socket.on('cheering', (data) => {
+      this.setState({ cheering: data })
+      const { browserId } = this.state
+      const teamChoice = (data && browserId) && data[browserId]
+      this.setState({ teamChoice })
+    })
   }
 
   disableSocketListeners = (events) => {
     // Iterate over a list of socket events (strings), and disable event listener
     events.forEach((eventName) => {
-      socket.off(eventName)
+      this.socket.off(eventName)
     })
   }
 
@@ -61,10 +95,10 @@ export default class Live extends Component {
 
   handleTeamClick = (e) => {
     // send the server the teamId that the user clicked on
-    socket.emit('cheering', { cheeringFor: e.currentTarget.id })
+    this.socket.emit('cheering', { cheeringFor: e.currentTarget.id })
   }
 
-  buildTeams(teams, raised, initial, teamChoice, cheering) {
+  buildTeams = (teams, raised, initial, teamChoice, cheering) => {
     if (!teams || !raised) { return null }
     const teamsData = teams
     teamsData.forEach((team) => {
@@ -91,7 +125,7 @@ export default class Live extends Component {
     ))
   }
 
-  mergeLiveUpdate(teamId, mergable) {
+  mergeLiveUpdate = (teamId, mergable) => {
     this.setState((prevState) => {
       const order = prevState.raised.map(t => t.id)
       const prevRaised = prevState.raised.find(t => parseInt(t.id) === parseInt(teamId))
@@ -101,26 +135,6 @@ export default class Live extends Component {
       ]
       updated.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id))
       return { raised: updated }
-    })
-  }
-
-  enableSocketListeners() {
-    socket.on('liveUpdate', (update) => {
-      this.setState({ initial: false }) // will prevent resorting of the list after initial render
-      const { teamId, mergable } = update
-      this.mergeLiveUpdate(teamId, mergable)
-    })
-    socket.on('address', (data) => {
-      this.setState({ address: data })
-    })
-    socket.on('watching', (data) => {
-      this.setState({ watching: data })
-    })
-    socket.on('cheering', (data) => {
-      this.setState({ cheering: data })
-      const { address } = this.state
-      const teamChoice = (data && address) && data[address]
-      this.setState({ teamChoice })
     })
   }
 
