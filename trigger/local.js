@@ -38,4 +38,4 @@ const send = (t, f, a) => {
   })
 }
 
-send(30966, 'raised', 1200)
+send(30966, 'raised', 5200)

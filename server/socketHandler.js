@@ -3,22 +3,20 @@ const socketHandler = (io) => {
   const cheering = {}
 
   io.on('connection', (socket) => {
-    const ipAddress = socket.handshake.headers['x-real-ip']
-    console.log(`connected ${ipAddress} with socket ${socket.id}`)
-    socket.emit('address', ipAddress) // send browser their IP string
+    const { browserId } = socket.handshake.query
+    console.log(`connected ${browserId} with socket ${socket.id}`)
 
-    // Keep track of the number of people disconnected, 'tab/id' agnostic
-    if (clients[ipAddress] === undefined) {
-      clients[ipAddress] = {}
+    // Keep track of the number of people connected, 'tab' agnostic
+    if (clients[browserId] === undefined) {
+      clients[browserId] = {}
     }
-    clients[ipAddress][socket.id] = true
-    console.log(JSON.stringify(clients))
+    clients[browserId][socket.id] = true
     io.emit('watching', Object.keys(clients).length)
     io.emit('cheering', cheering)
 
     // Keep track of the teams that each person is cheering for
     socket.on('cheering', ({ cheeringFor }) => {
-      cheering[ipAddress] = cheeringFor
+      cheering[browserId] = cheeringFor
       io.emit('cheering', cheering)
     })
 
@@ -27,16 +25,15 @@ const socketHandler = (io) => {
       console.log(`disconnected ${socket.id}`)
 
       // Remove their tracking reference
-      delete clients[ipAddress][socket.id]
-      if (Object.keys(clients[ipAddress]).length === 0) {
-        // If this is the last socket (tab) per IP, remove them
+      delete clients[browserId][socket.id]
+      if (Object.keys(clients[browserId]).length === 0) {
+        // If this is the last socket (tab) per Id, remove them
         // completely and their cheering reference
-        delete clients[ipAddress]
-        delete cheering[ipAddress]
+        delete clients[browserId]
+        delete cheering[browserId]
       }
 
       // Send the updates to anyone still connected
-      console.log(JSON.stringify(clients))
       io.emit('watching', Object.keys(clients).length)
       io.emit('cheering', cheering)
     })
