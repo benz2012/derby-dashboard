@@ -21,10 +21,12 @@ const DateOptionContainer = styled.div`
   width: 100%;
   white-space: nowrap;
   overflow-x: scroll;
+  display: flex;
+  justify-content: space-between;
 `
 
 const DateOption = styled(CleanLink)`
-  display: inline-block;
+  display: block;
   width: 40px;
   padding: 4px 6px;
   text-align: center;
@@ -48,6 +50,7 @@ const DateCircle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: ${props => (props.selected ? props.theme.headerFG : 'none')};
