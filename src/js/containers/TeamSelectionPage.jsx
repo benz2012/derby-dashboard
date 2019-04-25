@@ -29,11 +29,15 @@ export default class TeamSelectionPage extends Component {
       this.setState({ save: false }) // eslint-disable-line
     }
 
-    const selectionExists = this.checkForSelection()
-    if (selectionExists) { return } // block the component from requesting data
+    const selection = this.checkForSelection()
 
     dataFetch('/data/teams').then((data) => {
       this.setState({ teams: data })
+      if (selection > 0 && data.every(t => t.id !== selection)) {
+        storageSet('teamSelection', { value: 0 })
+        this.setState({ selection: 0 })
+        this.setState({ save: true })
+      }
     })
   }
 
@@ -71,13 +75,12 @@ export default class TeamSelectionPage extends Component {
     // load the selected teamId
     const teamSelection = storageGet('teamSelection')
     if (teamSelection) {
-      this.setState({ selection: teamSelection.value })
-      if (teamSelection.value > 0) {
-        return true
-      }
+      const value = parseInt(teamSelection.value)
+      this.setState({ selection: value })
       this.setState({ save: false })
+      return value
     }
-    return false
+    return 0
   }
 
   buildTeamLinks(teams) {
@@ -98,7 +101,7 @@ export default class TeamSelectionPage extends Component {
     const { match } = this.props
     const { teams, save, selection, storageIsEnabled } = this.state
 
-    if (selection > 0) {
+    if (selection > 0 && teams && teams.find(t => t.id === selection)) {
       return <Redirect to={`${match.url}/${selection}`} />
     }
 

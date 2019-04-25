@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Page from '../components/Page'
 import Block from '../components/Block'
 import Loading from '../components/Loading'
+import Empty from '../components/Empty'
 import TeamBlock from '../components/TeamBlock'
 import TeamHeader from '../components/TeamHeader'
 import { TeamChallengeBlock } from '../components/ChallengeBlock'
@@ -29,21 +30,29 @@ export default class TeamPage extends Component {
   componentDidMount() {
     this.isThisTheSavedTeam()
     const { teamId } = this.props.match.params
-    dataFetch(`/data/teams/${teamId}`).then((data) => {
-      this.setState({ team: data })
-    })
-    dataFetch(`/data/raised/${teamId}`).then((data) => {
-      const raised = sumTeamFunds(data)
-      this.setState({ raised })
-    })
-    dataFetch(`/data/history/${teamId}`).then((data) => {
-      const history = joinFundsHistory(data)
-      this.setState({ history })
-    })
-    dataFetch('/data/challenges').then((data) => {
-      const challenges = filterChallenges(data, parseInt(teamId))
-      objectSort(challenges, 'name', stringSort)
-      this.setState({ challenges })
+
+    // Make sure team exists
+    dataFetch('/data/teams').then((teams) => {
+      if (teams.find(t => t.id === parseInt(teamId))) {
+        dataFetch(`/data/teams/${teamId}`).then((data) => {
+          this.setState({ team: data })
+        })
+        dataFetch(`/data/raised/${teamId}`).then((data) => {
+          const raised = sumTeamFunds(data)
+          this.setState({ raised })
+        })
+        dataFetch(`/data/history/${teamId}`).then((data) => {
+          const history = joinFundsHistory(data)
+          this.setState({ history })
+        })
+        dataFetch('/data/challenges').then((data) => {
+          const challenges = filterChallenges(data, parseInt(teamId))
+          objectSort(challenges, 'name', stringSort)
+          this.setState({ challenges })
+        })
+      } else {
+        this.setState({ team: undefined, raised: undefined })
+      }
     })
   }
 
@@ -89,6 +98,9 @@ export default class TeamPage extends Component {
   render() {
     const { thisTeamIsSaved, team, raised, history, challenges } = this.state
     if (team === null || raised === null) { return <Loading /> }
+    if (team === undefined && raised === undefined) {
+      return <Empty alone>This team does not exist.</Empty>
+    }
 
     const unsave = thisTeamIsSaved ? this.unsaveButton() : null
     const challengeBlocks = challenges && this.buildChallengeBlocks(challenges)
