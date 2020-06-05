@@ -28,7 +28,7 @@
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
-    "acorn": "^6.0.7",
+    "acorn": "^6.4.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^7.1.2",
