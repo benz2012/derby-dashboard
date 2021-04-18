@@ -6,7 +6,7 @@ const scrapeUtil = require('./utility')
 
 // Parse Globals
 const HOSTNAME = 'https://hope.huntsmancancer.org'
-const BASENAME = 'huntsmanchallenge'
+const BASENAME = 'huntsmanchallenge2021'
 
 // Parse Utilities
 const teamIdFromURI = (url) => {
