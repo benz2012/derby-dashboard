@@ -3,7 +3,7 @@ const parse = require('./parse')
 const dbRead = require('../database/dbRead')
 
 // Global Constants
-const SCHOOL_ID_RIT = 28116
+const SCHOOL_ID_RIT = 90526
 
 // Global State
 let schools = null
