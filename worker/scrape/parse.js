@@ -22,7 +22,7 @@ const raisedValuesForSchool = (html, schoolId) => new Promise((resolve, reject) 
   const teams = dom('.GroupChildWidget-group')
 
   // funds donated to school page
-  const schoolAmount = dom('.page-raised').first().text()
+  const schoolAmount = dom('#page-raised').first().text()
   const schoolCleanAmount = schoolAmount.trim().replace('$', '').replace(',', '')
   const schoolFloatAmount = parseFloat(schoolCleanAmount)
   if (!schoolCleanAmount.split('').every(c => (parseInt(c) || ['0', '.'].includes(c)))) {
