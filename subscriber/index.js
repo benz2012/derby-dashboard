@@ -49,7 +49,7 @@ exports.handler = (event, context, callback) => {
         Protocol: 'sms',
         Endpoint: cleanNumber,
       }
-      const sns = new SNS()
+      const sns = new SNS({ region: 'us-east-1' })
 
       sns.subscribe(params, (err, data) => {
         if (err) {

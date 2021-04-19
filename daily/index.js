@@ -23,7 +23,7 @@ exports.handler = (event, context, callback) => {
 
     console.log(message)
 
-    const sns = new SNS()
+    const sns = new SNS({ region: 'us-east-1' })
     sns.publish(params, (publishErr) => {
       if (publishErr) { console.log(publishErr) }
     })

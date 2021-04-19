@@ -6,7 +6,7 @@ const scrapeUtil = require('./utility')
 
 // Parse Globals
 const HOSTNAME = 'https://hope.huntsmancancer.org'
-const BASENAME = 'huntsmanchallenge'
+const BASENAME = 'huntsmanchallenge2021'
 
 // Parse Utilities
 const teamIdFromURI = (url) => {
@@ -19,10 +19,10 @@ const teamIdFromURI = (url) => {
 const raisedValuesForSchool = (html, schoolId) => new Promise((resolve, reject) => {
   const raisedValues = {}
   const dom = cheerio.load(html)
-  const teams = dom('.GroupRosterWidget-partdesc')
+  const teams = dom('.GroupChildWidget-group')
 
   // funds donated to school page
-  const schoolAmount = dom('.page-raised').first().text()
+  const schoolAmount = dom('#page-raised').first().text()
   const schoolCleanAmount = schoolAmount.trim().replace('$', '').replace(',', '')
   const schoolFloatAmount = parseFloat(schoolCleanAmount)
   if (!schoolCleanAmount.split('').every(c => (parseInt(c) || ['0', '.'].includes(c)))) {
@@ -36,12 +36,12 @@ const raisedValuesForSchool = (html, schoolId) => new Promise((resolve, reject) 
   raisedValues[schoolId] = schoolFloatAmount
 
   teams.each((i, elm) => {
-    const teamURI = dom(elm).children('.GroupRosterWidget-name').first().attr('href')
+    const teamURI = dom(elm).children('.GroupListWidget-name').first().attr('href')
     const teamId = teamIdFromURI(teamURI)
     if (!teamId) {
       return reject(new Error(`failed to find teamId in teamURI: ${teamURI}`))
     }
-    const amount = dom(elm).children('.GroupRosterWidget-raised').first().text()
+    const amount = dom(elm).children('.GroupListWidget-raised').first().text()
     const cleanAmount = amount.trim().replace('$', '').replace(',', '')
     const floatAmount = parseFloat(cleanAmount)
 
@@ -70,10 +70,10 @@ const raisedValuesForSchool = (html, schoolId) => new Promise((resolve, reject) 
 const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
   const urls = {}
   const dom = cheerio.load(html)
-  const teams = dom('.GroupRosterWidget-partdesc')
+  const teams = dom('.GroupChildWidget-group')
 
   teams.each((i, elm) => {
-    const teamNode = dom(elm).children('.GroupRosterWidget-name').first()
+    const teamNode = dom(elm).children('.GroupListWidget-name').first()
     const teamName = teamNode.text()
     const teamURI = teamNode.attr('href')
     const teamId = teamIdFromURI(teamURI)

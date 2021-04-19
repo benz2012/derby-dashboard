@@ -39,7 +39,7 @@ router.get('/daily', (req, res) => {
     },
   }
   return request(options, (err, response, body) => {
-    const events = JSON.parse(body)
+    const events = body && JSON.parse(body)
 
     const ny = moment().tz('America/New_York')
     const today = ny.format('YYYY-MM-DD')
@@ -50,13 +50,22 @@ router.get('/daily', (req, res) => {
     }
 
     const todaysURL = `https://www.derbydashboard.io/schedule/${today}`
-    const urlEncoded = encodeURIComponent(todaysURL)
-    const bitlyReqURI = `https://api-ssl.bitly.com/v3/shorten?access_token=${process.env.BITLY_API_KEY}&longUrl=${urlEncoded}`
-    return request(bitlyReqURI, (bitlyErr, bitlyRes, bitlyBody) => {
-      const bitData = JSON.parse(bitlyBody)
+    // const urlEncoded = encodeURIComponent(todaysURL)
+    // const bitlyReqURI = `https://api-ssl.bitly.com/v3/shorten?access_token=${process.env.BITLY_API_KEY}&longUrl=${urlEncoded}`
+    const bitlyReq = {
+      method: 'POST',
+      url: 'https://api-ssl.bitly.com/v4/shorten',
+      auth: {
+        bearer: process.env.BITLY_API_KEY,
+      },
+      json: {
+        long_url: todaysURL,
+      },
+    }
+    return request(bitlyReq, (bitlyErr, bitlyRes, bitData) => {
       if (!bitData) { return res.json({ error: 'bitly didnt work' }) }
-      const bitHash = bitData.data.hash
-      if (!bitHash) { return res.json({ error: 'bitly didnt have link' }) }
+      const bitLink = bitData.id
+      if (!bitLink) { return res.json({ error: 'bitly didnt have link' }) }
 
       todaysEvents.sort(timeSort)
       const microEvents = todaysEvents.map((event) => {
@@ -66,7 +75,7 @@ router.get('/daily', (req, res) => {
       })
       const eventsString = microEvents.join('\n')
 
-      const message = `Todays Events:\n${eventsString}\nDetails: bit.ly/${bitHash}`
+      const message = `Todays Events:\n${eventsString}\nDetails: ${bitLink}`
       return res.json(message)
     })
   })
