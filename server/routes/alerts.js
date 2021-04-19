@@ -39,7 +39,7 @@ router.get('/daily', (req, res) => {
     },
   }
   return request(options, (err, response, body) => {
-    const events = JSON.parse(body)
+    const events = body && JSON.parse(body)
 
     const ny = moment().tz('America/New_York')
     const today = ny.format('YYYY-MM-DD')
