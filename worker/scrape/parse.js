@@ -107,7 +107,6 @@ const teamURLsForSchool = (html, schoolId) => new Promise((resolve, reject) => {
 })
 
 const teamValues = (html, teamId) => new Promise((resolve, reject) => {
-  console.log('parsing team values for', teamId)
   const dom = cheerio.load(html)
 
   const teamName = dom('#page_name').text()

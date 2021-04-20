@@ -58,6 +58,11 @@ const scheduler = () => {
 }
 
 
-// Clock, execute every second
-initialRun()
-setInterval(scheduler, 1000)
+// roughly wait for in-memory init
+setTimeout(() => {
+  // try a first pass so we don't have to wait 59 mins for values
+  initialRun()
+
+  // Clock, execute every second
+  setInterval(scheduler, 1000)
+}, 3000)
