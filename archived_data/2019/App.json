@@ -1,0 +1,290 @@
+[
+  {
+    "DataName": "MorePage",
+    "Disclaimer": "This website is not a fundraising service and will never attempt to collect money or payment information from you. You should only enter payment information on the https://hope.huntsmancancer.org/ domain, and never on this website.\n \n This website displays data collected directly from [Huntsman Challenge](https://hope.huntsmancancer.org/huntsmanchallenge/). This website shows totals raised by teams, including funds donated to the Huntsman Challenge outside of the Huntsman Challenge website, such as sending a check to Sigma Chi.\n \n The Sigma Chi International Fraternity in no way endorses any information displayed on this website. For their officially endorsed Huntsman Challenge, please visit [Huntsman Challenge](https://hope.huntsmancancer.org/huntsmanchallenge/).\n \n This Website uses HTML Local Storage (*not cookies*) to save your team selection. This website tracks usage statistics using Google Analytics.",
+    "Support": "This website is built and maintained by brothers of Sigma Chi. The technolgies used to build this website can be viewed on the [Github](https://github.com/benz2012/derby-dashboard) open-source repository.\n \n If you've found a bug or have questions, please contact [derbydashboard@gmail.com](mailto:derbydashboard@gmail.com).",
+    "SaveToPhone": "This website can be saved to your phone and appear as an App. Just follow a few simple steps below, depending on your phone type.\n \n![Derby Dashboard saved on an iPhone Home Screen](/icon_on_home.png)\n \n ### iPhone w/ Safari\n1. Navigate to the [homepage](/)\n2. Tap the Share button\n3. Scroll the grey action buttons to the left\n4. Tap **Add to Home Screen**\n5. Tap **Add** in the top-right corner\n \n### Android w/ Chrome\n1. Navigate to the [homepage](/)\n2. Tap the More button in the top-right\n3. Tap **Add to Home screen**\n \n*For alternative Android web browsers, follow [this guide](https://www.wikihow.com/Set-a-Bookmark-Shortcut-in-Your-Home-Screen-on-Android) from wiki-how.*",
+    "SignUpForTexts": "This website offers optional text message alerts. The extent of the alerts will be to inform you of the events taking place during each Derby Day. If you sign up, you will receive one message each day that events occur, and nothing more.\n \nAn example message might look like\n \n> DERBY> Todays events:\n> SignASig @All Day\n> Volleyball @7pm\n> Details: http://bit.ly/12345\n \n#### Subscribe with your cell phone number below\n*By clicking subscribe, you agree to our [Privacy Policy](/policy.html) and [Terms of Service](/tos.html)*",
+    "OverviewVideo": "https://www.youtube.com/watch?v=jwhd8NygOx4"
+  },
+  {
+    "1": {
+      "Pledges": {
+        "1": 10,
+        "2": 25,
+        "3": 10,
+        "4": 5,
+        "6": 25,
+        "7": 150,
+        "8": 50,
+        "9": 50,
+        "10": 5,
+        "11": 0
+      },
+      "Name": "Ben Zenker",
+      "Email": "imbenzenker@gmail.com"
+    },
+    "2": {
+      "Pledges": {
+        "1": 5,
+        "2": 5,
+        "3": 2,
+        "4": 3,
+        "6": 10,
+        "7": 50,
+        "8": 50,
+        "9": 0
+      },
+      "Name": "Amar Bhatt",
+      "Email": "bhatt.amar.a@gmail.com"
+    },
+    "3": {
+      "Pledges": {
+        "1": 1,
+        "2": 0,
+        "3": 5,
+        "4": 0,
+        "6": 5,
+        "7": 20,
+        "8": 0,
+        "9": 0
+      },
+      "Name": "Justin Eng",
+      "Email": "jxe1104@rit.edu"
+    },
+    "4": {
+      "Pledges": {
+        "1": 5,
+        "2": 5,
+        "3": 0,
+        "4": 0,
+        "6": 5,
+        "7": 0,
+        "8": 0,
+        "9": 50
+      },
+      "Name": "Courtney McGorrill",
+      "Email": "cmcg429@gmail.com"
+    },
+    "5": {
+      "Pledges": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "Name": "Adnan Syed",
+      "Email": "ams4dt@virginia.edu"
+    },
+    "6": {
+      "Pledges": {
+        "1": 5,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "6": 5,
+        "7": 0,
+        "8": 0,
+        "9": 100
+      },
+      "Name": "Matthew Crawford",
+      "Email": "mcrawford0126@gmail.com"
+    },
+    "7": {
+      "Pledges": {
+        "1": 10,
+        "2": 10,
+        "3": 5,
+        "4": 0,
+        "6": 10,
+        "7": 100,
+        "8": 100,
+        "9": 100
+      },
+      "Name": "Luther Heigl",
+      "Email": "lhheigl@gmail.com"
+    },
+    "8": {
+      "Pledges": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 50
+      },
+      "Name": "Farid Barquet",
+      "Email": "Unknown@unkown.unknown"
+    },
+    "DataName": "AlumniPledges"
+  },
+  {
+    "1": {
+      "Description": "For every brother that performs 5 or more hours of community service, Alumni will donate pledged amount.",
+      "CountName": "Brothers",
+      "EndDate": "2019-04-22",
+      "CountData": [
+        "Joseph Attias",
+        "Jacob Davies",
+        "Patrick Ehrgott",
+        "Kel Hakim",
+        "David Harris",
+        "Christopher Morgan"
+      ],
+      "Name": "Community Service"
+    },
+    "2": {
+      "Description": "For every dry greek/RIT event that the chapter attends, being hosted by another organization and proving that 5 or more brothers were in attendance, Alumni will donate pledged amount.",
+      "CountName": "Events",
+      "EndDate": "2019-04-22",
+      "CountData": [
+        "Karaoke for a Cause ![](https://i.imgur.com/JJjpXmo.jpg)",
+        "NUG Night ![](https://i.imgur.com/RHY8hls.jpg)",
+        "Bowl for Body Image ![](https://i.imgur.com/BM7VL0e.jpg)",
+        "Chipotle Fundraiser ![](https://i.imgur.com/oVh9Y08.jpg)"
+      ],
+      "Name": "RIT/Greek Community"
+    },
+    "3": {
+      "Description": "For every RIT faculty or staff that donates to Derby Days, Alumni will donate pledged amount.",
+      "CountName": "Faculty/Staff",
+      "EndDate": "2019-04-26",
+      "CountData": [
+        "Mariah McLane Giardino",
+        "Melodie Kolmetz",
+        "Dr. Newcomb",
+        "Danielle Dankey"
+      ],
+      "Name": "Faculty and Staff Relations"
+    },
+    "4": {
+      "Description": "For every brother that emails a complete resume AND a filled out application or proof of attendance of some post-graduate opportunity (career fair, graduate fair, workshop, etc).",
+      "CountName": "Brothers",
+      "EndDate": "2019-04-22",
+      "CountData": [
+        "Josh Kelly",
+        "Tiger Chapman",
+        "Ryan Kent",
+        "Jarrett Duncovich"
+      ],
+      "Name": "Co-op/Job Preparedness"
+    },
+    "6": {
+      "Description": "For every group community service event (at least 1 hour) completed that includes 5 or more brothers (picture proof), Alumni will donate pledged amount.",
+      "CountName": "Events",
+      "EndDate": "2019-04-22",
+      "CountData": [
+        "Habitat for Humanity",
+        "Ronald McDonald ![photo](https://i.imgur.com/XRTFR2s.jpg)"
+      ],
+      "Name": "Group Community Service Event"
+    },
+    "7": {
+      "Description": "Chapter adds two faculty advisors and has them come to at least 1 group meeting, Alumni will donate pledged amount.",
+      "CountName": "Completion",
+      "EndDate": "2019-04-22",
+      "CountData": [],
+      "Name": "Faculty Advisors"
+    },
+    "8": {
+      "Description": "Chapter has 90% on-time completion rate of SMART goal reports, Alumni will donate pledged amount.",
+      "CountName": "Completion",
+      "EndDate": "2019-04-22",
+      "CountData": [
+        "Completed"
+      ],
+      "Name": "SMART Goals"
+    },
+    "9": {
+      "Description": "Chapter has an average of 90% chapter attendance, Alumni will donate pledged amount.",
+      "CountName": "Completion",
+      "EndDate": "2019-04-22",
+      "CountData": [],
+      "Name": "Chapter Attendance"
+    },
+    "10": {
+      "Description": "$X for every brother who sends you an introductory email about themselves {$5 from the brother alumni, $2 from Courtney}. This challenge is valid for the following people and the following criteria:\n\nBen Zenker (imbenzenker@gmail.com)\nXi Class and newer, brief email about who they are, any goals/dreams they have for RIT and beyond, and what their favorite flavor of calzone is.\n\nLuther Heigl (lhheigl@gmail.com)\nXi Class and newer, introduction of themselves, how the chapter/school is going, and anything else they would like to share!\n\nCourtney McGorrill (cmcg429@gmail.com)\nAny active brother,\nFor brothers that know her: what their goals and plans are for the coming years, and anything else they'd like to share!\nFor brothers who don't know her: how they got started with Sigma Chi and what hopes they have for the chapters future, plus anything else about themselves they want to share!\n\nJustin Eng: No Restrictions (jxe1104@rit.edu)\n\nMatthew Crawford: No Restrictions (mcrawford0126@gmail.com)",
+      "CountName": "Emails",
+      "EndDate": "2019-04-29",
+      "CountData": [
+        "Jacob Davies to Ben Zenker",
+        "Ryan Kent to Luther Heigl",
+        "Mike Lambrecht To Ben Zenker",
+        "Luke Murphy to Ben Zenker",
+        "Nicholas Toth to Ben Zenker",
+        "Alex Bogusta to Ben Zenker",
+        "Kel Hakim to Ben Zenker",
+        "Kel Hakim to Justin Eng",
+        "Alex Bogusta to Justin Eng",
+        "Andrew Ward to Justin Eng",
+        "Luke Murphy to Justin Eng",
+        "Alex Bogusta to Matt Crawford",
+        "Andrew Ward to Matt Crawford",
+        "Luke Murphy to Matt Crawford",
+        "Tiger Chapman to Matt Crawford",
+        "Aidan Sullivan to Courtney McGorrill",
+        "Andrew Ward to Courtney McGorrill",
+        "Luke Murphy to Courtney McGorrill",
+        "Kel Hakim to Courtney McGorrill",
+        "Nick Toth to Courtney McGorrill",
+        "Sam Walker to Courtney McGorrill",
+        "Alex Bogusta to Luther Heigl",
+        "Nick Toth to Luther Heigl",
+        "Luke Murphy to Luther Heigl"
+      ],
+      "Name": "Welcome Hands Engagement"
+    },
+    "11": {
+      "Description": "Farid Barquet will donate to each brother who holds a leadership position on campus. If you hold any student leadership position (e.g with Res Life, YearOne, Orientation, SG or an RSO, Campus Life, on the eboard of another club, or anything else that you consider leadership) hit him up and he’ll donate to your page!",
+      "CountName": "Leaders",
+      "EndDate": "2019-04-29",
+      "CountData": [
+        "Grant Franko",
+        "San Walker",
+        "Alex Bogusta",
+        "Eric Kolb",
+        "Nicholas Toth",
+        "Constantino Larach",
+        "Dade Wood",
+        "Additional Donation 1",
+        "Additional Donation 2",
+        "Michael Gugino",
+        "Michael Lambrecht",
+        "Jojo Athias"
+      ],
+      "Name": "Leadership Positions"
+    },
+    "DataName": "AlumniChallenges"
+  },
+  {
+    "AdminPanel": {
+      "Root": [
+        "10155619876878167"
+      ],
+      "Alumni": [
+        "10157435163882494"
+      ],
+      "Chairman": [
+        "1626521804052179",
+        "1625764414188675",
+        "1543869719047765"
+      ]
+    },
+    "DataName": "Authorized",
+    "AccessTokens": {
+      "10155619876878167": "EAAYVEwCZAKEUBAMA5m3ZCbeza0QZAuhbG8h1yWwx0A1vmaYjbkHfzUhOQ4vAP497oF0A865vyc1o2SCeQ4eWxZCJM9MLfZC1RtBZBsP3jLUYzcehfZCcPkMQHrMVPND5ZCl2TGRk5yB6ADg1VhmuNdnT1VfUarNIuX9vCwDZCIZClkAmhC5emkLLliYpDGGHp8xTgZD",
+      "10157435163882494": "EAAYVEwCZAKEUBAHVR7wf3LtNPrXxQQcTpRbBnKnoFy3BX24FI0tyxlLGKrOswIlfvszNkZCHPeg8IVEJRGxsoOnhd1YVnGT0TfY9I4DeZCR3Kfp8lHv8taUPCZC2ZAzsl5c7Cz4ZBUZCnsYfdqxZBkXoORqYFIKH3WwYUnYWH5lCmAqPn5PN7vb8ieTk4baBHOeBFf9mHUtpOQZDZD",
+      "1543869719047765": "EAAYVEwCZAKEUBANdnDZCwcPDMsLIKOQOqM2ZCSZC3UPZBO7O2MXJlfM9CDnNDvtQyeASuGvzcfFdZBz23QtDc6bdhGVgyKznfZCvJ4imndDOhEoPOLlepxbnUCshoPQPJ5qh2NUqVp40xE1g9xbK73DW3wqIeNNLPCt3xVI00HEFrbfAXsI0g252zd1H4L0ZAEdIYAeysRaZChwZDZD",
+      "1625764414188675": "EAAYVEwCZAKEUBACgqZBzVSkdvZB2VVykkII7ZAWIYxmxeJvv6cN4Ce32VtmZAxf4SD6Bc9VzoZB9ArFTiHsGMsn7imDKP776ewYV1E3svgsseJHHxze36r90Rx5pZAXBDp6S3PUOzcpVw4BUu5hD7ZCkZAlTSB96RgS7kSJSdSb23ZCDuL1ZBohxf5kS0yGhhB1eqSdURPhWZBy54gZDZD",
+      "1626521804052179": "EAAYVEwCZAKEUBAO2eKFU9E3LExdznhy9NroKhG5P6Mg70AtFn9G8tb3NkcEVMSZCmtk90CndpsiS1b1H909VibIp9YAyf7b62cnZCvRQmtK4rXZABCHxCg8DViOzHfpov3WlwTmbIbIt8ybPOhXopdjBhFpzWeE7PQIUpJIVVo6gDXIuAUZBjE7DLWibXUphCA9z7Eo3t4wZDZD"
+    }
+  }
+]

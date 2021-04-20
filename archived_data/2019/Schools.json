@@ -1,0 +1,53 @@
+[
+  {
+    "AlertDateRange": {
+      "Start": "2019-04-22",
+      "End": "2019-04-26"
+    },
+    "Teams": [
+      30966,
+      58782,
+      58784,
+      58786,
+      58788,
+      58790
+    ],
+    "SchoolId": 28116,
+    "AlertTime": "08:00",
+    "HomeTeamId": 30966,
+    "AvatarURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/596fb1828c15a.jpg",
+    "EventYear": "2019",
+    "HomePageData": {
+      "LearnMoreURL": "https://hope.huntsmancancer.org/huntsmanchallenge/about",
+      "Header": "We are the Generation to End Cancer!",
+      "Body": "Thousands of Sigma Chi's have stepped up to fund cancer research and have announced a 7-year commitment to raise $11M to fuel the innovative research at Huntsman Cancer Institute (HCI).",
+      "VideoURL": "https://www.youtube.com/watch?v=flEs0fGm_VY"
+    },
+    "Active": true,
+    "Abbreviation": "RIT",
+    "Name": "Rochester Institute of Technology",
+    "URL": "https://hope.huntsmancancer.org/huntsmanchallenge/28116"
+  },
+  {
+    "AlertDateRange": {
+      "Start": "2018-04-14",
+      "End": "2018-04-22"
+    },
+    "Teams": [],
+    "SchoolId": 954,
+    "AlertTime": "08:00",
+    "HomeTeamId": 3502,
+    "AvatarURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/596fb1828c15a.jpg",
+    "EventYear": "2018",
+    "HomePageData": {
+      "Body": "Thousands of Sigma Chi's have stepped up to fund cancer research and have announced a 7-year commitment to raise $11M to fuel the innovative research at Huntsman Cancer Institute (HCI).",
+      "Header": "We are the Generation to End Cancer!",
+      "LearnMoreURL": "https://us-p2p.netdonor.net/223/derby-challenge/about",
+      "VideoURL": "https://www.youtube.com/watch?v=flEs0fGm_VY"
+    },
+    "Active": false,
+    "Abbreviation": "RIT",
+    "Name": "Rochester Institute of Technology",
+    "URL": "https://us-p2p.netdonor.net/223/derby-challenge/954"
+  }
+]

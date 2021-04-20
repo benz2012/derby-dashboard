@@ -1,0 +1,375 @@
+[
+  {
+    "ChallengeId": 0,
+    "SchoolId": 28116,
+    "EventId": 0,
+    "Description": "The sorority with the most sisters present at the event get the most points",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 2
+      },
+      "58784": {
+        "include": true,
+        "score": 4
+      },
+      "58786": {
+        "include": true,
+        "score": 3
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 5
+      }
+    },
+    "Name": "Kickoff BBQ",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 1,
+    "SchoolId": 28116,
+    "EventId": 1,
+    "Description": "The sorority with the most sisters present at bowling will win the most amount of points!",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 4
+      },
+      "58784": {
+        "include": true,
+        "score": 2
+      },
+      "58786": {
+        "include": true,
+        "score": 1
+      },
+      "58788": {
+        "include": true,
+        "score": 3
+      },
+      "58790": {
+        "include": true,
+        "score": 5
+      }
+    },
+    "Name": "Bowling",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 2,
+    "SchoolId": 28116,
+    "EventId": 6,
+    "Description": "The sorority with the most selfies with brothers win the most amount of points!",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 3
+      },
+      "58784": {
+        "include": true,
+        "score": 4
+      },
+      "58786": {
+        "include": true,
+        "score": 4
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 5
+      }
+    },
+    "Name": "Selfie A Sig",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 3,
+    "SchoolId": 28116,
+    "EventId": 2,
+    "Description": "The sorority that wins the greatest number of yard games wins the most amount of points!",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 4
+      },
+      "58784": {
+        "include": true,
+        "score": 2
+      },
+      "58786": {
+        "include": true,
+        "score": 5
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 4
+      }
+    },
+    "Name": "Yard Games and Calzones",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 4,
+    "SchoolId": 28116,
+    "EventId": 7,
+    "Description": "See a Sig, talk to him, and have him put your sororities pin on his shirt. Your pin will go on top. If your pin is on top at the end of the day, your sorority gets the most points. If a brother is already wearing your sorority’s pin he will move your pin to the top. ",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 3
+      },
+      "58784": {
+        "include": true,
+        "score": 2
+      },
+      "58786": {
+        "include": true,
+        "score": 4
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 7
+      }
+    },
+    "Name": "Pin a Sig",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 5,
+    "SchoolId": 28116,
+    "EventId": 3,
+    "Description": "If your sorority wins the Jeopardy! competition, then you win the most points!",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 5
+      },
+      "58784": {
+        "include": true,
+        "score": 4
+      },
+      "58786": {
+        "include": true,
+        "score": 2
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 3
+      }
+    },
+    "Name": "Jeopardy!",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 6,
+    "SchoolId": 28116,
+    "EventId": 8,
+    "Description": "Have your sorority sign the greatest number of comic books and win the challenge!\n",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 3
+      },
+      "58784": {
+        "include": true,
+        "score": 6
+      },
+      "58786": {
+        "include": true,
+        "score": 2
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 5
+      }
+    },
+    "Name": "Sign a Sig",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 7,
+    "SchoolId": 28116,
+    "EventId": 4,
+    "Description": "Find all of the brothers in the greatest amount of time and win the most points!",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 4
+      },
+      "58784": {
+        "include": true,
+        "score": 2
+      },
+      "58786": {
+        "include": true,
+        "score": 4
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 5
+      }
+    },
+    "Name": "Brother Scavenger Hunt",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 8,
+    "SchoolId": 28116,
+    "EventId": 9,
+    "Description": "Collect cards from brothers. Collect the most amount of cards and win the most amount of points!",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 4
+      },
+      "58784": {
+        "include": true,
+        "score": 4
+      },
+      "58786": {
+        "include": true,
+        "score": 2
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 7
+      }
+    },
+    "Name": "Find your Villian",
+    "ScoresPublic": true
+  },
+  {
+    "ChallengeId": 9,
+    "SchoolId": 28116,
+    "EventId": 5,
+    "Description": "Win the most Minute to Win It competitions to win the last event of Derby Days!",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 5
+      },
+      "58784": {
+        "include": true,
+        "score": 2
+      },
+      "58786": {
+        "include": true,
+        "score": 5
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 3
+      }
+    },
+    "Name": "Sorority Appreciation ",
+    "ScoresPublic": true
+  },
+  {
+    "Description": "Highest donation total wins!",
+    "Scores": {
+      "30966": {
+        "include": false,
+        "score": 0
+      },
+      "58782": {
+        "include": true,
+        "score": 3
+      },
+      "58784": {
+        "include": true,
+        "score": 4
+      },
+      "58786": {
+        "include": true,
+        "score": 2
+      },
+      "58788": {
+        "include": true,
+        "score": 1
+      },
+      "58790": {
+        "include": true,
+        "score": 5
+      }
+    },
+    "ChallengeId": 10,
+    "Name": "Donations",
+    "SchoolId": 28116,
+    "ScoresPublic": true
+  }
+]

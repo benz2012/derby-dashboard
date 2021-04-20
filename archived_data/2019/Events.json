@@ -1,0 +1,158 @@
+[
+  {
+    "ChallengeId": 0,
+    "SchoolId": 28116,
+    "Location": "Grassy Area by Global Village",
+    "EventId": 0,
+    "Description": "Meet the brothers of Sigma Chi and enjoy some free Chick-Fil-A as we honor those who have passed away due to cancer by performing a white rose ceremony (our Fraternity's way of honoring those who have passed away). \n\nPoints are based on attendance.",
+    "Time": {
+      "Start": "17:00",
+      "End": "19:00"
+    },
+    "DateString": "2019-04-22",
+    "Type": "Public Event",
+    "Name": "Kickoff BBQ",
+    "Tags": [
+      "Free Food"
+    ]
+  },
+  {
+    "ChallengeId": 1,
+    "SchoolId": 28116,
+    "Location": "Bowl-A-Roll",
+    "EventId": 1,
+    "Description": "Come to Bowl-A-Roll and enjoy some bowling while a portion of the proceeds go to Huntsman Cancer Institute! Bowling costs $5, shoes are $1.\n\nPoints are based on attendance.",
+    "Time": {
+      "Start": "21:00",
+      "End": "23:00"
+    },
+    "DateString": "2019-04-22",
+    "Type": "Individual Activity",
+    "Name": "Bowling for HCI",
+    "Tags": []
+  },
+  {
+    "ChallengeId": 3,
+    "SchoolId": 28116,
+    "Location": "Brother's off campus house",
+    "EventId": 2,
+    "Description": "Come compete against each other in yard games and enjoy some calzones from the DP Dough fundraiser.\n\nRules: Whoever wins the most yard games wins the event",
+    "Time": {
+      "Start": "17:30",
+      "End": "20:00"
+    },
+    "DateString": "2019-04-23",
+    "Type": "Team Activity",
+    "Name": "Yard Games and Calzones ",
+    "Tags": []
+  },
+  {
+    "ChallengeId": 5,
+    "SchoolId": 28116,
+    "Location": "Golisano 1400",
+    "EventId": 3,
+    "Description": "Compete against each other in Jeopardy! Sisters will be switched out throughout the night in order to make sure everyone can participate. We'll \"interview\" sisters to give us a change to get to know you guys. Ice cream will be provided after.",
+    "Time": {
+      "Start": "17:00",
+      "End": "20:00"
+    },
+    "DateString": "2019-04-24",
+    "Type": "Team Activity",
+    "Name": "Jeopardy!",
+    "Tags": [
+      "Free Food"
+    ]
+  },
+  {
+    "ChallengeId": 7,
+    "SchoolId": 28116,
+    "Location": "RIT Academic Side",
+    "EventId": 4,
+    "Description": "Pictures will be posted to our social media of where brothers are hiding on campus. Find all of the brothers around campus in the fastest time in order to win!",
+    "Time": {
+      "Start": "17:00",
+      "End": "19:00"
+    },
+    "DateString": "2019-04-25",
+    "Type": "Individual Activity",
+    "Name": "Brother Scavenger Hunt",
+    "Tags": []
+  },
+  {
+    "ChallengeId": 9,
+    "SchoolId": 28116,
+    "Location": "Global Village Plaza",
+    "EventId": 5,
+    "Description": "Come get free Chipottle and compete in fun minute-to-win-it games. Brothers will be performing challenges as well\n\nRules:\nWin the most Minute-to-Win it competitions in order to win the event!",
+    "Time": {
+      "Start": "17:30",
+      "End": "21:00"
+    },
+    "DateString": "2019-04-26",
+    "Type": "Team Activity",
+    "Name": "Sorority Appreciation",
+    "Tags": [
+      "Free Food"
+    ]
+  },
+  {
+    "ChallengeId": 2,
+    "SchoolId": 28116,
+    "Location": "RIT",
+    "EventId": 6,
+    "Description": "Get a Selfie with a brother, post that picture in your sorority's Facebook group, and get points for each picture!\n\nRules: \n-Group Pics Count (you will receive one point for every brother multiplied by the number of sisters in each picture. e.g., three brothers and two sisters will earn you six points.)\n\n-You can only take 1 photo per brother \n\n-You must be in the photo \n\n-Upload your photos to your Facebook page at the end of the event\n",
+    "Time": {
+      "Start": "08:00",
+      "End": "16:00"
+    },
+    "DateString": "2019-04-23",
+    "Type": "Individual Activity",
+    "Name": "Selfie a Sig",
+    "Tags": []
+  },
+  {
+    "ChallengeId": 4,
+    "SchoolId": 28116,
+    "Location": "RIT",
+    "EventId": 7,
+    "Description": "See a brother around campus, go up to him and ask him to put your organization's pin on. \n\nRules:\nSee a Sig, talk to him, and have him put your sororities pin on his shirt. Your pin will go on top. If your pin is on top at the end of the day, your sorority gets the most points. If a brother is already wearing your sorority’s pin he will move your pin to the top.",
+    "Time": {
+      "Start": "08:00",
+      "End": "16:00"
+    },
+    "DateString": "2019-04-24",
+    "Type": "Individual Activity",
+    "Name": "Pin a Sig",
+    "Tags": []
+  },
+  {
+    "ChallengeId": 6,
+    "SchoolId": 28116,
+    "Location": "RIT",
+    "EventId": 8,
+    "Description": "See a brother, and ask him to sign your comic book (include your name and letters). You get points based on how many signatures your organization has in brother's comic books.\n\nRules:\nFind a brother and sign his comic book. Please write your name and organization",
+    "Time": {
+      "Start": "08:00",
+      "End": "16:00"
+    },
+    "DateString": "2019-04-25",
+    "Type": "Individual Activity",
+    "Name": "Sign a Sig",
+    "Tags": []
+  },
+  {
+    "ChallengeId": 8,
+    "SchoolId": 28116,
+    "Location": "RIT",
+    "EventId": 9,
+    "Description": "Brothers will have super villain trading cards. Find a brother and collect your organization's card from him.\n\nRules:\nFind a brother and get his supervillain card.",
+    "Time": {
+      "Start": "08:00",
+      "End": "16:00"
+    },
+    "DateString": "2019-04-26",
+    "Type": "Individual Activity",
+    "Name": "Find Your Villain",
+    "Tags": []
+  }
+]
