@@ -94,7 +94,7 @@ router.post('/:id', (req, res) => {
         let v = u[k]
 
         if (k === 'challengeId') {
-          if (v === undefined || v === null || v === "") {
+          if (v === undefined || v === null || v === '') {
             return update(params.attrRemove(
               'Derby_Events',
               { SchoolId: config.SCHOOL_ID_HARD, EventId: eventId },
