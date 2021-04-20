@@ -23,6 +23,14 @@ const everyHour = () => {
     .catch(err => console.log(err))
 }
 
+// Trigger each method once, for initial data gathering on worker restart
+// which will prevent waiting for a certain minute/hour to elliminate
+// stale data
+const initialRun = () => {
+  everySecond()
+  everyTenMinutes()
+  everyHour()
+}
 
 // Scheduler
 let executedTenMinutely = false
@@ -51,4 +59,5 @@ const scheduler = () => {
 
 
 // Clock, execute every second
+initialRun()
 setInterval(scheduler, 1000)
