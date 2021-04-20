@@ -88,6 +88,7 @@ router.get('/:id', (req, res) => {
 router.post('/:id', (req, res) => {
   const eventId = parseInt(req.params.id)
   if (req.body) {
+    console.log(JSON.stringify(req.body))
     return Promise.all(
       req.body.map((u) => {
         const k = Object.keys(u)[0]
