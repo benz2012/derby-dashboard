@@ -1,0 +1,62 @@
+[
+  {
+    "Members": 58,
+    "TeamId": 30966,
+    "Organization": "Sigma Chi",
+    "AvatarURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/7508/5ba7be2342a8a.png",
+    "CoverURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/7508/5ba7c05611266.jpg",
+    "Name": "Sigma Chi - Lambda Kappa",
+    "OrganizationId": "Lambda Kappa",
+    "URL": "https://hope.huntsmancancer.org/huntsmanchallenge/30966"
+  },
+  {
+    "Members": 3,
+    "TeamId": 58786,
+    "Organization": "Alpha Sigma Alpha",
+    "AvatarURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/59433da75f4bc.jpg",
+    "CoverURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/3592/59cbd50a95b15.jpg",
+    "Name": "Alpha Sigma Alpha-Gamma Iota",
+    "OrganizationId": "Gamma Iota",
+    "URL": "https://hope.huntsmancancer.org/huntsmanchallenge/58786"
+  },
+  {
+    "Members": 7,
+    "TeamId": 58784,
+    "Organization": "Delta Phi Epsilon",
+    "AvatarURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/59433da75f4bc.jpg",
+    "CoverURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/3592/59cbd50a95b15.jpg",
+    "Name": "Delta Phi Epsilon-Beta Upsilon",
+    "OrganizationId": "Beta Upsilon",
+    "URL": "https://hope.huntsmancancer.org/huntsmanchallenge/58784"
+  },
+  {
+    "Members": 1,
+    "TeamId": 58788,
+    "Organization": "Sigma Sigma Sigma",
+    "AvatarURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/59433da75f4bc.jpg",
+    "CoverURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/3592/59cbd50a95b15.jpg",
+    "Name": "Sigma Sigma Sigma-Epsilon Psi",
+    "OrganizationId": "Epsilon Psi",
+    "URL": "https://hope.huntsmancancer.org/huntsmanchallenge/58788"
+  },
+  {
+    "Members": 2,
+    "TeamId": 58782,
+    "Organization": "Alpha Xi Delta",
+    "AvatarURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/59433da75f4bc.jpg",
+    "CoverURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/3592/59cbd50a95b15.jpg",
+    "Name": "Alpha Xi Delta - Delta Lambda",
+    "OrganizationId": "Delta Lambda",
+    "URL": "https://hope.huntsmancancer.org/huntsmanchallenge/58782"
+  },
+  {
+    "Members": 6,
+    "TeamId": 58790,
+    "Organization": "Zeta Tau Alpha",
+    "AvatarURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/59433da75f4bc.jpg",
+    "CoverURL": "https://e75325cb343690f5dca7-874df108d1477ae424c060696fbb25be.ssl.cf1.rackcdn.com/images/182/3592/59cbd50a95b15.jpg",
+    "Name": "Zeta Tau Alpha-Iota Psi",
+    "OrganizationId": "Iota Psi",
+    "URL": "https://hope.huntsmancancer.org/huntsmanchallenge/58790"
+  }
+]
