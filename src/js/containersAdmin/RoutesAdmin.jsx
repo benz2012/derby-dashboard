@@ -9,6 +9,9 @@ import NoMatch from '../components/NoMatch'
 import Loading from '../components/Loading'
 import { dataFetch, dataSend } from '../util'
 
+const FB_APP_ID = '1712021218863173'
+const FB_API_VERSION = 'v2.12'
+
 export default class RoutesAdmin extends Component {
   state = {
     stage: 'CHECKING',
@@ -25,8 +28,8 @@ export default class RoutesAdmin extends Component {
     this.loadFacebookAPI(document, 'script', 'facebook-jssdk')
     window.fbAsyncInit = () => {
       window.FB.init({
-        appId: '1712021218863173',
-        version: 'v2.12',
+        appId: FB_APP_ID,
+        version: FB_API_VERSION,
       });
       // Check a user's auth status
       window.FB.getLoginStatus(this.authStatusHandler)
@@ -40,6 +43,12 @@ export default class RoutesAdmin extends Component {
     js.src = 'https://connect.facebook.net/en_US/sdk.js'
     fjs.parentNode.insertBefore(js, fjs)
   }
+
+  invokeLoginDialogURL = () => (
+    `https://www.facebook.com/${FB_API_VERSION}/dialog/oauth?` +
+    `client_id=${FB_APP_ID}` +
+    `&redirect_uri=${window.location.origin}/admin`
+  )
 
   authStatusHandler = (response) => {
     if (response.status === 'connected') {
@@ -74,7 +83,10 @@ export default class RoutesAdmin extends Component {
       return <UnauthorizedPage uid={uid} />
     }
     if (stage === 'LOGGED_OUT') {
-      return <LoginPage statusChangeCallback={this.authStatusHandler} />
+      return <LoginPage
+        statusChangeCallback={this.authStatusHandler}
+        invokeLoginDialogURL={this.invokeLoginDialogURL}
+      />
     }
     if (stage === 'AUTHORIZED') {
       return (
