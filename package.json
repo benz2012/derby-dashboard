@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "ajv": "^5.5.2",
-    "aws-sdk": "^2.396.0",
+    "aws-sdk": "^2.814.0",
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.1",
