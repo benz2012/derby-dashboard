@@ -18,7 +18,7 @@
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.1",
-    "marked": "^0.7.0",
+    "marked": "^4.0.10",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.14",
     "passport": "^0.4.0",
