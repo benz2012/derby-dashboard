@@ -13,7 +13,7 @@
     "lint": "eslint --ext .jsx,.js src/**; exit 0"
   },
   "dependencies": {
-    "ajv": "^5.5.2",
+    "ajv": "^6.12.3",
     "aws-sdk": "^2.396.0",
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
