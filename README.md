@@ -57,7 +57,7 @@ Run the Node/Express server in development mode.
 npm start
 ```
 
-Open a web browser and navigate to [localhost:8080](http://localhost:8080)
+Open a web browser and navigate to [https://localhost:8080](https://localhost:8080)
 
 This mode will simultaneously bundle your javascript code on every file save (nicknamed *Hot Module Replacement*).
 

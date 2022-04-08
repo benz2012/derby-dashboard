@@ -43,6 +43,7 @@ export default class ChallengesPage extends Component {
       ))
       .reduce((accum, current) => {
         Object.keys(current.scores).forEach((tid) => {
+          if (!(tid in accum)) return accum
           if (current.scores[tid].include === true) {
             // eslint-disable-next-line no-param-reassign
             accum[tid].score += current.scores[tid].score
