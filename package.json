@@ -19,7 +19,7 @@
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.1",
     "marked": "^0.7.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.14",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
